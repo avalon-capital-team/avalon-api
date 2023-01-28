@@ -1,10 +1,9 @@
-<p align="">
-    <img src="https://avatars.githubusercontent.com/u/118907375?s=200&v=4" alt="TukNuk" height="20">
-</p>
+## Avalon Capital
 
-## TukNuk Backend Project (API)
+Backend Project (API)
 
-The TukNuk project consists of a social network.
+The Avalon Capital
+project consists of a social network.
 
 -   [API Documentation]()
 
@@ -15,29 +14,19 @@ The TukNuk project consists of a social network.
     -   [x] Password Recover
     -   [x] Create new Password
     -   [x] Register
--   [x] Onboarding
-    -   [x] Profile
-    -   [x] Social Links
-    -   [x] Interests
-    -   [x] Suggestions
--   [x] Profile
-    -   [x] Data
-    -   [x] Timeline
-    -   [x] Likes
-    -   [x] Following
-    -   [x] Followers
-    -   [x] Photos
-    -   [x] Videos
+-   [] Onboarding
+    -   [] Profile
+    -   [] Suggestions
+-   [] Profile
+    -   [] Data
 -   [x] Settings
     -   [x] General
     -   [x] Notifications
-    -   [x] Social Networks
     -   [x] Profile
     -   [x] Compliance
     -   [x] Privacy
     -   [x] Password
     -   [x] Access logs
-    -   [x] Blocked users
 
 ## Library
 
@@ -55,9 +44,5 @@ The TukNuk project consists of a social network.
 
 ## Links
 
--   [Database Design (drawSQL)]()
 -   [Briefing (Google Drive)]()
 -   [Briefing - Admin (Google Drive)]()
--   [Sprints (Monday.com)]()
--   [Tasks (Monday.com)]()
--   [Channel (Discord)]()
