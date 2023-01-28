@@ -29,28 +29,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::dashboard(\App\Nova\Dashboards\Main::class)->icon('chart-bar'),
                 MenuSection::make('Usuários', [
                     MenuItem::resource(\App\Nova\Models\User\User::class),
-                    MenuItem::resource(\App\Nova\Models\User\UserFollow::class),
-                    MenuItem::resource(\App\Nova\Models\User\UserInterest::class),
                     MenuItem::resource(\App\Nova\Models\User\UserStatus::class),
                 ])->icon('user')->collapsable(),
-
-                MenuSection::make('Publicações', [
-                    MenuItem::resource(\App\Nova\Models\Publication\Publication::class),
-                    MenuItem::resource(\App\Nova\Models\Publication\PublicationStatistics::class),
-                    MenuItem::resource(\App\Nova\Models\Publication\PublicationLike::class),
-                    MenuItem::resource(\App\Nova\Models\Publication\PublicationComment::class),
-                    MenuItem::resource(\App\Nova\Models\Publication\PublicationReport::class),
-                ])->icon('photograph')->collapsable(),
-
-                MenuSection::make('Salas', [
-                    MenuItem::resource(\App\Nova\Models\Room\Room::class),
-                    MenuItem::resource(\App\Nova\Models\User\UserRoom::class),
-                ])->icon('chat-alt-2')->collapsable(),
 
                 MenuSection::make('Dados', [
                     MenuItem::resource(\App\Nova\Models\Data\DataCountry::class),
                     MenuItem::resource(\App\Nova\Models\Data\DataGenre::class),
-                    MenuItem::resource(\App\Nova\Models\Data\DataInterest::class),
                     MenuItem::resource(\App\Nova\Models\Data\DataPrivacyType::class),
                     MenuItem::resource(\App\Nova\Models\Data\DataPrivacyTypeOption::class),
                 ])->icon('database')->collapsable(),
@@ -62,8 +46,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         Nova::footer(function ($request) {
             return Blade::render('
                 <div class="mt-8 leading-normal text-xs text-gray-500 space-y-1">
-                    <p class="text-center">Desenvolvido por Intellectus</p>
-                    <p class="text-center">© 2022 intellectus.com</p>
+                    <p class="text-center">Desenvolvido por Avalon</p>
+                    <p class="text-center">© 2022 Avalon.com</p>
                 </div>
             ');
         });
@@ -77,10 +61,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function routes()
     {
         Nova::routes()
-                ->withAuthenticationRoutes()
-                ->withPasswordResetRoutes()
-                ->register();
-
+            ->withAuthenticationRoutes()
+            ->withPasswordResetRoutes()
+            ->register();
     }
 
     /**

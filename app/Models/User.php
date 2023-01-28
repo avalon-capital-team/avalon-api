@@ -5,18 +5,12 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\Data\DataGenre;
-use App\Models\Publication\Publication;
-use App\Models\Room\Room;
 use App\Models\User\UserAddress;
-use App\Models\User\UserBlocked;
 use App\Models\User\UserCompliance;
-use App\Models\User\UserFollow;
-use App\Models\User\UserInterest;
 use App\Models\User\UserNotification;
 use App\Models\User\UserOnboarding;
 use App\Models\User\UserPrivacy;
 use App\Models\User\UserProfile;
-use App\Models\User\UserRoom;
 use App\Models\User\UserSecurity;
 use App\Models\User\UserStatus;
 use App\Models\User\UserTokenDevice;
@@ -90,15 +84,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @param  array $data
-     * @return void
-     */
-    public function sendNewMessageNotification(array $data)
-    {
-        $this->notify(new MessageSentNotification($data));
-    }
-
-    /**
      * Get the profile from user
      *
      * @return \App\Models\User\UserProfile
@@ -109,26 +94,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the followers from user
-     *
-     * @return \App\Models\User\UserFollow
-     */
-    public function followers()
-    {
-        return $this->hasMany(UserFollow::class, 'user_follow_id', 'id');
-    }
-
-    /**
-     * Get the following from user
-     *
-     * @return \App\Models\User\UserFollow
-     */
-    public function following()
-    {
-        return $this->hasMany(UserFollow::class, 'user_id', 'id');
-    }
-
-    /**
      * Get the address from user
      *
      * @return \App\Models\User\UserAddress
@@ -136,16 +101,6 @@ class User extends Authenticatable
     public function address()
     {
         return $this->hasOne(UserAddress::class, 'user_id', 'id');
-    }
-
-    /**
-     * Get the interests from user
-     *
-     * @return \App\Models\User\UserInterest
-     */
-    public function interests()
-    {
-        return $this->hasMany(UserInterest::class, 'user_id', 'id');
     }
 
     /**
@@ -179,16 +134,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the publications from user
-     *
-     * @return \App\Models\Publication\Publication
-     */
-    public function publications()
-    {
-        return $this->hasMany(Publication::class, 'user_id', 'id');
-    }
-
-    /**
      * Get the genre from user
      *
      * @return \App\Models\Data\DataGenre
@@ -216,36 +161,6 @@ class User extends Authenticatable
     public function privacy()
     {
         return $this->hasMany(UserPrivacy::class, 'user_id', 'id');
-    }
-
-    /**
-     * Get the users blocked from user
-     *
-     * @return \App\Models\User\UserBlocked
-     */
-    public function usersBlocked()
-    {
-        return $this->hasMany(UserBlocked::class, 'user_id', 'id');
-    }
-
-    /**
-     * Get the rooms from user
-     *
-     * @return \App\Models\User\UserRoom
-     */
-    public function rooms()
-    {
-        return $this->hasMany(UserRoom::class, 'user_id', 'id');
-    }
-
-    /**
-     * Get the rooms created from user
-     *
-     * @return \App\Models\Room\Room
-     */
-    public function roomsCreated()
-    {
-        return $this->hasMany(Room::class, 'user_id', 'id');
     }
 
 

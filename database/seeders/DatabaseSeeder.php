@@ -6,7 +6,6 @@ namespace Database\Seeders;
 
 use Database\Seeders\Data\DataCountrySeeder;
 use Database\Seeders\Data\DataGenreSeeder;
-use Database\Seeders\Data\DataInterestSeeder;
 use Database\Seeders\Data\DataNotificationChannelSeeder;
 use Database\Seeders\Data\DataNotificationTypeSeeder;
 use Database\Seeders\Data\DataPrivacyTypeOptionSeeder;
@@ -28,7 +27,6 @@ class DatabaseSeeder extends Seeder
     {
         # Data
         $this->call(DataGenreSeeder::class);
-        $this->call(DataInterestSeeder::class);
         $this->call(DataNotificationChannelSeeder::class);
         $this->call(DataNotificationTypeSeeder::class);
         $this->call(DataCountrySeeder::class);

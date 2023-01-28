@@ -2,9 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\Publication\PublicationCommentedEvent;
-use App\Events\Publication\PublicationLikedEvent;
-use App\Listeners\Publication\SavePublicationCommentNotification;
 use App\Models\User;
 use App\Observers\User\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -22,12 +19,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-        ],
-        PublicationLikedEvent::class => [
-            SavePublicationLikeNotification::class,
-        ],
-        PublicationCommentedEvent::class => [
-            SavePublicationCommentNotification::class,
         ],
     ];
 
