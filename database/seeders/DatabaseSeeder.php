@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DataGenreSeeder::class);
         $this->call(DataNotificationChannelSeeder::class);
         $this->call(DataNotificationTypeSeeder::class);
-        $this->call(DataCountrySeeder::class);
+        // $this->call(DataCountrySeeder::class);
         $this->call(DataPrivacyTypeOptionSeeder::class);
         $this->call(DataPrivacyTypeSeeder::class);
 

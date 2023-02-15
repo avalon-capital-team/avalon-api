@@ -42,7 +42,7 @@ class UserSecurity extends Resource
      */
     public static function label()
     {
-        return __('Segurança');
+        return __('Aprovação de usuario');
     }
 
     /**

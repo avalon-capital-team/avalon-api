@@ -41,7 +41,7 @@ class UserAddress extends Resource
      */
     public static function label()
     {
-        return __('Endereços');
+        return __('Novos acessores');
     }
 
     /**
@@ -69,17 +69,17 @@ class UserAddress extends Resource
                 ->searchable()
                 ->withSubtitles(),
 
-            Text::make('Cidade','city')
+            Text::make('Cidade', 'city')
                 ->sortable(),
 
-            Text::make('Estado','state')
+            Text::make('Estado', 'state')
                 ->sortable(),
 
             BelongsTo::make('País', 'country', 'App\Nova\Models\Data\DataCountry')
                 ->searchable()
                 ->withSubtitles(),
 
-            Text::make('País','country_id')
+            Text::make('País', 'country_id')
                 ->sortable(),
 
         ];

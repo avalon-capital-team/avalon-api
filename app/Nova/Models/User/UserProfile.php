@@ -43,7 +43,7 @@ class UserProfile extends Resource
      */
     public static function label()
     {
-        return __('Perfis');
+        return __('Aprovação de deposito');
     }
 
     /**
@@ -67,21 +67,16 @@ class UserProfile extends Resource
         return [
             BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
 
-            Avatar::make('Avatar','avatar')
+            Avatar::make('Avatar', 'avatar')
                 ->preview(function ($value, $disk) {
-                    return ($value)? $value : null;
+                    return ($value) ? $value : null;
                 }),
 
-            Image::make('Cover','cover')
+            Image::make('Cover', 'cover')
                 ->preview(function ($value, $disk) {
-                    return ($value)? $value : null;
+                    return ($value) ? $value : null;
                 }),
-            Text::make('Bio','bio')->sortable(),
-            Text::make('Profissão','profession')->sortable(),
-            Text::make('Facebook','link_facebook')->sortable(),
-            Text::make('Instagram','link_instagram')->sortable(),
-            Text::make('TikTok','link_tiktok')->sortable(),
-            Text::make('Twitter','link_twitter')->sortable(),
+            Text::make('Bio', 'bio')->sortable(),
         ];
     }
 

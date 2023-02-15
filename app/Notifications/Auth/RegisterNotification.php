@@ -47,7 +47,7 @@ class RegisterNotification extends Notification implements ShouldQueue
             ->view('emails.auth.register', [
                 'user' => $this->user
             ])
-            ->subject('Bem-vindo à Intellectus');
+            ->subject('Bem-vindo à Avalon Capital');
     }
 
     /**

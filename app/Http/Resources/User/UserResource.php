@@ -64,12 +64,13 @@ class UserResource
         $validated = $request->validated();
 
         $sponsor = isset($validated['sponsor_username']) ? $this->findByUsername($request->sponsor_username) : null;
-
+        dd($sponsor);
         $code = CodeVerifyHelper::generateCode();
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'username' => $validated['username'],
             'birth_date' => $validated['birth_date'],
             'password' => bcrypt($validated['password']),
             'verification_code' => $code,
@@ -80,8 +81,8 @@ class UserResource
             throw new \Exception('Não foi possível se registrar. Tente novamente!');
         }
 
-        // $user->notify(new RegisterNotification($user));
-        // $user->notify(new VerifyCodeNotification($user->id, $code));
+        $user->notify(new RegisterNotification($user->id));
+        $user->notify(new VerifyCodeNotification($user->id, $code));
 
         return $user;
     }

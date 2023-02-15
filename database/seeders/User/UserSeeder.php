@@ -19,8 +19,8 @@ class UserSeeder extends Seeder
         $admin = User::create([
             'type' => 'admin',
             'username' => 'admin',
-            'name' => 'Admin Intellectus',
-            'email' => 'admin@intellectus.dev',
+            'name' => 'Admin Avalon',
+            'email' => 'admin@avalon.dev',
             'password' => Hash::make('admin'),
             'email_verified_at' => date('Y-m-d H:i:s')
         ]);
@@ -29,8 +29,8 @@ class UserSeeder extends Seeder
         $client = User::create([
             'type' => 'user',
             'username' => 'user',
-            'name' => 'Usuário Intellectus',
-            'email' => 'user@intellectus.dev',
+            'name' => 'Usuário Avalon',
+            'email' => 'user@avalon.dev',
             'password' => Hash::make('user'),
             'email_verified_at' => date('Y-m-d H:i:s')
         ]);

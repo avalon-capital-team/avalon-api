@@ -65,11 +65,11 @@ class UserStatus extends Resource
             ID::make()->sortable(),
 
 
-            Text::make('Nome','name')
+            Text::make('Nome', 'name')
                 ->sortable(),
 
 
-            Text::make('Mensagem','message')
+            Text::make('Mensagem', 'message')
                 ->sortable(),
         ];
     }

@@ -43,9 +43,9 @@ class LoginController extends Controller
             $user = User::where('email', $request->email)->first();
             $apiName = ($request->header('device-type')) ? $request->header('device-type') : 'web';
 
-            // if (!$user->email_verified_at) {
-            //     (new VerifyResource())->requestVerify($user);
-            // }
+            if (!$user->email_verified_at) {
+                (new VerifyResource())->requestVerify($user);
+            }
 
             return response()->json([
                 'status' => true,

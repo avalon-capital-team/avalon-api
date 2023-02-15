@@ -2,8 +2,7 @@
 
 Backend Project (API)
 
-The Avalon Capital
-project consists of a social network.
+The Avalon Capital project consists of a social network.
 
 -   [API Documentation]()
 
@@ -16,7 +15,6 @@ project consists of a social network.
     -   [x] Register
 -   [] Onboarding
     -   [] Profile
-    -   [] Suggestions
 -   [] Profile
     -   [] Data
 -   [x] Settings

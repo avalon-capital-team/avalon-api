@@ -61,7 +61,7 @@ class User extends Resource
      */
     public function title()
     {
-        return '@'.$this->username;
+        return '@' . $this->username;
     }
 
     /**
@@ -70,7 +70,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'document','email','username'
+        'id', 'name', 'document', 'email', 'username'
     ];
 
     /**
@@ -85,9 +85,9 @@ class User extends Resource
             ID::make()->sortable(),
 
             Avatar::make('Avatar')
-            ->preview(function ($value, $disk) {
-                return ($this->resource->profile && $this->resource->profile->avatar)? $this->resource->profile->avatar : null;
-            }),
+                ->preview(function ($value, $disk) {
+                    return ($this->resource->profile && $this->resource->profile->avatar) ? $this->resource->profile->avatar : null;
+                }),
 
             Badge::make('Tipo', 'type', function () {
                 if ($this->type == 'user') {
@@ -100,19 +100,19 @@ class User extends Resource
                 'Admin' => 'warning'
             ]),
 
-            Text::make('Nome','name')
+            Text::make('Nome', 'name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Usuário','username')
+            Text::make('Usuário', 'username')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
 
             Select::make('Tipo do documento', 'document_type')->options([
-                    'CPF' => 'CPF',
-                    'CNPJ' => 'CNPJ',
-                ])->displayUsingLabels()->hideFromIndex(),
+                'CPF' => 'CPF',
+                'CNPJ' => 'CNPJ',
+            ])->displayUsingLabels()->hideFromIndex(),
 
             Text::make(__('Documento'), 'document')
                 ->sortable()
@@ -154,41 +154,12 @@ class User extends Resource
                 }),
 
             Tabs::make('Detalhes', [
-                HasMany::make('Seguidores', 'followers', 'App\Nova\Models\User\UserFollow')
-                    ->exceptOnForms()
-                    ->hideFromDetail(function () {
-                        return $this->type == 'admin';
-                    }),
-
-                HasMany::make('Seguindo', 'following', 'App\Nova\Models\User\UserFollow')
-                    ->exceptOnForms()
-                    ->hideFromDetail(function () {
-                        return $this->type == 'admin';
-                    }),
-
-                HasMany::make('Salas que participa', 'rooms', 'App\Nova\Models\User\UserRoom')
-                    ->exceptOnForms()
-                    ->hideFromDetail(function () {
-                        return $this->type == 'admin';
-                    }),
-
-                HasMany::make('Salas criadas', 'roomsCreated', 'App\Nova\Models\Room\Room')
-                    ->exceptOnForms()
-                    ->hideFromDetail(function () {
-                        return $this->type == 'admin';
-                    }),
-
-                HasMany::make('Interesses', 'interests', 'App\Nova\Models\User\UserInterest')
-                    ->exceptOnForms()
-                    ->hideFromDetail(function () {
-                        return $this->type == 'admin';
-                    }),
 
                 HasMany::make('Privacidade', 'privacy', 'App\Nova\Models\User\UserPrivacy')
                     ->exceptOnForms()
                     ->hideFromDetail(function () {
                         return $this->type == 'admin';
-                    }),
+                    })
 
             ]),
         ];
@@ -203,7 +174,7 @@ class User extends Resource
     public function cards(NovaRequest $request)
     {
         return [
-            (new CountModel(\App\Models\User::where('type', 'user'),'Total de usuários'))->width('1/2')->icon('user-group'),
+            (new CountModel(\App\Models\User::where('type', 'user'), 'Total de usuários'))->width('1/2')->icon('user-group'),
         ];
     }
 
@@ -238,7 +209,7 @@ class User extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            new ChangeStatusModel(\App\Models\User\UserStatus::get(),'Alterar status do usuário')
+            new ChangeStatusModel(\App\Models\User\UserStatus::get(), 'Alterar status do usuário')
         ];
     }
 

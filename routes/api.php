@@ -19,7 +19,7 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 # API Auth
 Route::group(['prefix' => 'auth'], function () {
     # Login
-    Route::post('login', [App\Http\Controllers\Api\Auth\LoginController::class, 'login']);
+    Route::post('signin', [App\Http\Controllers\Api\Auth\LoginController::class, 'login']);
 
     # Forgot Password
     Route::post('forgot-password', [App\Http\Controllers\Api\Auth\ForgotPasswordController::class, 'recoverPassword']);
@@ -28,7 +28,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('reset-password', [App\Http\Controllers\Api\Auth\ResetPasswordController::class, 'updatePasswordRecovery']);
 
     # Register
-    Route::post('register', [App\Http\Controllers\Api\Auth\RegisterController::class, 'register']);
+    Route::post('signup', [App\Http\Controllers\Api\Auth\RegisterController::class, 'register']);
 });
 
 # API Logged
@@ -114,9 +114,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         # Access Logs
         Route::get('access-logs', [App\Http\Controllers\Api\Settings\SettingsAccessLogsController::class, 'data']);
 
-        # Users Blocked
-        Route::get('users-blocked', [App\Http\Controllers\Api\Settings\SettingsUsersBlockedController::class, 'data']);
-
         # Update Device token
         Route::post('device-token/update', [App\Http\Controllers\Api\Settings\SettingsDeviceTokenController::class, 'updateDeviceToken']);
     });
@@ -127,10 +124,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 # Helpers
 Route::group(['prefix' => 'helpers'], function () {
-
-    # Interests
-    Route::get('interests/base', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getBaseInterests']);
-    Route::get('interests', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllInterests']);
 
     # Countries
     Route::get('countries', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllCountries']);
