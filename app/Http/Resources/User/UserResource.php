@@ -64,7 +64,7 @@ class UserResource
         $validated = $request->validated();
 
         $sponsor = isset($validated['sponsor_username']) ? $this->findByUsername($request->sponsor_username) : null;
-        dd($sponsor);
+
         $code = CodeVerifyHelper::generateCode();
 
         $user = User::create([
