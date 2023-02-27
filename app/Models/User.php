@@ -14,6 +14,7 @@ use App\Models\User\UserProfile;
 use App\Models\User\UserSecurity;
 use App\Models\User\UserStatus;
 use App\Models\User\UserTokenDevice;
+use App\Models\User\UserPlan;
 use App\Notifications\Chat\MessageSentNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -101,6 +102,16 @@ class User extends Authenticatable
     public function address()
     {
         return $this->hasOne(UserAddress::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the plan from user
+     *
+     * @return \App\Models\User\UserPlan
+     */
+    public function plan()
+    {
+        return $this->hasOne(UserPlan::class, 'user_id', 'id');
     }
 
     /**

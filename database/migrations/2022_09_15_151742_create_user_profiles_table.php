@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class() extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -15,17 +16,11 @@ return new class () extends Migration {
         Schema::create('users_profile', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
-            $table->string('avatar')->nullable();
-            $table->string('cover')->nullable();
-            $table->text('bio')->nullable();
-            $table->string('link_facebook')->nullable();
-            $table->string('link_instagram')->nullable();
-            $table->string('link_tiktok')->nullable();
-            $table->string('link_twitter')->nullable();
-            $table->boolean('is_private')->default(false);
-            $table->string('profession')->nullable();
-            $table->timestamps();
+            $table->unsignedInteger('ong_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('ong_id')->references('id')->on('data_ongs')->nullOnDelete();
+            $table->string('avatar')->nullable();
+            $table->timestamps();
         });
     }
 

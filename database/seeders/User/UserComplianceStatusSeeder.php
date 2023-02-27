@@ -15,23 +15,27 @@ class UserComplianceStatusSeeder extends Seeder
     public function run()
     {
         UserComplianceStatus::create([
-            'name' => 'Não Enviado',
-        ]);
-
-        UserComplianceStatus::create([
-            'name' => 'Processando',
-        ]);
-
-        UserComplianceStatus::create([
-            'name' => 'Negado',
-        ]);
-
-        UserComplianceStatus::create([
-            'name' => 'Reenviado',
+            'name' => 'Pendente',
+            'color' => 'warning',
+            'icon' => '/assets/icons/compliance/pending.png'
         ]);
 
         UserComplianceStatus::create([
             'name' => 'Aprovado',
+            'color' => 'success',
+            'icon' => '/assets/icons/compliance/success.png'
+        ]);
+
+        UserComplianceStatus::create([
+            'name' => 'Rejeitado',
+            'color' => 'danger',
+            'icon' => '/assets/icons/compliance/rejected.png'
+        ]);
+
+        UserComplianceStatus::create([
+            'name' => 'Processando',
+            'color' => 'info',
+            'icon' => '/assets/icons/compliance/pending.png'
         ]);
     }
 }

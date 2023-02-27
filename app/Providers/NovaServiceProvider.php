@@ -29,21 +29,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::dashboard(\App\Nova\Dashboards\Main::class)->icon('chart-bar'),
                 MenuSection::make('Usuários', [
                     MenuItem::resource(\App\Nova\Models\User\User::class),
-                    MenuItem::resource(\App\Nova\Models\User\UserProfile::class),
-                    MenuItem::resource(\App\Nova\Models\User\UserSecurity::class),
-                    MenuItem::resource(\App\Nova\Models\User\UserStatus::class),
-
-                ])->icon('user')->collapsable(),
-
-                MenuSection::make('Gestão de acessores', [
-                    MenuItem::resource(\App\Nova\Models\User\UserAddress::class),
+                    MenuItem::resource(\App\Nova\Models\User\UserPlan::class),
                 ])->icon('user')->collapsable(),
 
                 MenuSection::make('Dados', [
-                    MenuItem::resource(\App\Nova\Models\Data\DataCountry::class),
-                    MenuItem::resource(\App\Nova\Models\Data\DataGenre::class),
-                    MenuItem::resource(\App\Nova\Models\Data\DataPrivacyType::class),
-                    MenuItem::resource(\App\Nova\Models\Data\DataPrivacyTypeOption::class),
+                    MenuItem::resource(\App\Nova\Models\Data\DataPlan::class),
                 ])->icon('database')->collapsable(),
 
             ];

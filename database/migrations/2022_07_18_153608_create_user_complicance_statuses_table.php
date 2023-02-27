@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNovaNotificationsTable extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,12 +12,11 @@ class CreateNovaNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('nova_notifications', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('type');
-            $table->morphs('notifiable');
-            $table->text('data');
-            $table->timestamp('read_at')->nullable();
+        Schema::create('users_compliance_status', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('color')->nullable();
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateNovaNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nova_notifications');
+        Schema::dropIfExists('users_compliance_status');
     }
-}
+};

@@ -68,10 +68,8 @@ class UserResource
         $code = CodeVerifyHelper::generateCode();
 
         $user = User::create([
-            'name' => $validated['name'],
             'email' => $validated['email'],
             'username' => $validated['username'],
-            'birth_date' => $validated['birth_date'],
             'password' => bcrypt($validated['password']),
             'verification_code' => $code,
             'sponsor_id' => ($sponsor) ? $sponsor->id : null
@@ -82,7 +80,7 @@ class UserResource
         }
 
         $user->notify(new RegisterNotification($user->id));
-        $user->notify(new VerifyCodeNotification($user->id, $code));
+
 
         return $user;
     }

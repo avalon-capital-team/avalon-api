@@ -104,7 +104,7 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Usuário', 'username')
+            Text::make('Acesso', 'username')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
@@ -124,10 +124,6 @@ class User extends Resource
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
-
-            BelongsTo::make('Status', 'status', 'App\Nova\Models\User\UserStatus')
-                ->searchable()
-                ->withSubtitles(),
 
             Password::make('Password')
                 ->onlyOnForms()

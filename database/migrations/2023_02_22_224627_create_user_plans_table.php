@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,14 +13,14 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('users_compliance', function (Blueprint $table) {
+        Schema::create('users_plan', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
-            $table->unsignedInteger('status_id')->nullable();
-            $table->json('archives')->nullable();
-            $table->text('message')->nullable();
+            $table->unsignedInteger('plan_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
-            $table->foreign('status_id')->references('id')->on('users_compliance_status')->nullOnDelete();
+            $table->foreign('plan_id')->references('id')->on('data_plans')->nullOnDelete();
+            $table->boolean('acting')->default(false);
+            $table->string('paymente_voucher_url')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('users_compliance');
+        Schema::dropIfExists('user_plans');
     }
 };

@@ -20,13 +20,6 @@ class UserProfileResource
                 'name' => $user->name,
                 'username' => $user->username,
                 'avatar' => $user->profile->avatar,
-            ],
-            'wallet' => [
-                'address' => null,
-                'balance' => 0
-            ],
-            'notifications' => [
-                'unread' => $user->unreadNotifications->count()
             ]
         ];
     }

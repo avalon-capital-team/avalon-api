@@ -2,21 +2,20 @@
 
 namespace App\Models\User;
 
+use App\Models\Data\DataPlan;
 use App\Models\User;
-use App\Models\DataOng;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserProfile extends Model
+class UserPlan extends Model
 {
     use HasFactory;
-
     /**
      * table
      *
      * @var string
      */
-    protected $table = 'users_profile';
+    protected $table = 'users_plan';
 
     /**
      * The attributes that are mass assignable.
@@ -25,8 +24,7 @@ class UserProfile extends Model
      */
     protected $fillable = [
         'user_id',
-        'org_id',
-        'avatar',
+        'plan_id',
     ];
 
     /**
@@ -44,8 +42,8 @@ class UserProfile extends Model
      *
      * @return \App\Models\Data\DataPlan
      */
-    public function ong()
+    public function plan()
     {
-        return $this->hasOne(DataOng::class, 'id', 'ong_id');
+        return $this->hasOne(DataPlan::class, 'id', 'plan_id');
     }
 }
