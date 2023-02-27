@@ -14,7 +14,8 @@ class CreateNovaNotificationsTable extends Migration
     public function up()
     {
         Schema::create('nova_notifications', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->increments('id');
+            $table->uuid('uuid')->primary();
             $table->string('type');
             $table->morphs('notifiable');
             $table->text('data');
