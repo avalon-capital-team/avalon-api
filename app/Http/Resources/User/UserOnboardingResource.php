@@ -91,6 +91,19 @@ class UserOnboardingResource
     {
         $validated = $request->validated();
 
+        $address = Arr::only(
+            $validated,
+            array(
+                'cep',
+                'street',
+                'neighborhood',
+                'city',
+                'state',
+                'number',
+                'complement'
+            )
+        );
+        $request->user()->address->update($address);
 
         $request->user()->onboarding->update([
             'step_id' => 4

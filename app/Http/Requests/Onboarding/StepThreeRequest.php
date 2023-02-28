@@ -27,12 +27,12 @@ class StepThreeRequest extends FormRequest
     public function rules()
     {
         return [
-            'document_type' => ['required', 'string', 'in:CPF,CNPJ'],
-            'document' => ['required', 'string', 'max:255', 'unique:users,document'],
-            'name' => ['required', 'string'],
-            'phone' => ['required', 'string'],
-            'birth_date' => ['required', 'string'],
-            'genre_id' => ['required'],
+            'cep' => ['required', 'string'],
+            'street' => ['required', 'string'],
+            'neighborhood' => ['required', 'string'],
+            'city' => ['required', 'string'],
+            'state' => ['required', 'string'],
+            'number' => ['required', 'string']
         ];
     }
 
@@ -44,13 +44,12 @@ class StepThreeRequest extends FormRequest
     public function messages()
     {
         return [
-            'document_type.required'    => __('O tipo do documento é obrigatório'),
-            'document.unique'    => __('O número do documento já esta sendo utilizado'),
-            'document.required'    => __('O número do documento é obrigatório'),
-            'name.required'    => __('O nome é obrigatório'),
-            'phone.required'    => __('O telefone é obrigatório'),
-            'birth_date.required'    => __('A data de nacimento é obrigatório'),
-            'genre_id.required'    => __('O genero é obrigatório'),
+            'cep.required'    => __('O cep é obrigatório'),
+            'street.required'    => __('A rua é obrigatório'),
+            'neighborhood.required'    => __('O bairro é obrigatório'),
+            'city.required'    => __('A cidade é obrigatório'),
+            'state.required'    => __('O estado é obrigatório'),
+            'number.required'    => __('O numero é obrigatório'),
         ];
     }
 }

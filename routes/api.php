@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('update-step-two', [App\Http\Controllers\Api\Onboarding\OnboardingStepTwoController::class, 'updateStep']);
 
         # Step Three
-        Route::get('get-suggestions', [App\Http\Controllers\Api\Onboarding\OnboardingStepThreeController::class, 'getSuggestions']);
+        Route::post('update-step-three', [App\Http\Controllers\Api\Onboarding\OnboardingStepThreeController::class, 'updateStep']);
 
         # Step Four
         Route::post('update-step-four', [App\Http\Controllers\Api\Onboarding\OnboardingStepFourController::class, 'updateStep']);
