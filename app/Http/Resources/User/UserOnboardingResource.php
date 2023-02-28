@@ -36,13 +36,12 @@ class UserOnboardingResource
         $request->user()->profile->save();
 
         # Avatar
-        if ($validated['avatar']) {
-
-            $avatar_url = (new FileUploadHelper())->storeFile($validated['avatar'], 'avatars');
-            $request->user()->profile()->update([
-                'avatar' => $avatar_url
-            ]);
-        }
+        // if ($validated['avatar']) {
+        //     $avatar_url = (new FileUploadHelper())->storeFile($validated['avatar'], 'avatars');
+        //     $request->user()->profile()->update([
+        //         'avatar' => $avatar_url
+        //     ]);
+        // }
 
         $request->user()->onboarding->update([
             'step_id' => 2
