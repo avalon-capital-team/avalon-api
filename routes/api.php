@@ -29,6 +29,9 @@ Route::group(['prefix' => 'auth'], function () {
 
     # Register
     Route::post('signup', [App\Http\Controllers\Api\Auth\RegisterController::class, 'register']);
+
+    # Resend Code
+    Route::get('resend-code', [App\Http\Controllers\Api\Auth\VerifyController::class, 'resendCode']);
 });
 
 # API Logged

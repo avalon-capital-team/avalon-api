@@ -34,7 +34,7 @@ class OnboardingStepTwoController extends Controller
 
                 return response()->json([
                     'status'  => true,
-                    'message' => 'Interesses atualizado com sucesso',
+                    'message' => 'Os dados foram salvos com sucesso',
                     'onboarding' => [
                         'step' => (new UserOnboardingResource())->getActualStep($request->user())
                     ]

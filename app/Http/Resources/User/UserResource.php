@@ -45,6 +45,7 @@ class UserResource
      * @param int $id
      *
      * @return \App\Models\User
+     * * @throws \Exception
      */
     public function verifyCode(int $code, string $email)
     {

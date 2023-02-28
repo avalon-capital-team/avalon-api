@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Onboarding;
+namespace App\Http\Requests\Auth;
 
 use App\Traits\FailedValidationTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StepOneRequest extends FormRequest
+class ResendRequest extends FormRequest
 {
     use FailedValidationTrait;
 
@@ -22,24 +22,25 @@ class StepOneRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {
         return [
-            'ong_id' => ['required', 'exists:data_ongs,id'],
+            'email'     => ['required', 'exists:users,email'],
         ];
     }
 
     /**
-     * messages
+     * Get the error messages for the defined validation rules.
      *
-     * @return void
+     * @return array
      */
     public function messages()
     {
         return [
-            'ong.required' => __('Selecione a ong que deseja ajudar.')
+            'email.required'    => __('O email é obrigatório'),
+            'email.exists'    => __('O email é inválido'),
         ];
     }
 }

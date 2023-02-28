@@ -5,7 +5,7 @@ namespace App\Http\Requests\Onboarding;
 use App\Traits\FailedValidationTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StepTwoRequest extends FormRequest
+class StepThreeRequest extends FormRequest
 {
     use FailedValidationTrait;
 

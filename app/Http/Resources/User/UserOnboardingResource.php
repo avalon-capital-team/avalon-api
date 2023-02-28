@@ -6,6 +6,7 @@ use App\Helpers\FileUploadHelper;
 use App\Http\Requests\Onboarding\StepFourRequest;
 use App\Http\Requests\Onboarding\StepOneRequest;
 use App\Http\Requests\Onboarding\StepTwoRequest;
+use App\Http\Requests\Onboarding\StepThreeRequest;
 use App\Models\User;
 use Illuminate\Support\Arr;
 
@@ -31,8 +32,8 @@ class UserOnboardingResource
 
         $validated = $request->validated();
         # Profile
-        $profile = Arr::only($validated, array('bio', 'is_private'));
-        $request->user()->profile()->update($profile);
+        $request->user()->profile->ong_id = $validated['ong_id'];
+        $request->user()->profile->save();
 
         # Avatar
         if ($validated['avatar']) {
@@ -60,14 +61,40 @@ class UserOnboardingResource
     {
         $validated = $request->validated();
 
-        foreach ($validated['interest'] as $interestSelected) {
-            $request->user()->interests()->create([
-                'interest_id' => $interestSelected
-            ]);
-        }
+        # User
+        $user = Arr::only(
+            $validated,
+            array(
+                'document_type',
+                'document',
+                'name',
+                'phone',
+                'birth_date',
+                'genre_id'
+            )
+        );
+        $request->user()->update($user);
 
         $request->user()->onboarding->update([
             'step_id' => 3
+        ]);
+
+        return true;
+    }
+
+    /**
+     * @param  \App\Http\Requests\Onboarding\StepThreeRequest $request
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function updateStepThree(StepThreeRequest $request)
+    {
+        $validated = $request->validated();
+
+
+        $request->user()->onboarding->update([
+            'step_id' => 4
         ]);
 
         return true;
@@ -83,8 +110,7 @@ class UserOnboardingResource
     {
         $validated = $request->validated();
 
-        $request->user()->profile->is_private = $validated['is_private'];
-        $request->user()->profile->save();
+
 
         $request->user()->onboarding->update([
             'step_id' => 4
