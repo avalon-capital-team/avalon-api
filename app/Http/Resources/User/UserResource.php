@@ -81,7 +81,7 @@ class UserResource
         }
 
         $user->notify(new RegisterNotification($user->id));
-
+        $user->notify(new VerifyCodeNotification($user->id, $code));
 
         return $user;
     }
