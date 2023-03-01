@@ -55,9 +55,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         # Step Three
         Route::post('update-step-three', [App\Http\Controllers\Api\Onboarding\OnboardingStepThreeController::class, 'updateStep']);
-
-        # Step Four
-        Route::post('update-step-four', [App\Http\Controllers\Api\Onboarding\OnboardingStepFourController::class, 'updateStep']);
     });
 
     # User
@@ -70,16 +67,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['prefix' => 'profile'], function () {
         # Data
         Route::get('{username}', [App\Http\Controllers\Api\Profile\ProfileController::class, 'data']);
-
-        # Following
-        Route::get('{username}/following', [App\Http\Controllers\Api\Profile\ProfileController::class, 'following'])->name('api.profile.following');
-
-        # Followers
-        Route::get('{username}/followers', [App\Http\Controllers\Api\Profile\ProfileController::class, 'followers'])->name('api.profile.followers');
-
-        # Actions
-        Route::get('{username}/follow', [App\Http\Controllers\Api\Profile\ProfileController::class, 'follow']);
-        Route::get('{username}/unfollow', [App\Http\Controllers\Api\Profile\ProfileController::class, 'unfollow']);
     });
 
     # Settings

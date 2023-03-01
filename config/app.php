@@ -184,10 +184,11 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
-         * Package Service Providers...
-         */
+        * Package Service Providers...
+        */
         PragmaRX\Google2FALaravel\ServiceProvider::class,
         NotificationChannels\OneSignal\OneSignalServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
 
         /*
          * Application Service Providers...

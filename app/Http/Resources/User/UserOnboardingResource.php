@@ -111,23 +111,4 @@ class UserOnboardingResource
 
         return true;
     }
-
-    /**
-     * @param  \App\Http\Requests\Onboarding\StepFourRequest $request
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public function updateStepFour(StepFourRequest $request)
-    {
-        $validated = $request->validated();
-
-
-
-        $request->user()->onboarding->update([
-            'step_id' => 4
-        ]);
-
-        return true;
-    }
 }

@@ -19,6 +19,7 @@ class UserProfileResource
                 'id' => $user->id,
                 'name' => $user->name,
                 'username' => $user->username,
+                'email' => $user->email,
                 'avatar' => $user->profile->avatar,
             ]
         ];

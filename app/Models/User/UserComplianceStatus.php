@@ -16,14 +16,14 @@ class UserComplianceStatus extends Model
      */
     protected $table = 'users_compliance_status';
 
-    public $timestamps = false;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name'
+        'name',
+        'color',
+        'icon',
     ];
 }

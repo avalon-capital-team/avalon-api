@@ -18,6 +18,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
         "league/flysystem-aws-s3-v3": "^3.5",
+        "owen-it/laravel-auditing": "^13.1",
         "pragmarx/google2fa-laravel": "^2.0",
         "pusher/pusher-php-server": "^7.2",
         "ramsey/uuid": "^4.5",
