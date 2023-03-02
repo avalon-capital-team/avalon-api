@@ -57,6 +57,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('update-step-three', [App\Http\Controllers\Api\Onboarding\OnboardingStepThreeController::class, 'updateStep']);
     });
 
+    # Compliance
+    Route::group(['prefix' => 'compliance'], function () {
+        Route::get('user-compliance-status', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'userComplianceStatus']);
+
+        # Send Documents
+        Route::post('start-compleance-person', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'startCompliancePerson']);
+        Route::post('user-storeOrUpdate', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'userStoreOrUpdate']);
+    });
+
     # User
     Route::group(['prefix' => 'user'], function () {
         # User

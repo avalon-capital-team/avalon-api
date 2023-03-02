@@ -105,12 +105,8 @@ class UserComplianceResource
 
         $userName = $user->splitName();
 
-        if (empty($userName['firstname'])) {
+        if (empty($userName['name'])) {
             throw new \Exception('Para continuar você precisa informar seu primeiro nome em Meus Dados.');
-        }
-
-        if (empty($userName['lastname'])) {
-            throw new \Exception('Para continuar você precisa informar seu sobrenome em Meus Dados.');
         }
     }
 
@@ -127,8 +123,7 @@ class UserComplianceResource
         $this->validateUserDataForPerson($user);
 
         $data = [
-            'first_name' => $user->splitName()['firstname'],
-            'last_name' => $user->splitName()['lastname'],
+            'name' => $user->splitName()['name'],
             'birth_date' => $user->data->birth_date->format('Y-m-d'),
             'country_code' => 'BR',
             'email' => $user->email,
@@ -197,7 +192,7 @@ class UserComplianceResource
 
         $data['responsible'] = [
             'type' => 'AUTHORISED',
-            'first_name' => $user->responsible->splitName()['firstname'],
+            'name' => $user->responsible->splitName()['name'],
             'last_name' => $user->responsible->splitName()['lastname'],
             'birth_date' => $user->data->birth_date->format('Y-m-d'),
             'title' => 'CEO',

@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Auth;
 
+use App\Traits\FailedValidationTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserDocumentRequest extends FormRequest
 {
+    use FailedValidationTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -32,9 +35,9 @@ class UpdateUserDocumentRequest extends FormRequest
     }
 
     /**
-     * messages
+     * Get the error messages for the defined validation rules.
      *
-     * @return void
+     * @return array
      */
     public function messages()
     {

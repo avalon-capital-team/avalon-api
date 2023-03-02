@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Resources\Auth\VerifyResource;
 use App\Http\Resources\User\UserOnboardingResource;
 use App\Http\Resources\User\UserProfileResource;
 use App\Models\User;
@@ -43,9 +42,7 @@ class LoginController extends Controller
             $user = User::where('email', $request->email)->first();
             $apiName = ($request->header('device-type')) ? $request->header('device-type') : 'web';
 
-            if (!$user->email_verified_at) {
-                (new VerifyResource())->requestVerify($user);
-            }
+
 
             return response()->json([
                 'status' => true,

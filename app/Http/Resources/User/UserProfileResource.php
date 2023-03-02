@@ -4,6 +4,8 @@ namespace App\Http\Resources\User;
 
 
 use App\Models\User;
+use App\Http\Resources\Auth\VerifyResource;
+
 
 class UserProfileResource
 {
@@ -14,6 +16,13 @@ class UserProfileResource
      */
     public function profileDetail(User $user): array
     {
+        if ($user->email_verified_at == null) {
+            $email_verified_at = false;
+            (new VerifyResource())->requestVerify($user);
+        } else {
+            $email_verified_at = true;
+        }
+
         return [
             'user' => [
                 'id' => $user->id,
@@ -21,6 +30,7 @@ class UserProfileResource
                 'username' => $user->username,
                 'email' => $user->email,
                 'avatar' => $user->profile->avatar,
+                'email_verified' => $email_verified_at
             ]
         ];
     }
@@ -37,7 +47,7 @@ class UserProfileResource
                 'id' => $user->id,
                 'name' => $user->name,
                 'username' => $user->username,
-                'avatar' => $user->profile->avatar,
+                'avatar' => $user->profile->avatar
             ],
         ];
     }
