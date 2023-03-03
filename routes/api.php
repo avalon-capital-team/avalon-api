@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('user-compliance-status', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'userComplianceStatus']);
 
         # Send Documents
-        Route::post('start-compleance-person', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'startCompliancePerson']);
+        Route::post('start-compleance-person', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'startPersonCompliance']);
         Route::post('user-storeOrUpdate', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'userStoreOrUpdate']);
     });
 

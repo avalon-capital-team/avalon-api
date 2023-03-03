@@ -3,7 +3,6 @@
 namespace App\Http\Resources\User;
 
 use App\Helpers\FileUploadHelper;
-use App\Http\Resources\ExternalApis\KycaidApiResource;
 use App\Models\User;
 use App\Models\User\UserCompliance;
 use App\Notifications\User\Document\ComplianceApprovedNotification;
@@ -99,14 +98,13 @@ class UserComplianceResource
      */
     public function validateUserDataForPerson(User $user)
     {
-        if (!$user->data->birth_date) {
+
+        if (!$user->birth_date) {
             throw new \Exception('Para continuar você precisa informar sua data de aniversário em Meus Dados.');
         }
 
-        $userName = $user->splitName();
-
-        if (empty($userName['name'])) {
-            throw new \Exception('Para continuar você precisa informar seu primeiro nome em Meus Dados.');
+        if (!$user->name) {
+            throw new \Exception('Para continuar você precisa informar seu nome completo em Meus Dados.');
         }
     }
 
@@ -123,35 +121,30 @@ class UserComplianceResource
         $this->validateUserDataForPerson($user);
 
         $data = [
-            'name' => $user->splitName()['name'],
-            'birth_date' => $user->data->birth_date->format('Y-m-d'),
+            'name' => $user->name,
+            'birth_date' => $user->birth_date,
             'country_code' => 'BR',
             'email' => $user->email,
             'user_id' => $user->id,
         ];
 
         foreach ($files as $file) {
+
             $data['files'][] = [
                 'name' => $file['name'],
                 'url' => (new FileUploadHelper())->storeFile($file['file'], 'users/documents'),
                 'url_back' => ($file['file_back']) ? (new FileUploadHelper())->storeFile($file['file_back'], 'users/documents') : null,
             ];
         }
-
-        // $kyc = (new KycaidApiResource())->startCompliancePerson($data);
-
-        // if ($kyc) {
+        dd($data);
         $userCompliance = new UserCompliance();
         $userCompliance->user_id = $user->id;
         $userCompliance->status_id = 1;
         $userCompliance->type = 'manual';
         $userCompliance->documents = json_encode($data['files']);
-        // $userCompliance->applicant_id = $kyc['applicant']['applicant_id'];
-        // $userCompliance->verification_id = $kyc['verification']['verification_id'];
         $userCompliance->save();
 
         return $userCompliance;
-        // }
     }
 
     /**
@@ -193,7 +186,6 @@ class UserComplianceResource
         $data['responsible'] = [
             'type' => 'AUTHORISED',
             'name' => $user->responsible->splitName()['name'],
-            'last_name' => $user->responsible->splitName()['lastname'],
             'birth_date' => $user->data->birth_date->format('Y-m-d'),
             'title' => 'CEO',
             'residence_country' => 'BR',
@@ -208,20 +200,14 @@ class UserComplianceResource
             ];
         }
 
-        // $kyc = (new KycaidApiResource())->startComplianceCompany($data);
-
-        // if ($kyc) {
         $userCompliance = new UserCompliance();
         $userCompliance->user_id = $user->id;
         $userCompliance->status_id = 1;
         $userCompliance->type = 'manual';
         $userCompliance->documents = json_encode($data['files']);
-        // $userCompliance->applicant_id = $kyc['applicant']['applicant_id'];
-        // $userCompliance->verification_id = $kyc['verification']['verification_id'];
         $userCompliance->save();
 
         return $userCompliance;
-        // }
     }
 
     /**

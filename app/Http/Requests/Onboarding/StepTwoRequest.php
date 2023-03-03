@@ -31,7 +31,7 @@ class StepTwoRequest extends FormRequest
             'document' => ['required', 'string', 'max:255', 'unique:users,document'],
             'name' => ['required', 'string'],
             'phone' => ['required', 'string'],
-            'birth_date' => ['required', 'string'],
+            'birth_date' => ['required', 'date'],
             'genre_id' => ['required'],
         ];
     }

@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api\Compliance;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserComplianceResource;
-use App\Http\Request\User\UpdateUserDocumentRequest;
+use App\Http\Requests\User\UserComplianceRequest;
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -30,20 +31,26 @@ class UserComplianceController extends Controller
     }
 
     /**
-     * @param  \App\Http\Resources\Auth\VerifyResource $resource
-     * @param  \App\Http\Requests\Auth\VerifyRequest $request
+     * @param  \App\Http\Resources\User\UserComplianceResource $resource
+     * @param  \App\Http\Requests\User\UpdateUserDocumentRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function startCompliancePerson(UserComplianceResource $resource, UpdateUserDocumentRequest $request)
+    public function startPersonCompliance(UserComplianceRequest $request)
     {
         try {
-            if ($resource->verifyResource($request)) {
+            $file = [
+                'doc_front' => $request->doc_front,
+                'doc_back' => $request->doc_back,
+                'proof_address' => $request->proof_address,
+                'terms_and_police' => $request->terms_and_police
+            ];
 
-                return response()->json([
-                    'status'  => true,
-                    'message' => __('E-mail verificado com sucesso'),
-                ]);
-            }
+            (new UserComplianceResource())->startCompliancePerson(auth()->user(), $file);
+
+            return response()->json([
+                'status'  => true,
+                'message' => __('Documentos enviados com sucesso'),
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
 
