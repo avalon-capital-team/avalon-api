@@ -23,7 +23,9 @@ return new class() extends Migration
             $table->string('form_url')->nullable();
             $table->string('verification_id')->nullable();
             $table->json('last_callback')->nullable();
-            $table->json('documents')->nullable();
+            $table->string('document_front')->nullable();
+            $table->string('document_back')->nullable();
+            $table->string('proof_address')->nullable();
             $table->string('message')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->foreign('status_id')->references('id')->on('users_compliance_status')->nullOnDelete();

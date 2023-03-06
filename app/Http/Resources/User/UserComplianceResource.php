@@ -128,20 +128,20 @@ class UserComplianceResource
             'user_id' => $user->id,
         ];
 
-        foreach ($files as $file) {
+        $document_front = (new FileUploadHelper())->storeFile($files['doc_front'], 'users/documents');
+        $document_back = (new FileUploadHelper())->storeFile($files['doc_back'], 'users/documents');
 
-            $data['files'][] = [
-                'name' => $file['name'],
-                'url' => (new FileUploadHelper())->storeFile($file['file'], 'users/documents'),
-                'url_back' => ($file['file_back']) ? (new FileUploadHelper())->storeFile($file['file_back'], 'users/documents') : null,
-            ];
+        if ($files['proof_address']) {
+            $proof_address = (new FileUploadHelper())->storeFile($files['proof_address'], 'users/documents');
         }
-        dd($data);
+
         $userCompliance = new UserCompliance();
         $userCompliance->user_id = $user->id;
         $userCompliance->status_id = 1;
         $userCompliance->type = 'manual';
-        $userCompliance->documents = json_encode($data['files']);
+        $userCompliance->document_front = $document_front;
+        $userCompliance->document_back = $document_back;
+        $userCompliance->proof_address = $proof_address;
         $userCompliance->save();
 
         return $userCompliance;

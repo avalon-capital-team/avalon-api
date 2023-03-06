@@ -15,9 +15,9 @@ class FileUploadHelper
      */
     public function storeFile($file, string $folder)
     {
-        dd($file);
         $storage = Storage::disk('digitalocean')->putFile('uploads/' . $folder, $file, 'public');
         $fileUpload_url = config('filesystems.disks.digitalocean.endpoint') . '/' . config('filesystems.disks.digitalocean.bucket') . '/' . $storage;
+
         return $fileUpload_url;
     }
 }
