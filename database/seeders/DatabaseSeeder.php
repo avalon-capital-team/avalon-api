@@ -45,7 +45,6 @@ class DatabaseSeeder extends Seeder
         # Order
         $this->call(OrderStatusTableSeeder::class);
 
-
         # Data
         $this->call(DataGenreSeeder::class);
         $this->call(DataNotificationChannelSeeder::class);
