@@ -16,6 +16,11 @@ use Database\Seeders\Onboarding\OnboardingStepSeeder;
 use Database\Seeders\User\UserComplianceStatusSeeder;
 use Database\Seeders\User\UserSeeder;
 use Database\Seeders\User\UserStatusSeeder;
+use Database\Seeders\Coin\CoinsTableSeeder;
+use Database\Seeders\Credit\CreditTypeTableSeeder;
+use Database\Seeders\Credit\CreditStatusTableSeeder;
+use Database\Seeders\Order\OrderStatusTableSeeder;
+use Database\Seeders\System\PaymentMethodTableSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -27,6 +32,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        # Coin
+        $this->call(CoinsTableSeeder::class);
+
+        # Credit
+        $this->call(CreditTypeTableSeeder::class);
+        $this->call(CreditStatusTableSeeder::class);
+
+        # Payment Method
+        $this->call(PaymentMethodTableSeeder::class);
+
+        # Order
+        $this->call(OrderStatusTableSeeder::class);
+
+
         # Data
         $this->call(DataGenreSeeder::class);
         $this->call(DataNotificationChannelSeeder::class);
