@@ -4,8 +4,8 @@ namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Requests\User\CreatePlanOrderRequest;
-use App\Models\User\UserPlan;
 use App\Models\User;
+use App\Models\User\UserPlan;
 use App\Models\Order\Order;
 
 class UserPlanResource
@@ -34,16 +34,13 @@ class UserPlanResource
     {
         $validated = $request->validated();
 
-        $plan = new UserPlan();
-        dd($plan->createPlan($user));
-        $plan = $plan->createPlan($user, $validated['plan_id'], $validated['amount']);
+        $plan = (new UserPlan())->createPlan($user, $validated);
+        $order = (new Order())->createOrder($user, $validated);
 
-        $order = new Order();
-        $order = $order->createOrder($user, $validated);
-
-
-        if (!$plan) {
+        if (!$plan && !$order) {
             throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!');
         }
+
+        return $order;
     }
 }

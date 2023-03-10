@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Plan;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserPlanResource;
+use App\Models\Order\Order;
 use App\Http\Requests\User\CreatePlanOrderRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -52,7 +53,9 @@ class UserPlanController extends Controller
 
                 return response()->json([
                     'status'  => true,
-                    'message' => 'O endereço foi salvo com sucesso',
+                    'message' => 'A orden foi criada com sucesso',
+                    'order' => (new Order())->findByOrderUserId(auth()->user()->id),
+                    'plan' => (new UserPlanResource())->findByUserId(auth()->user()->id),
                 ]);
             }
         } catch (\Exception $e) {
@@ -61,5 +64,14 @@ class UserPlanController extends Controller
                 'message' => $e->getMessage()
             ], $e->getCode() ?? 400);
         }
+    }
+
+    /**
+     * Deposit Voucher
+     * @param
+     * @return
+     */
+    public function UploadeVoucher()
+    {
     }
 }

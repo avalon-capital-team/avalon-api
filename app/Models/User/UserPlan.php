@@ -38,15 +38,12 @@ class UserPlan extends Model
      * @param  int $payment_method
      * @return \App\Models\User\UserPlan || boolean;
      */
-    public function createOrder(User $user)
+    public function createPlan(User $user, $data)
     {
-        dd($plan);
         $plan = new UserPlan();
         $plan->user_id             = $user->id;
-        $plan->plan_id             = $plan_id;
-        $plan->acting              = false;
-        $plan->amount              = $amount;
-
+        $plan->plan_id             = $data['plan_id'];
+        $plan->amount              = $data['amount'];
 
         if ($plan->save()) {
             return $plan;

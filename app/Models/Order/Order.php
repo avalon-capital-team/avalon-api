@@ -6,7 +6,6 @@ use App\Http\Resources\Order\OrderResource;
 use App\Models\Coin\Coin;
 use App\Models\Credit\Credit;
 use App\Models\System\PaymentMethod\PaymentMethod;
-use App\Models\TokenSale\TokenSale;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -68,6 +67,15 @@ class Order extends Model implements AuditableContract
     }
 
     /**
+     * Finder Order
+     * @param $id
+     */
+    public function findByOrderUserId(int $id)
+    {
+        return Order::where('user_id', $id)->first();
+    }
+
+    /**
      * @param $query
      * @param $request
      * @return mixed
@@ -107,17 +115,14 @@ class Order extends Model implements AuditableContract
      */
     public function createOrder(User $user, $data)
     {
-        dd($data);
-
-        $total = '10';
-
         $order = new Order();
         $order->user_id             = $user->id;
         $order->payment_method_id   = $data['payment_method'];
         $order->status_id           = 1;
         $order->coin_id             = $data['coin_id'];
+        $order->plan_id               = $data['plan_id'];
+        $order->total               = $data['amount'];
         $order->fee                 = 0;
-        $order->total               = $total;
 
         if ($order->save()) {
             return $order;
