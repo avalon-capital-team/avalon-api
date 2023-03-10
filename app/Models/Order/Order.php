@@ -32,7 +32,6 @@ class Order extends Model implements AuditableContract
      * @var array<int, string>
      */
     protected $fillable = [
-        'token',
         'user_id',
         'coin_id',
         'payment_method_id',
@@ -106,15 +105,19 @@ class Order extends Model implements AuditableContract
      * @param  int $payment_method
      * @return \App\Models\Order\Order || boolean;
      */
-    public function createOrder(User $user, $coin_id, $payment_method)
+    public function createOrder(User $user, $data)
     {
+        dd($data);
+
+        $total = '10';
+
         $order = new Order();
         $order->user_id             = $user->id;
-        $order->payment_method_id   = $payment_method;
+        $order->payment_method_id   = $data['payment_method'];
         $order->status_id           = 1;
-        $order->coin_id             = $coin_id;
-        $order->total               = 0;
+        $order->coin_id             = $data['coin_id'];
         $order->fee                 = 0;
+        $order->total               = $total;
 
         if ($order->save()) {
             return $order;
@@ -237,5 +240,15 @@ class Order extends Model implements AuditableContract
     public function coin()
     {
         return $this->hasOne(Coin::class, 'id', 'coin_id');
+    }
+
+    /**
+     * Get the plan detains
+     *
+     * @return \App\Models\Data\DataPlan
+     */
+    public function plan()
+    {
+        return $this->hasOne(DataPlan::class, 'id', 'plan_id');
     }
 }

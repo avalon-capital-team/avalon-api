@@ -70,6 +70,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['prefix' => 'user'], function () {
         # User
         Route::get('data', [App\Http\Controllers\Api\Account\AccountController::class, 'userData']);
+        Route::get('plan', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlan']);
+
+        # Generate Order
+        Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrder']);
     });
 
     # Profile

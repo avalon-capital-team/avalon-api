@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->unsignedInteger('type_id')->nullable();
             $table->unsignedInteger('status_id')->nullable();
-            $table->boolean('external')->default(false);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->foreign('type_id')->references('id')->on('credits_type')->nullOnDelete();

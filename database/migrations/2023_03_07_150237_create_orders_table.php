@@ -19,6 +19,7 @@ return new class() extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('payment_method_id')->nullable();
             $table->unsignedInteger('coin_id')->nullable();
+            $table->unsignedInteger('plan_id')->nullable();
             $table->decimal('total', 15, 4);
             $table->decimal('fee', 15, 4)->default(0);
             $table->unsignedInteger('status_id')->nullable();
@@ -27,6 +28,7 @@ return new class() extends Migration
             $table->unsignedInteger('manual_by')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->foreign('coin_id')->references('id')->on('coins')->nullOnDelete();
+            $table->foreign('plan_id')->references('id')->on('data_plans')->nullOnDelete();
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->nullOnDelete();
             $table->foreign('status_id')->references('id')->on('orders_status')->nullOnDelete();
             $table->foreign('manual_by')->references('id')->on('users')->nullOnDelete();

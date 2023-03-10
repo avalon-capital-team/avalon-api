@@ -133,6 +133,8 @@ class UserComplianceResource
 
         if ($files['proof_address']) {
             $proof_address = (new FileUploadHelper())->storeFile($files['proof_address'], 'users/documents');
+        } else {
+            $proof_address = null;
         }
 
         $userCompliance = new UserCompliance();

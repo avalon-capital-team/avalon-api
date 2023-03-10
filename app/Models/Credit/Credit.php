@@ -41,10 +41,7 @@ class Credit extends Model implements AuditableContract
         'description',
         'order_id',
         'type_id',
-        'status_id',
-        'transfer_user_id',
-        'token_sale_id',
-        'external'
+        'status_id'
     ];
 
     /**
@@ -70,11 +67,11 @@ class Credit extends Model implements AuditableContract
     public function scopeFilterSearch($query, $filters)
     {
         if (isset($filters['uuid']) && $filters['uuid']) {
-            $query->where('uuid', 'LIKE', '%'.$filters['uuid'].'%');
+            $query->where('uuid', 'LIKE', '%' . $filters['uuid'] . '%');
         }
 
         if (isset($filters['description']) && $filters['description']) {
-            $query->where('description', 'LIKE', '%'.$filters['description'].'%');
+            $query->where('description', 'LIKE', '%' . $filters['description'] . '%');
         }
 
         if (isset($filters['coin_id']) && $filters['coin_id'] && $filters['coin_id'] != 'all') {
@@ -85,7 +82,7 @@ class Credit extends Model implements AuditableContract
         }
 
         if (isset($filters['date_to']) && $filters['date_to']) {
-            $query->where('created_at', '<=', Carbon::parse($filters['date_to'])->format('Y-m-d').' 23:59:59');
+            $query->where('created_at', '<=', Carbon::parse($filters['date_to'])->format('Y-m-d') . ' 23:59:59');
         }
 
         return $query;
@@ -168,6 +165,6 @@ class Credit extends Model implements AuditableContract
      */
     public function receipt()
     {
-        return $this->hasOne(Receipt::class, 'model_id', 'id')->where('model_class', "\\".(new \ReflectionClass($this))->getName());
+        return $this->hasOne(Receipt::class, 'model_id', 'id')->where('model_class', "\\" . (new \ReflectionClass($this))->getName());
     }
 }
