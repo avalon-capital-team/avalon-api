@@ -31,52 +31,6 @@ class UserComplianceController extends Controller
     }
 
     /**
-     * Submit form
-     */
-    public function submit(UserComplianceRequest $request)
-    {
-        $validated = $request->validated();
-
-        if ($validated) {
-            try {
-                $files = array(
-                    array(
-                        'name' => 'driver_license',
-                        'file' => $validated['doc_front'],
-                        'file_back' => $validated['doc_back'],
-                    ),
-                    array(
-                        'name' => 'proof_address',
-                        'file' => $validated['proof_address'],
-                        'file_back' => null,
-                    ),
-                );
-
-                $userCompliance = (new UserComplianceResource())->startCompliancePerson(auth()->user(), $files);
-                if ($userCompliance) {
-                    return response()->json([
-                        'status'  => true,
-                        'message' => __('Documentos enviados com sucesso, o prazo para validação é de 24 horas.'),
-                    ]);
-                }
-            } catch (\Exception $e) {
-                DB::rollBack();
-
-                return response()->json([
-                    'status' => false,
-                    'message'  => $e->getMessage()
-                ], 400);
-            }
-        }
-
-        return response()->json([
-            'status'  => false,
-            'message' => __('Não foi possivel enviar os documentos
-            '),
-        ]);
-    }
-
-    /**
      * @param  \App\Http\Resources\User\UserComplianceResource $resource
      * @param  \App\Http\Requests\User\UpdateUserDocumentRequest $request
      * @return \Illuminate\Http\JsonResponse

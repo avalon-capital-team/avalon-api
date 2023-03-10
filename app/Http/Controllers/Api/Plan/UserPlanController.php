@@ -67,11 +67,28 @@ class UserPlanController extends Controller
     }
 
     /**
-     * Deposit Voucher
-     * @param
-     * @return
+     * @param \App\Htt\Resorces\User\UserPlanResource @resource
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function UploadeVoucher()
+    public function uploadeVoucher(UserPlanResource $resource, $request)
     {
+        dd($request);
+        try {
+            if ($resource->upDate(auth()->user())) {
+            }
+
+
+            return response()->json([
+                'status'  => true,
+                'message' => __('Documentos enviados com sucesso'),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message'  => $e->getMessage()
+            ], 400);
+        }
     }
 }

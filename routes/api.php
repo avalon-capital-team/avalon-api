@@ -72,8 +72,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('data', [App\Http\Controllers\Api\Account\AccountController::class, 'userData']);
         Route::get('plan', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlan']);
 
-        # Generate Order
+        # Plan
         Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrder']);
+        Route::post('plan/upload-voucher', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'uploadeVoucher']);
     });
 
     # Profile
@@ -133,6 +134,9 @@ Route::group(['prefix' => 'helpers'], function () {
 
     # Genre
     Route::get('genres', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllGenres']);
+
+    # Plans
+    Route::get('plans', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPlans']);
 
     # Privacy
     Route::get('privacy/types-with-options', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPrivacyTypeWithOption']);

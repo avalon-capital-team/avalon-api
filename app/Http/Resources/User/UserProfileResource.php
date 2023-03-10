@@ -30,6 +30,7 @@ class UserProfileResource
                 'username' => $user->username,
                 'email' => $user->email,
                 'avatar' => $user->profile->avatar,
+                'phone' => $user->phone,
                 'email_verified' => $email_verified_at
             ]
         ];

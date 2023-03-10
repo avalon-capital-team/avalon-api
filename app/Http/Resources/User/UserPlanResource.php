@@ -43,4 +43,29 @@ class UserPlanResource
 
         return $order;
     }
+
+    /**
+     * Store or update documentation
+     *
+     * @param  \App\Models\User $user
+     * @param  void $doc_front
+     * @param  void $doc_back
+     * @param  void $proof_address
+     * @return bool
+     * @throws \Exception
+     */
+    public function upDate(User $user)
+    {
+
+        $plan = $this->findByUserId($user->id);
+        if ($plan) {
+            dd($plan);
+        }
+
+        if ($plan->save()) {
+            return true;
+        }
+
+        throw new \Exception('Não foi possível enviar seus documentos!');
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Helpers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Data\DataCountryResource;
 use App\Http\Resources\Data\DataGenreResource;
-use App\Http\Resources\Data\DataInterestResource;
+use App\Http\Resources\Data\DataPlanResource;
 use App\Http\Resources\Data\DataPrivacyTypeOptionResource;
 use App\Http\Resources\Data\DataPrivacyTypeResource;
 
@@ -14,25 +14,13 @@ class HelpersController extends Controller
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getBaseInterests()
+    public function getAllPlans()
     {
         return response()->json([
             'status'  => true,
-            'steps' => (new DataInterestResource())->getBaseInterests()->toArray()
+            'plans' => (new DataPlanResource())->getAll()->toArray()
         ]);
     }
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getAllInterests()
-    {
-        return response()->json([
-            'status'  => true,
-            'steps' => (new DataInterestResource())->getAllInterests()->toArray()
-        ]);
-    }
-
     /**
      * @return \Illuminate\Http\JsonResponse
      */
