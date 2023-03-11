@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Plan;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Document\TransferVoucherRequest;
 use App\Http\Resources\User\UserPlanResource;
 use App\Models\Order\Order;
 use App\Http\Requests\User\CreatePlanOrderRequest;
+use Aws\S3\Transfer;
 use Illuminate\Support\Facades\DB;
 
 class UserPlanController extends Controller
@@ -70,18 +72,18 @@ class UserPlanController extends Controller
      * @param \App\Htt\Resorces\User\UserPlanResource @resource
      * @return \Illuminate\Http\JsonResponse
      */
-    public function uploadeVoucher(UserPlanResource $resource, $request)
+    public function uploadeVoucher(UserPlanResource $resource, TransferVoucherRequest $request)
     {
-        dd($request);
         try {
-            if ($resource->upDate(auth()->user())) {
+            $validated = $request->validated();
+
+            if ($resource->upDate(auth()->user(), $validated)) {
+
+                return response()->json([
+                    'status'  => true,
+                    'message' => __('Comprovante enviado com sucesso'),
+                ]);
             }
-
-
-            return response()->json([
-                'status'  => true,
-                'message' => __('Documentos enviados com sucesso'),
-            ]);
         } catch (\Exception $e) {
             DB::rollBack();
 

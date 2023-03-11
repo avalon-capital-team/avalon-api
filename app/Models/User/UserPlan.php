@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Models\Data\DataPlan;
 use App\Models\User;
+use App\Models\Coin\Coin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,9 +26,10 @@ class UserPlan extends Model
     protected $fillable = [
         'user_id',
         'plan_id',
+        'coin_id',
         'amount',
         'acting',
-        'paymente_voucher_url',
+        'payment_voucher_url',
     ];
 
     /**
@@ -43,6 +45,7 @@ class UserPlan extends Model
         $plan = new UserPlan();
         $plan->user_id             = $user->id;
         $plan->plan_id             = $data['plan_id'];
+        $plan->coin_id             = $data['coin_id'];
         $plan->amount              = $data['amount'];
 
         if ($plan->save()) {
@@ -70,5 +73,15 @@ class UserPlan extends Model
     public function plan()
     {
         return $this->hasOne(DataPlan::class, 'id', 'plan_id');
+    }
+
+    /**
+     * Get the plan detains
+     *
+     * @return \App\Models\Data\DataPlan
+     */
+    public function coin()
+    {
+        return $this->hasOne(Coin::class, 'id', 'coin_id');
     }
 }

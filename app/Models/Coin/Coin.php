@@ -2,6 +2,7 @@
 
 namespace App\Models\Coin;
 
+use App\Models\User\UserPlan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\Credit\CreateCreditBalance;
@@ -58,6 +59,16 @@ class Coin extends Model
     public function coinNetwork()
     {
         return $this->hasMany(CoinNetwork::class, 'coin_id', 'id');
+    }
+
+    /**
+     * Get Networks of Coin
+     *
+     * @return \App\Models\Coin\CoinNetwork
+     */
+    public function userPlan()
+    {
+        return $this->hasMany(UserPlan::class, 'coin_id', 'id');
     }
 
     /**

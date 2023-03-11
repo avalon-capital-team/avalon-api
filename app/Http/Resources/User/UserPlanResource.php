@@ -7,6 +7,7 @@ use App\Http\Requests\User\CreatePlanOrderRequest;
 use App\Models\User;
 use App\Models\User\UserPlan;
 use App\Models\Order\Order;
+use App\Helpers\FileUploadHelper;
 
 class UserPlanResource
 {
@@ -54,18 +55,24 @@ class UserPlanResource
      * @return bool
      * @throws \Exception
      */
-    public function upDate(User $user)
+    public function upDate(User $user, $data)
     {
-
         $plan = $this->findByUserId($user->id);
-        if ($plan) {
-            dd($plan);
+
+        if ($plan['coin_id'] == 1) {
+            $plan->payment_voucher_url = (new FileUploadHelper())->storeFile($data['transfer_voucher'], 'users/documents');
+        } else if ($plan['coin_id'] == 2) {
+            $plan->payment_voucher_url = 'https://www.blockchain.com/explorer/search?search=' . $data['transfer_hash'];
+        } else if ($plan['coin_id'] == 3) {
+            $plan->payment_voucher_url = 'https://etherscan.io/tx/' . $data['transfer_hash'];
+        } else {
+            throw new \Exception('Não foi possível enviar seu comprovante!');
         }
 
         if ($plan->save()) {
             return true;
         }
 
-        throw new \Exception('Não foi possível enviar seus documentos!');
+        throw new \Exception('Não foi possível enviar seu comprovante!');
     }
 }
