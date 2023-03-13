@@ -3,9 +3,10 @@
 namespace App\Models\Credit;
 
 use App\Helpers\UuidHelper;
-use App\Http\Resources\Receipt\ReceiptResource;
+
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Models\Coin\Coin;
+use App\Models\Data\DataPlan;
 use App\Models\Order\Order;
 use App\Models\Receipt\Receipt;
 use App\Models\User;
@@ -41,7 +42,8 @@ class Credit extends Model implements AuditableContract
         'description',
         'order_id',
         'type_id',
-        'status_id'
+        'status_id',
+        'plan_id'
     ];
 
     /**
@@ -54,8 +56,7 @@ class Credit extends Model implements AuditableContract
             $model->uuid = UuidHelper::generate($model);
         });
         self::created(function ($model) {
-            (new CreditBalanceResource())->createOrUpdateBalance($model->user, $model->coin_id, floatval($model->amount), $model->token_sale_id);
-            (new ReceiptResource())->create($model->type->code, $model, $model->user, $model->coin);
+            (new CreditBalanceResource())->createOrUpdateBalance($model->user, $model->coin_id, floatval($model->amount));
         });
     }
 
@@ -139,6 +140,16 @@ class Credit extends Model implements AuditableContract
     }
 
     /**
+     * Get Order of Credit
+     *
+     * @return \App\Models\Order\Order
+     */
+    public function plan()
+    {
+        return $this->hasOne(DataPlan::class, 'id', 'plan_id');
+    }
+
+    /**
      * Get Type of Credit
      *
      * @return \App\Models\Credit\CreditType
@@ -148,15 +159,15 @@ class Credit extends Model implements AuditableContract
         return $this->hasOne(CreditType::class, 'id', 'type_id');
     }
 
-    /**
-     * Check if have receipt
-     *
-     * @return boolean
-     */
-    public function checkIfHaveReceipt()
-    {
-        return (new ReceiptResource())->checkIfModelAlreadyExistAndReturnId($this);
-    }
+    // /**
+    //  * Check if have receipt
+    //  *
+    //  * @return boolean
+    //  */
+    // public function checkIfHaveReceipt()
+    // {
+    //     return (new ReceiptResource())->checkIfModelAlreadyExistAndReturnId($this);
+    // }
 
     /**
      * Get Receipt of Credit

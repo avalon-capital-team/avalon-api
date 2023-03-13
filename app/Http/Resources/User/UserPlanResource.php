@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\User\UserPlan;
 use App\Models\Order\Order;
 use App\Helpers\FileUploadHelper;
+use App\Http\Resources\Credit\CreditResource;
 
 class UserPlanResource
 {
@@ -34,11 +35,14 @@ class UserPlanResource
     public function createPlanOrder(User $user, CreatePlanOrderRequest $request)
     {
         $validated = $request->validated();
-
+        $type_id = 1;
+        $status_id = 1;
+        $description = 'Ordem criada';
         $plan = (new UserPlan())->createPlan($user, $validated);
         $order = (new Order())->createOrder($user, $validated);
+        $credit = (new CreditResource())->create($user, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description, $order->id);
 
-        if (!$plan && !$order) {
+        if (!$plan && !$order && !$credit) {
             throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!');
         }
 

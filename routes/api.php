@@ -74,7 +74,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         # Plan
         Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrder']);
+        #UploadFile
         Route::post('plan/upload-voucher', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'uploadeVoucher']);
+        #Extract
+        Route::get('plan/extract', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getExtract']);
     });
 
     # Profile
@@ -129,14 +132,17 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 # Helpers
 Route::group(['prefix' => 'helpers'], function () {
 
+    # Banks
+    Route::get('banks', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllBanks']);
+
+    # Plans
+    Route::get('plans', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPlans']);
+
     # Countries
     Route::get('countries', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllCountries']);
 
     # Genre
     Route::get('genres', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllGenres']);
-
-    # Plans
-    Route::get('plans', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPlans']);
 
     # Privacy
     Route::get('privacy/types-with-options', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPrivacyTypeWithOption']);

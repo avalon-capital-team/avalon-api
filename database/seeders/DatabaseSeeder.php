@@ -8,6 +8,7 @@ use Database\Seeders\Data\DataCountrySeeder;
 use Database\Seeders\Data\DataGenreSeeder;
 use Database\Seeders\Data\DataPlanSeeder;
 use Database\Seeders\Data\DataOngSeeder;
+use Database\Seeders\Data\DataBankSeeder;
 use Database\Seeders\Data\DataNotificationChannelSeeder;
 use Database\Seeders\Data\DataNotificationTypeSeeder;
 use Database\Seeders\Data\DataPrivacyTypeOptionSeeder;
@@ -49,11 +50,12 @@ class DatabaseSeeder extends Seeder
         $this->call(DataGenreSeeder::class);
         $this->call(DataNotificationChannelSeeder::class);
         $this->call(DataNotificationTypeSeeder::class);
-        $this->call(DataCountrySeeder::class);
         $this->call(DataPrivacyTypeOptionSeeder::class);
         $this->call(DataPlanSeeder::class);
         $this->call(DataOngSeeder::class);
         $this->call(DataPrivacyTypeSeeder::class);
+        $this->call(DataBankSeeder::class);
+        $this->call(DataCountrySeeder::class);
 
         # Onboarding
         $this->call(OnboardingStepSeeder::class);

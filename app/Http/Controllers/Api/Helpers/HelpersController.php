@@ -6,11 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Data\DataCountryResource;
 use App\Http\Resources\Data\DataGenreResource;
 use App\Http\Resources\Data\DataPlanResource;
+use App\Http\Resources\Data\DataBankResource;
 use App\Http\Resources\Data\DataPrivacyTypeOptionResource;
 use App\Http\Resources\Data\DataPrivacyTypeResource;
 
 class HelpersController extends Controller
 {
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllBanks()
+    {
+        return response()->json([
+            'status'  => true,
+            'plans' => (new DataBankResource())->getAll()->toArray()
+        ]);
+    }
+
     /**
      * @return \Illuminate\Http\JsonResponse
      */
@@ -21,6 +33,7 @@ class HelpersController extends Controller
             'plans' => (new DataPlanResource())->getAll()->toArray()
         ]);
     }
+
     /**
      * @return \Illuminate\Http\JsonResponse
      */

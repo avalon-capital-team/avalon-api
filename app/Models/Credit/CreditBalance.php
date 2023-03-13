@@ -36,7 +36,6 @@ class CreditBalance extends Model implements AuditableContract
         'deposited',
         'used',
         'received',
-        'token_sale_id',
         'withdrawal'
     ];
 
@@ -78,7 +77,7 @@ class CreditBalance extends Model implements AuditableContract
     public function balanceName()
     {
         if ($this->tokenSale) {
-            return 'Vendas de '.$this->tokenSale->name;
+            return 'Vendas de ' . $this->tokenSale->name;
         }
         return 'Principal';
     }

@@ -15,7 +15,7 @@ use App\Models\User\UserSecurity;
 use App\Models\User\UserStatus;
 use App\Models\User\UserTokenDevice;
 use App\Models\User\UserPlan;
-use App\Notifications\Chat\MessageSentNotification;
+use App\Models\Credit\CreditBalance;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -100,6 +100,16 @@ class User extends Authenticatable
                 'value' => (string)$this->id
             ]
         ];
+    }
+
+    /**
+     * Get the financial data from user
+     *
+     * @return \App\Models\User\UserWithdrawalInfo
+     */
+    public function financial()
+    {
+        return $this->hasMany(UserWithdrawalInfo::class, 'user_id', 'id');
     }
 
     /**
@@ -211,5 +221,10 @@ class User extends Authenticatable
     public function tokenDevice()
     {
         return $this->hasOne(UserTokenDevice::class, 'user_id', 'id');
+    }
+
+    public function creditBalance()
+    {
+        return $this->hasMany(CreditBalance::class, 'user_id', 'id');
     }
 }
