@@ -20,8 +20,8 @@ class SettingsGeneralResource
         return [
             'email' => $user->email,
             'birth_date' => $user->birth_date,
-            'country' => ($user->address->country) ? $user->address->country->name : null,
             'phone' => $user->phone,
+            'country' => ($user->address->country) ? $user->address->country->name : null,
             'genre' => ($user->genre) ? $user->genre->name : null,
         ];
     }
@@ -35,25 +35,11 @@ class SettingsGeneralResource
     {
         $validated = $request->validated();
 
-        $genre = (new DataGenreResource())->findByName($validated['genre']);
-        if (!$genre) {
-            throw new \Exception('Gênero selecionado inválido.', 400);
-        }
-
-        $country = (new DataCountryResource())->findByName($validated['country']);
-        if (!$country) {
-            throw new \Exception('País selecionado inválido.', 400);
-        }
-
-        $request->user()->address->update([
-            'country_id' => $country->id
-        ]);
 
         return $request->user()->update([
             'email' => $validated['email'],
             'birth_date' => $validated['birth_date'],
             'phone' => $validated['phone'],
-            'genre_id' => $genre->id
         ]);
     }
 }

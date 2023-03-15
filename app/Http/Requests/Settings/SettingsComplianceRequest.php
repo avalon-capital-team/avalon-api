@@ -27,8 +27,8 @@ class SettingsComplianceRequest extends FormRequest
     public function rules()
     {
         return [
-            'front_document' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'back_document' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'doc_front' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'doc_back' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
         ];
     }
 
@@ -40,11 +40,12 @@ class SettingsComplianceRequest extends FormRequest
     public function messages()
     {
         return [
-            'front_document.required' => __('Faça Upload da frente do documento'),
-            'front_document.mimes' => __('O arquivo pode ser: PDF, JPG ou PNG'),
-            'front_document.max' => __('O arquivo deve ter no máximo 2MB'),
-            'back_document.mimes' => __('O arquivo pode ser: PDF, JPG ou PNG'),
-            'back_document.max' => __('O arquivo deve ter no máximo 2MB'),
+            'doc_front.required' => __('Faça Upload da frente do documento'),
+            'doc_back.required' => __('Faça Upload do verso do documento'),
+            'doc_front.mimes' => __('O arquivo pode ser: PDF, JPG ou PNG'),
+            'doc_front.max' => __('O arquivo deve ter no máximo 2MB'),
+            'doc_back.mimes' => __('O arquivo pode ser: PDF, JPG ou PNG'),
+            'doc_back.max' => __('O arquivo deve ter no máximo 2MB'),
         ];
     }
 }

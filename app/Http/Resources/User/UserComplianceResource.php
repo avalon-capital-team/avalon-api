@@ -31,7 +31,7 @@ class UserComplianceResource
      * @return bool
      * @throws \Exception
      */
-    public function storeOrUpdate(User $user, $doc_front, $doc_back, $proof_address)
+    public function storeOrUpdate(User $user, $files)
     {
         $document = $this->findByUserId($user->id);
         if ($document) {
@@ -49,15 +49,18 @@ class UserComplianceResource
             $document = new UserCompliance();
             $document->user_id = $user->id;
             $document->status_id = 1;
+            $document->type = 'manual';
         }
 
-        $data = [
-            'front_doc' => (new FileUploadHelper())->storeFile($doc_front, 'users/documents'),
-            'back_doc' => (new FileUploadHelper())->storeFile($doc_back, 'users/documents'),
-            'proof_address' => (new FileUploadHelper())->storeFile($proof_address, 'users/documents'),
-        ];
+        foreach ($files as $file) {
+            $data['files'][] = [
+                'name' => $file['name'],
+                'url' => (new FileUploadHelper())->storeFile($file['file'], 'users/documents'),
+                'url_back' => ($file['file_back']) ? (new FileUploadHelper())->storeFile($file['file_back'], 'users/documents') : null,
+            ];
+        }
 
-        $document->documents = $data;
+        $document->documents = json_encode($data['files']);;
 
         if ($document->save()) {
             return true;

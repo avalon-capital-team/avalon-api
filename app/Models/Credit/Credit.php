@@ -8,7 +8,6 @@ use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Models\Coin\Coin;
 use App\Models\Data\DataPlan;
 use App\Models\Order\Order;
-use App\Models\Receipt\Receipt;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -56,7 +55,7 @@ class Credit extends Model implements AuditableContract
             $model->uuid = UuidHelper::generate($model);
         });
         self::created(function ($model) {
-            (new CreditBalanceResource())->createOrUpdateBalance($model->user, $model->coin_id, floatval($model->amount));
+            (new CreditBalanceResource())->createOrUpdateBalance($model->user, $model->coin_id, floatval($model->amount), $model->plan_id);
         });
     }
 
@@ -157,25 +156,5 @@ class Credit extends Model implements AuditableContract
     public function type()
     {
         return $this->hasOne(CreditType::class, 'id', 'type_id');
-    }
-
-    // /**
-    //  * Check if have receipt
-    //  *
-    //  * @return boolean
-    //  */
-    // public function checkIfHaveReceipt()
-    // {
-    //     return (new ReceiptResource())->checkIfModelAlreadyExistAndReturnId($this);
-    // }
-
-    /**
-     * Get Receipt of Credit
-     *
-     * @return \App\Models\Receipt\Receipt
-     */
-    public function receipt()
-    {
-        return $this->hasOne(Receipt::class, 'model_id', 'id')->where('model_class', "\\" . (new \ReflectionClass($this))->getName());
     }
 }

@@ -63,7 +63,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         # Send Documents
         Route::post('start-compleance-person', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'startPersonCompliance']);
-        Route::post('user-storeOrUpdate', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'userStoreOrUpdate']);
+        Route::post('store-or-update', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'upPersonCompliance']);
     });
 
     # User
@@ -80,9 +80,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('plan/extract', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getExtract']);
     });
 
-    # Profile
-    Route::group(['prefix' => 'profile'], function () {
-        # Data
+    # Withdrawl
+    Route::group(['prefix' => 'withdrawl'], function () {
+        # Request
         Route::get('{username}', [App\Http\Controllers\Api\Profile\ProfileController::class, 'data']);
     });
 
@@ -92,25 +92,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('general', [App\Http\Controllers\Api\Settings\SettingsGeneralController::class, 'data']);
         Route::post('general/update', [App\Http\Controllers\Api\Settings\SettingsGeneralController::class, 'update']);
 
-        # Notifications
-        Route::get('notifications', [App\Http\Controllers\Api\Settings\SettingsNotificationsController::class, 'data']);
-        Route::post('notifications/update', [App\Http\Controllers\Api\Settings\SettingsNotificationsController::class, 'update']);
-
-        # Social
-        Route::get('social', [App\Http\Controllers\Api\Settings\SettingsSocialController::class, 'data']);
-        Route::post('social/update', [App\Http\Controllers\Api\Settings\SettingsSocialController::class, 'update']);
-
-        # Profile
-        Route::get('profile', [App\Http\Controllers\Api\Settings\SettingsProfileController::class, 'data']);
-        Route::post('profile/update', [App\Http\Controllers\Api\Settings\SettingsProfileController::class, 'update']);
-
         # Compliance
         Route::get('compliance', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'data']);
         Route::post('compliance/update', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'update']);
-
-        # Privacy
-        Route::get('privacy', [App\Http\Controllers\Api\Settings\SettingsPrivacyController::class, 'data']);
-        Route::post('privacy/update', [App\Http\Controllers\Api\Settings\SettingsPrivacyController::class, 'update']);
 
         # Security
         Route::post('security/update-password', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'updatePassword']);

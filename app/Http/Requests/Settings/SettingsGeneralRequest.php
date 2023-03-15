@@ -27,11 +27,11 @@ class SettingsGeneralRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'.((!auth()->guest()) ? ','.auth()->user()->id : '')],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email' . ((!auth()->guest()) ? ',' . auth()->user()->id : '')],
             'phone' => ['required', 'min:10', 'regex:/^([0-9\s\-\+\(\)]*)$/'],
             'birth_date' => ['required', 'date_format:Y-m-d', 'before:-18 years'],
-            'country' => ['required', 'exists:data_countries,name'],
-            'genre' => ['required', 'exists:data_genres,name'],
+            'country' => ['exists:data_countries,name'],
+            'genre' => ['exists:data_genres,name'],
         ];
     }
 

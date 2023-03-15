@@ -23,9 +23,16 @@ class CreditTypeTableSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s'),
             ),
             array(
-                'id'    => 3,
+                'id'    => 2,
                 'name'  => 'Saque',
                 'code' => 'withdrawal',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ),
+            array(
+                'id'    => 3,
+                'name'  => 'Rendimento',
+                'code' => 'profit',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             )

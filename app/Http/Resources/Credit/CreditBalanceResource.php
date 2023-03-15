@@ -87,7 +87,7 @@ class CreditBalanceResource
      * @param  int|null $tokenSaleId
      * @return bool
      */
-    public function createOrUpdateBalance(User $user, int $coin_id, float $amount)
+    public function createOrUpdateBalance(User $user, int $coin_id, float $amount, int $plan_id)
     {
         $coin = (new CoinResource())->findById($coin_id);
         $balance = $this->checkBalanceByCoinId($user, $coin);
@@ -98,6 +98,7 @@ class CreditBalanceResource
             $balance->coin_id = $coin_id;
         }
 
+        $balance->plan_id = $plan_id;
         $balance->balance_enable += $amount;
         if ($amount > 0) {
             $balance->received += $amount;
