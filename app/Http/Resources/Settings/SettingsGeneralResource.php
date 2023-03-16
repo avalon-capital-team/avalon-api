@@ -19,10 +19,10 @@ class SettingsGeneralResource
     {
         return [
             'email' => $user->email,
-            'birth_date' => $user->birth_date,
+            'name' => $user->name,
+            'document' => $user->document,
             'phone' => $user->phone,
-            'country' => ($user->address->country) ? $user->address->country->name : null,
-            'genre' => ($user->genre) ? $user->genre->name : null,
+            'birth_date' => $user->birth_date,
         ];
     }
 
