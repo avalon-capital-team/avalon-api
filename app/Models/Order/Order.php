@@ -117,7 +117,7 @@ class Order extends Model implements AuditableContract
     {
         $order = new Order();
         $order->user_id             = $user->id;
-        $order->payment_method_id   = $data['payment_method'];
+        $order->payment_method_id   = 1;
         $order->status_id           = 1;
         $order->coin_id             = $data['coin_id'];
         $order->plan_id               = $data['plan_id'];

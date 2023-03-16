@@ -29,7 +29,7 @@ class CreatePlanOrderRequest extends FormRequest
         return [
             'plan_id' => ['required', 'exists:data_plans,id'],
             'coin_id' => ['required', 'exists:coins,id'],
-            'payment_method' => ['required', 'exists:payment_methods,id'],
+            'payment_method' => ['exists:payment_methods,id'],
             'amount' => ['required', 'string']
         ];
     }
