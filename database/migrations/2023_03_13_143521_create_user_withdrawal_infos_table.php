@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('users_withdrawal_info', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
-            $table->enum('type', ['pix', 'bank', 'crypto']);
+            $table->enum('type', ['pix', 'bank', 'crypto'])->nullable();
             $table->json('data')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();

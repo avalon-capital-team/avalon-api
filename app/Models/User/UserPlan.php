@@ -2,7 +2,6 @@
 
 namespace App\Models\User;
 
-use App\Models\Data\DataPlan;
 use App\Models\User;
 use App\Models\Coin\Coin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,29 +32,6 @@ class UserPlan extends Model
     ];
 
     /**
-     * createPlan
-     *
-     * @param  App\Models\User $user
-     * @param  int $coin_id
-     * @param  int $payment_method
-     * @return \App\Models\User\UserPlan || boolean;
-     */
-    public function createPlan(User $user, $data)
-    {
-        $plan = new UserPlan();
-        $plan->user_id             = $user->id;
-        $plan->plan_id             = $data['plan_id'];
-        $plan->coin_id             = $data['coin_id'];
-        $plan->amount              = $data['amount'];
-
-        if ($plan->save()) {
-            return $plan;
-        }
-
-        return false;
-    }
-
-    /**
      * Get user
      *
      * @return App\Models\User
@@ -63,16 +39,6 @@ class UserPlan extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Get the plan detains
-     *
-     * @return \App\Models\Data\DataPlan
-     */
-    public function plan()
-    {
-        return $this->hasOne(DataPlan::class, 'id', 'plan_id');
     }
 
     /**

@@ -5,13 +5,10 @@ namespace App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use OwenIt\Auditing\Auditable;
 
-class UserWithdrawalInfo extends Model implements AuditableContract
+class UserWithdrawalInfo extends Model
 {
     use HasFactory;
-    use Auditable;
 
     /**
      * table

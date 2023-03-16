@@ -35,7 +35,6 @@ class SettingsGeneralResource
     {
         $validated = $request->validated();
 
-
         return $request->user()->update([
             'email' => $validated['email'],
             'birth_date' => $validated['birth_date'],

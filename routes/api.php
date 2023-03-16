@@ -96,6 +96,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('compliance', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'data']);
         Route::post('compliance/update', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'update']);
 
+        # Financial
+        Route::get('financial', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'data']);
+        Route::post('finacial/update-pix', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updatePix']);
+        Route::post('finacial/update-bank', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updateBank']);
+        Route::post('finacial/update-crypto', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updateCrypto']);
+
         # Security
         Route::post('security/update-password', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'updatePassword']);
         Route::get('security/2fa', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'data2fa']);

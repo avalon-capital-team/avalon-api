@@ -57,6 +57,14 @@ class UserObserver
                     'privacy_type_option_id' => $privacyType->privacyTypeOptionConnected()->where('is_default', 1)->first()->privacyTypeOption->id
                 ]);
             }
+
+            # Plan
+            $user->financial()->create(['type' => 'pix']);
+            $user->financial()->create(['type' => 'bank']);
+            $user->financial()->create(['type' => 'crypto']);
+
+            # Withdrawal
+            $user->plan()->create();
         }
     }
 

@@ -40,7 +40,14 @@ class UserPlanResource
         $status_id = 2;
         $description = 'Ordem criada com sucesso';
 
-        $plan = (new UserPlan())->createPlan($user, $validated);
+        $plan = $user->plan
+            ->where('user_id', $user->id)
+            ->first()
+            ->update([
+                'plan_id' => ($validated['plan_id']),
+                'coin_id' => ($validated['coin_id']),
+                'amount' => ($validated['amount']),
+            ]);
         $order = (new Order())->createOrder($user, $validated);
         $credit = (new CreditResource())->create($user, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description, $order->id);
 
