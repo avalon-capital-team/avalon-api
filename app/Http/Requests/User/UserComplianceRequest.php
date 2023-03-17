@@ -27,8 +27,8 @@ class UserComplianceRequest extends FormRequest
     public function rules()
     {
         return [
-            'doc_front'     => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'doc_back'      => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'doc_front'     => ['required', 'file', 'mimes:jpg,jpeg,png'],
+            'doc_back'      => ['required', 'file', 'mimes:jpg,jpeg,png'],
             'proof_address'     => ['file', 'mimes:jpg,jpeg,png', 'max:2048'],
             'terms_and_police'      => ['accepted']
         ];
