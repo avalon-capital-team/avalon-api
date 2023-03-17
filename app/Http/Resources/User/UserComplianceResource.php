@@ -50,6 +50,7 @@ class UserComplianceResource
             $document->user_id = $user->id;
             $document->status_id = 2;
             $document->type = 'manual';
+            $user->onboarding->step_id = 5;
         }
 
         foreach ($files as $file) {
