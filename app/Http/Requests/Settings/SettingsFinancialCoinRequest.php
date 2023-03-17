@@ -4,6 +4,7 @@ namespace App\Http\Requests\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\FailedValidationTrait;
+use App\Rules\CheckVerificationCodeRule;
 
 class SettingsFinancialCoinRequest extends FormRequest
 {
@@ -30,6 +31,7 @@ class SettingsFinancialCoinRequest extends FormRequest
             'coin_id' => ['required', 'exists:coins,id'],
             'network' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string',],
+            'code' => ['required', 'min:6', new CheckVerificationCodeRule('updated_coin')]
         ];
     }
 

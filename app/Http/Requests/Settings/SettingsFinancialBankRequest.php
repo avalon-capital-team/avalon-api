@@ -4,6 +4,7 @@ namespace App\Http\Requests\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\FailedValidationTrait;
+use App\Rules\CheckVerificationCodeRule;
 
 class SettingsFinancialBankRequest extends FormRequest
 {
@@ -32,6 +33,7 @@ class SettingsFinancialBankRequest extends FormRequest
             'account' => ['required', 'numeric', 'digits_between:1,10'],
             'account_digit' => ['required', 'numeric', 'digits_between:1,10'],
             'agency' => ['required', 'string', 'digits_between:1,10'],
+            'code' => ['required', 'min:6', new CheckVerificationCodeRule('updated_bank')]
         ];
     }
 

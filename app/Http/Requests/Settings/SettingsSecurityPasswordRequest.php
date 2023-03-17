@@ -4,6 +4,7 @@ namespace App\Http\Requests\Settings;
 
 use App\Traits\FailedValidationTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\CheckVerificationCodeRule;
 
 class SettingsSecurityPasswordRequest extends FormRequest
 {
@@ -28,7 +29,8 @@ class SettingsSecurityPasswordRequest extends FormRequest
     {
         return [
             'password_current' => ['required', 'string'],
-            'password_new' => ['required', 'confirmed', 'min:6', 'string']
+            'password_new' => ['required', 'confirmed', 'min:6', 'string'],
+            'code' => ['required', 'min:6', new CheckVerificationCodeRule('updated_password')]
         ];
     }
 

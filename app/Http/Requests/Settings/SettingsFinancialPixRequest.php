@@ -4,6 +4,7 @@ namespace App\Http\Requests\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\FailedValidationTrait;
+use App\Rules\CheckVerificationCodeRule;
 
 class SettingsFinancialPixRequest extends FormRequest
 {
@@ -29,6 +30,7 @@ class SettingsFinancialPixRequest extends FormRequest
         return [
             'key_type' => ['required', 'string', 'max:255', 'in:CPF,CNPJ,PHONE,EMAIL,RANDOM'],
             'key' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'min:6', new CheckVerificationCodeRule('updated_pix')]
         ];
     }
 
@@ -44,6 +46,8 @@ class SettingsFinancialPixRequest extends FormRequest
             'key_type.required' => __('Informe o tipo da chave.'),
             'key_type.in' => __('O tipo de chave selecionado é inválido.'),
             'key.required' => __('Informe a chave PIX.'),
+            'code.required' => 'Informe o código.',
+            'code.digits' => 'O código deve ter no mínimo 6 dígitos'
         ];
     }
 }
