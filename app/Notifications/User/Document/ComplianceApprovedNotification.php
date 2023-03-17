@@ -43,10 +43,11 @@ class ComplianceApprovedNotification extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage())->view(
-            'emails.user.document.compliance_approved',
-            ['userCompliance' => $this->userCompliance]
-        )->subject('[Avalon Capital] Seus documentos foram aprovados');
+        return (new MailMessage())
+            ->view(
+                'emails.user.document.compliance_approved',
+                ['userCompliance' => $this->userCompliance]
+            )->subject('[Avalon Capital] Seus documentos foram aprovados');
     }
 
     /**
