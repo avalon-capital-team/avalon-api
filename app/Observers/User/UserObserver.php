@@ -48,7 +48,7 @@ class UserObserver
             $user->onboarding()->create(['step_id' => 1]);
 
             # Compliance
-            $user->compliance()->create(['status_id' => 0]);
+            $user->compliance()->create(['status_id' => 1]);
 
             # Privacy
             foreach (DataPrivacyType::get() as $privacyType) {
