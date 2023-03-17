@@ -189,6 +189,7 @@ return [
         PragmaRX\Google2FALaravel\ServiceProvider::class,
         NotificationChannels\OneSignal\OneSignalServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
+        Torann\Currency\CurrencyServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -215,6 +216,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Google2FA' => PragmaRX\Google2FALaravel\Facade::class,
+        'Currency' => \Torann\Currency\Facades\Currency::class,
     ])->toArray(),
 
 ];

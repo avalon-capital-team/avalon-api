@@ -84,19 +84,20 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Avatar::make('Avatar')
-                ->preview(function ($value, $disk) {
-                    return ($this->resource->profile && $this->resource->profile->avatar) ? $this->resource->profile->avatar : null;
-                }),
-
             Badge::make('Tipo', 'type', function () {
                 if ($this->type == 'user') {
                     return 'Usuário';
+                } else if ($this->type == 'mananger') {
+                    return 'Gestor';
+                } else  if ($this->type == 'advidor') {
+                    return 'Assessor';
                 } else {
                     return 'Admin';
                 }
             })->map([
                 'Usuário' => 'success',
+                'Gestor' => 'success',
+                'Assessor' => 'success',
                 'Admin' => 'warning'
             ]),
 
@@ -104,7 +105,7 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Acesso', 'username')
+            Text::make('Nome de usuário', 'username')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
@@ -117,6 +118,11 @@ class User extends Resource
             Text::make(__('Documento'), 'document')
                 ->sortable()
                 ->rules('required', 'max:255')->hideFromIndex(),
+
+            Text::make('Telefone', 'phone')
+                ->sortable()
+                ->rules('required', 'phone', 'max:254'),
+
 
             Text::make('Email')
                 ->sortable()
@@ -131,7 +137,7 @@ class User extends Resource
                 ->updateRules('nullable', Rules\Password::defaults()),
 
 
-            HasOne::make('Perfil', 'profile', 'App\Nova\Models\User\UserProfile')
+            HasOne::make('Plano', 'plan', 'App\Nova\Models\User\UserPlan')
                 ->exceptOnForms()
                 ->hideFromDetail(function () {
                     return $this->type == 'admin';
@@ -148,16 +154,6 @@ class User extends Resource
                 ->hideFromDetail(function () {
                     return $this->type == 'admin';
                 }),
-
-            Tabs::make('Detalhes', [
-
-                HasMany::make('Privacidade', 'privacy', 'App\Nova\Models\User\UserPrivacy')
-                    ->exceptOnForms()
-                    ->hideFromDetail(function () {
-                        return $this->type == 'admin';
-                    })
-
-            ]),
         ];
     }
 

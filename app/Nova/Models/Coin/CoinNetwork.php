@@ -1,32 +1,49 @@
 <?php
 
-namespace App\Nova\Models\User;
+namespace App\Nova\Models\Coin;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Currency;
+use Laravel\Nova\Fields\Text;
 
-class UserPlan extends Resource
+class CoinNetwork extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User\UserPlan::class;
+    public static $model = \App\Models\Coin\CoinNetwork::class;
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return __('Redes');
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return __('Redes');
+    }
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'contract';
 
     /**
      * The columns that should be searched.
@@ -38,26 +55,6 @@ class UserPlan extends Resource
     ];
 
     /**
-     * Get the displayable label of the resource.
-     *
-     * @return string
-     */
-    public static function label()
-    {
-        return __('Aprovar Plano');
-    }
-
-    /**
-     * Get the displayable singular label of the resource.
-     *
-     * @return string
-     */
-    public static function singularLabel()
-    {
-        return __('Plano');
-    }
-
-    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
@@ -66,31 +63,17 @@ class UserPlan extends Resource
     public function fields(NovaRequest $request)
     {
         return [
+            ID::make()->sortable(),
 
+            BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
-            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')
-                ->searchable()
-                ->withSubtitles(),
+            BelongsTo::make('Blockchain', 'blockchain', 'App\Nova\Models\Coin\Coin'),
 
-            // BelongsTo::make('Moéda', 'coin_id', 'App\Nova\Models\Coin\Coin')
-            //     ->searchable()
-            //     ->withSubtitles(),
+            BelongsTo::make('Tipo', 'type', 'App\Nova\Models\Coin\CoinNetworkContractType'),
 
-            Boolean::make('Ativo', 'acting')
-                ->sortable(),
+            Text::make('Contrato', 'contract')
+                ->sortable()
 
-            Text::make('Valor', 'amount')
-                ->sortable(),
-
-            // Currency::make('Valor', 'amount')
-            //     ->displayUsing(function ($value) {
-            //         // return currency_format($value, $this->resource->coin->symbol);
-            //     })
-            //     ->creationRules('required', 'numeric', 'not_in:0')
-            //     ->updateRules('nullable', 'numeric', 'not_in:0'),
-
-            Image::make('Comprovante de deposito', 'payment_voucher_url')
-                ->sortable(),
 
         ];
     }
@@ -138,7 +121,6 @@ class UserPlan extends Resource
     {
         return [];
     }
-
     /**
      * Authorize to create
      */
@@ -146,7 +128,6 @@ class UserPlan extends Resource
     {
         return false;
     }
-
     /**
      * Authorize to delete
      */
@@ -154,15 +135,13 @@ class UserPlan extends Resource
     {
         return false;
     }
-
     /**
      * Authorize to delete
      */
     public function authorizedToUpdate(Request $request)
     {
-        return true;
+        return false;
     }
-
     /**
      * Authorize to replicate
      */

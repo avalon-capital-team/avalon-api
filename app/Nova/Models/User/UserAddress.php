@@ -69,18 +69,23 @@ class UserAddress extends Resource
                 ->searchable()
                 ->withSubtitles(),
 
+            Text::make('CEP', 'cep')
+                ->sortable(),
+
+            Text::make('Rua', 'street')
+                ->sortable(),
+
+            Text::make('Bairro', 'neighborhood')
+                ->sortable(),
+
             Text::make('Cidade', 'city')
                 ->sortable(),
 
             Text::make('Estado', 'state')
                 ->sortable(),
 
-            BelongsTo::make('País', 'country', 'App\Nova\Models\Data\DataCountry')
-                ->searchable()
-                ->withSubtitles(),
-
-            Text::make('País', 'country_id')
-                ->sortable(),
+            Text::make('Complemento', 'complement')
+                ->sortable()
 
         ];
     }

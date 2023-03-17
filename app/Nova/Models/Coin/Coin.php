@@ -1,41 +1,39 @@
 <?php
 
-namespace App\Nova\Models\User;
+namespace App\Nova\Models\Coin;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Currency;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Text;
+use Eminiarts\Tabs\Traits\HasTabs;
+use Eminiarts\Tabs\Tabs;
+use Laravel\Nova\Fields\Badge;
 
-class UserPlan extends Resource
+class Coin extends Resource
 {
+    use HasTabs;
+
+
+    public static $permissionsForAbilities = [
+        'viewAny' => 'view coins',
+        'view' => 'view coins',
+        'create' => 'create coins',
+        'update' => 'update coins',
+        // Token Sale
+        'addTokenSale' => 'add coin on tokens sale',
+        'attachTokenSale' => 'attach coin on tokens sale',
+        'detachTokenSale' => 'detach coin on tokens sale ',
+    ];
+
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User\UserPlan::class;
-
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
-    public static $title = 'id';
-
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
-    public static $search = [
-        'id',
-    ];
+    public static $model = \App\Models\Coin\Coin::class;
 
     /**
      * Get the displayable label of the resource.
@@ -44,7 +42,7 @@ class UserPlan extends Resource
      */
     public static function label()
     {
-        return __('Aprovar Plano');
+        return __('Moedas');
     }
 
     /**
@@ -54,8 +52,24 @@ class UserPlan extends Resource
      */
     public static function singularLabel()
     {
-        return __('Plano');
+        return __('Moeda');
     }
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     *
+     * @var string
+     */
+    public static $title = 'symbol';
+
+    /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
+    public static $search = [
+        'name', 'symbol'
+    ];
 
     /**
      * Get the fields displayed by the resource.
@@ -66,31 +80,27 @@ class UserPlan extends Resource
     public function fields(NovaRequest $request)
     {
         return [
+            ID::make()->sortable(),
 
+            Badge::make('Tipo', 'type')->map([
+                'coin' => 'warning',
+                'token' => 'info',
+                'fiat' => 'success'
+            ])
+                ->sortable()
+                ->rules('required', 'string', 'max:254', 'in:coin,token,fiat'),
 
-            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')
-                ->searchable()
-                ->withSubtitles(),
+            Text::make('Nome', 'name')
+                ->sortable()
+                ->rules('required', 'string', 'max:254'),
 
-            // BelongsTo::make('Moéda', 'coin_id', 'App\Nova\Models\Coin\Coin')
-            //     ->searchable()
-            //     ->withSubtitles(),
+            Text::make('Símbolo', 'symbol')
+                ->sortable()
+                ->rules('required', 'string', 'max:254'),
 
-            Boolean::make('Ativo', 'acting')
-                ->sortable(),
-
-            Text::make('Valor', 'amount')
-                ->sortable(),
-
-            // Currency::make('Valor', 'amount')
-            //     ->displayUsing(function ($value) {
-            //         // return currency_format($value, $this->resource->coin->symbol);
-            //     })
-            //     ->creationRules('required', 'numeric', 'not_in:0')
-            //     ->updateRules('nullable', 'numeric', 'not_in:0'),
-
-            Image::make('Comprovante de deposito', 'payment_voucher_url')
-                ->sortable(),
+            Text::make('Decimais', 'decimals')
+                ->sortable()
+                ->rules('required', 'string', 'max:254'),
 
         ];
     }
@@ -138,7 +148,6 @@ class UserPlan extends Resource
     {
         return [];
     }
-
     /**
      * Authorize to create
      */
@@ -146,7 +155,6 @@ class UserPlan extends Resource
     {
         return false;
     }
-
     /**
      * Authorize to delete
      */
@@ -154,7 +162,6 @@ class UserPlan extends Resource
     {
         return false;
     }
-
     /**
      * Authorize to delete
      */
@@ -162,7 +169,6 @@ class UserPlan extends Resource
     {
         return true;
     }
-
     /**
      * Authorize to replicate
      */
