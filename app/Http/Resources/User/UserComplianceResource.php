@@ -3,8 +3,10 @@
 namespace App\Http\Resources\User;
 
 use App\Helpers\FileUploadHelper;
+use App\Models\Onboarding\OnboardingStep;
 use App\Models\User;
 use App\Models\User\UserCompliance;
+use App\Models\User\UserOnboarding;
 use App\Notifications\User\Document\ComplianceApprovedNotification;
 use App\Notifications\User\Document\ComplianceDeclineNotification;
 
@@ -34,25 +36,19 @@ class UserComplianceResource
     public function storeOrUpdate(User $user, $files)
     {
         $document = $this->findByUserId($user->id);
+
         if ($document) {
-            if ($document->status_id == 2) {
+            if ($document->status_id == 3) {
                 throw new \Exception('Você já enviou os documentos, estão aguardando a validação.');
             }
 
-            if ($document->status_id == 3) {
+            if ($document->status_id == 2) {
                 throw new \Exception('Você já enviou os documento e estão ok!');
             }
-
-            $document->status_id = 2;
-            $document->message = '';
-        } else {
-            $document = new UserCompliance();
-            $document->user_id = $user->id;
-            $document->status_id = 2;
-            $document->type = 'manual';
-            $user->onboarding->step_id = 5;
-            $user->onboarding->save();
         }
+        $document->user_id = $user->id;
+        $document->status_id = 3;
+        $document->type = 'manual';
 
         foreach ($files as $file) {
             $data['files'][] = [

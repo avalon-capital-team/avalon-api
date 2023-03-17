@@ -6,6 +6,7 @@ use App\Helpers\FileUploadHelper;
 use App\Http\Requests\Onboarding\StepFourRequest;
 use App\Http\Requests\Onboarding\StepOneRequest;
 use App\Http\Requests\Onboarding\StepTwoRequest;
+use App\Http\Requests\Settings\SettingsComplianceRequest;
 use App\Http\Requests\Onboarding\StepThreeRequest;
 use App\Models\User;
 use Illuminate\Support\Arr;
@@ -107,6 +108,21 @@ class UserOnboardingResource
 
         $request->user()->onboarding->update([
             'step_id' => 4
+        ]);
+
+        return true;
+    }
+
+    /**
+     * @param  \App\Http\Requests\Onboarding\StepFourRequest $request
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function updateStepFour(SettingsComplianceRequest $request)
+    {
+        $request->user()->onboarding->update([
+            'step_id' => 5
         ]);
 
         return true;

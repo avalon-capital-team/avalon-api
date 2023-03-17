@@ -25,4 +25,14 @@ class UserOnboarding extends Model
         'user_id',
         'step_id',
     ];
+
+    /**
+     * Get user
+     *
+     * @return App\Models\User
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

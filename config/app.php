@@ -216,7 +216,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Google2FA' => PragmaRX\Google2FALaravel\Facade::class,
-        'Currency' => \Torann\Currency\Facades\Currency::class,
     ])->toArray(),
 
 ];

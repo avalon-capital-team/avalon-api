@@ -1,41 +1,43 @@
 <?php
 
-namespace App\Nova\Models\User;
+namespace App\Nova\Models\Credit;
 
+use App\Models\Coin\Coin;
+use App\Nova\Filters\Credit\CreditFilterByCoin;
+use App\Nova\Filters\Credit\CreditFilterByType;
+use App\Nova\Metrics\Credit\CreditBalance;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
+use Devpartners\AuditableLog\AuditableLog;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Currency;
+use Laravel\Nova\Fields\Stack;
+use Laravel\Nova\Fields\ID;
+use Eminiarts\Tabs\Traits\HasTabs;
 
-class UserPlan extends Resource
+class Credit extends Resource
 {
+    use HasTabs;
+    /*
+     * Permissions & Roles
+     */
+
+    public static $permissionsForAbilities = [
+        'viewAny' => 'view credits',
+        'view' => 'view credits',
+        'create' => 'create credits',
+        'update' => 'update credits',
+    ];
+
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User\UserPlan::class;
-
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
-    public static $title = 'id';
-
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
-    public static $search = [
-        'id',
-    ];
+    public static $model = \App\Models\Credit\Credit::class;
 
     /**
      * Get the displayable label of the resource.
@@ -44,7 +46,7 @@ class UserPlan extends Resource
      */
     public static function label()
     {
-        return __('Aprovar Plano');
+        return __('Extrato geral');
     }
 
     /**
@@ -54,8 +56,24 @@ class UserPlan extends Resource
      */
     public static function singularLabel()
     {
-        return __('Plano');
+        return __('Extrato geral');
     }
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     *
+     * @var string
+     */
+    public static $title = 'description';
+
+    /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
+    public static $search = [
+        'description'
+    ];
 
     /**
      * Get the fields displayed by the resource.
@@ -66,33 +84,32 @@ class UserPlan extends Resource
     public function fields(NovaRequest $request)
     {
         return [
+            ID::make()->sortable(),
 
-
-            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')
-                ->searchable()
-                ->withSubtitles(),
-
-            Boolean::make('Ativo', 'acting')
-                ->sortable(),
+            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
 
             BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
             Currency::make('Valor', 'amount')
                 ->displayUsing(function ($value) {
-                    return currency_format($value, 'brl');
+                    return currency_format($value, $this->resource->coin->symbol);
                 })
                 ->creationRules('required', 'numeric', 'not_in:0')
                 ->updateRules('nullable', 'numeric', 'not_in:0'),
 
-            // Currency::make('Valor', 'amount', 'App\Nova\Models\User\User')
-            //     ->displayUsing(function ($value) {
-            //         return currency_format($value, 'brl');
-            //     })
-            //     ->creationRules('required', 'numeric', 'not_in:0')
-            //     ->updateRules('nullable', 'numeric', 'not_in:0'),
+            Text::make('Description')
+                ->creationRules('required', 'string', 'max:250')
+                ->updateRules('nullable', 'string', 'max:250'),
 
-            Image::make('Comprovante de deposito', 'payment_voucher_url')
-                ->sortable(),
+            Stack::make('Tipo', [
+                Text::make('Type Id')->resolveUsing(function () {
+                    return optional($this->resource->type)->name;
+                }),
+            ]),
+
+            DateTime::make('Criado em', 'created_at'),
+
+            // AuditableLog::make(),
 
         ];
     }
@@ -105,7 +122,12 @@ class UserPlan extends Resource
      */
     public function cards(NovaRequest $request)
     {
-        return [];
+        $coins = Coin::where('show_wallet', 1)->get();
+        $array = [];
+        foreach ($coins as $coin) {
+            $array[] = (new CreditBalance($coin->id));
+        }
+        return $array;
     }
 
     /**
@@ -116,7 +138,10 @@ class UserPlan extends Resource
      */
     public function filters(NovaRequest $request)
     {
-        return [];
+        return [
+            // (new CreditFilterByType()),
+            // (new CreditFilterByCoin()),
+        ];
     }
 
     /**
@@ -140,7 +165,6 @@ class UserPlan extends Resource
     {
         return [];
     }
-
     /**
      * Authorize to create
      */
@@ -148,7 +172,6 @@ class UserPlan extends Resource
     {
         return false;
     }
-
     /**
      * Authorize to delete
      */
@@ -156,15 +179,13 @@ class UserPlan extends Resource
     {
         return false;
     }
-
     /**
      * Authorize to delete
      */
     public function authorizedToUpdate(Request $request)
     {
-        return true;
+        return false;
     }
-
     /**
      * Authorize to replicate
      */

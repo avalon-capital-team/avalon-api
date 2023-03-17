@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Compliance;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserComplianceResource;
+use App\Http\Resources\User\UserOnboardingResource;
 use App\Http\Requests\User\UserComplianceRequest;
 use App\Http\Requests\Settings\SettingsComplianceRequest;
 
@@ -76,7 +77,11 @@ class UserComplianceController extends Controller
                     'file_back' => $validated['doc_back'],
                 )
             );
-            (new UserComplianceResource())->storeOrUpdate(auth()->user(), $files);
+
+            (new UserOnboardingResource())->updateStepFour($request);
+
+            // (new UserComplianceResource())->storeOrUpdate(auth()->user(), $files);
+
 
             return response()->json([
                 'status'  => true,
