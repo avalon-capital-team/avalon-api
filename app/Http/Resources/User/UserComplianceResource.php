@@ -35,20 +35,20 @@ class UserComplianceResource
     {
         $document = $this->findByUserId($user->id);
         if ($document) {
-            if ($document->status_id == 1) {
+            if ($document->status_id == 2) {
                 throw new \Exception('Você já enviou os documentos, estão aguardando a validação.');
             }
 
-            if ($document->status_id == 2) {
+            if ($document->status_id == 3) {
                 throw new \Exception('Você já enviou os documento e estão ok!');
             }
 
-            $document->status_id = 1;
+            $document->status_id = 2;
             $document->message = '';
         } else {
             $document = new UserCompliance();
             $document->user_id = $user->id;
-            $document->status_id = 1;
+            $document->status_id = 2;
             $document->type = 'manual';
         }
 
