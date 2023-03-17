@@ -78,9 +78,9 @@ class UserComplianceController extends Controller
                 )
             );
 
-            (new UserOnboardingResource())->updateStepFour($request);
+            // (new UserOnboardingResource())->updateStepFour($request);
 
-            // (new UserComplianceResource())->storeOrUpdate(auth()->user(), $files);
+            (new UserComplianceResource())->storeOrUpdate(auth()->user(), $files);
 
 
             return response()->json([
