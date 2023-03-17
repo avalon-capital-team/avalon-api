@@ -221,7 +221,7 @@ class UserComplianceResource
     public function notifyApproveDocuments(UserCompliance $userCompliance)
     {
         if (config('app.env') != 'testing') {
-            $userCompliance->user->notify(new ComplianceApprovedNotification($userCompliance));
+            // $userCompliance->user->notify(new ComplianceApprovedNotification($userCompliance));
         }
     }
 
@@ -233,7 +233,7 @@ class UserComplianceResource
     public function notifyDeclineDocuments(UserCompliance $userCompliance)
     {
         if (config('app.env') != 'testing') {
-            $userCompliance->user->notify(new ComplianceDeclineNotification($userCompliance));
+            // $userCompliance->user->notify(new ComplianceDeclineNotification($userCompliance));
         }
     }
 }
