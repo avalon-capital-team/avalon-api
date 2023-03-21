@@ -29,9 +29,12 @@ class UserComplianceResource
      * @param  int $id
      * @return \App\Models\User\UserCompliance
      */
-    public function findByComplianceStatus(User $user)
+    public function findByComplianceStatus(User $user): array
     {
-        return $user->compliance->status_id;
+        return [
+            'status' => $user->compliance->status_id,
+            'message' => $user->compliance->message,
+        ];
     }
 
     /**

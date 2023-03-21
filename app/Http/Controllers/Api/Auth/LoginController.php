@@ -53,7 +53,7 @@ class LoginController extends Controller
                     'step' => (new UserOnboardingResource())->getActualStep($user)
                 ],
                 'compliance' => [
-                    'status' => (new UserComplianceResource())->findByComplianceStatus($user)
+                    (new UserComplianceResource())->findByComplianceStatus($user)
                 ],
                 'user' => (new UserProfileResource())->profileDetail(auth()->user()),
             ], 200);
