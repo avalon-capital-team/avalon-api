@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\User\UserOnboardingResource;
 use App\Http\Resources\User\UserProfileResource;
+use App\Http\Resources\User\UserComplianceResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,6 +51,9 @@ class LoginController extends Controller
                 'token' => $user->createToken($apiName)->plainTextToken,
                 'onboarding' => [
                     'step' => (new UserOnboardingResource())->getActualStep($user)
+                ],
+                'compliance' => [
+                    'status' => (new UserComplianceResource())->findByComplianceStatus($user)
                 ],
                 'user' => (new UserProfileResource())->profileDetail(auth()->user()),
             ], 200);

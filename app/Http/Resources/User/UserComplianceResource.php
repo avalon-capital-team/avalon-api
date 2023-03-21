@@ -24,6 +24,17 @@ class UserComplianceResource
     }
 
     /**
+     * Find User Document by userId
+     *
+     * @param  int $id
+     * @return \App\Models\User\UserCompliance
+     */
+    public function findByComplianceStatus(User $user)
+    {
+        return $user->compliance->status_id;
+    }
+
+    /**
      * Store or update documentation
      *
      * @param  \App\Models\User $user
@@ -38,7 +49,7 @@ class UserComplianceResource
         $document = $this->findByUserId($user->id);
 
         if ($document) {
-            if ($document->status_id == 3) {
+            if ($document->status_id == 1) {
                 throw new \Exception('Você já enviou os documentos, estão aguardando a validação.');
             }
 
@@ -47,9 +58,9 @@ class UserComplianceResource
             }
         }
         $document->user_id = $user->id;
-        $document->status_id = 3;
+        $document->status_id = 4;
         $document->type = 'manual';
-        $document->document_front = (new FileUploadHelper())->storeFile($files['file'], 'users/fileuments');
+        $document->document_front = (new FileUploadHelper())->storeFile($files['file'], 'users/documents');
         $document->document_back = (new FileUploadHelper())->storeFile($files['file_back'], 'users/documents');
 
         if ($document->save()) {
