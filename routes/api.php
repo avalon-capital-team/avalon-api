@@ -92,6 +92,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('general', [App\Http\Controllers\Api\Settings\SettingsGeneralController::class, 'data']);
         Route::post('general/update', [App\Http\Controllers\Api\Settings\SettingsGeneralController::class, 'update']);
 
+        # Profile
+        Route::post('profile/update', [App\Http\Controllers\Api\Settings\SettingsProfileController::class, 'update']);
+
         # Compliance
         Route::get('compliance', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'data']);
         Route::post('compliance/update', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'update']);

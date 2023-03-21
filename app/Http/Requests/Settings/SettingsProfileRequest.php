@@ -29,8 +29,8 @@ class SettingsProfileRequest extends FormRequest
         return [
             'cover' => ['nullable', 'image', 'mimes:jpg,png,jpeg', 'max:2048'],
             'avatar' => ['nullable', 'image', 'mimes:jpg,png,jpeg', 'max:2048'],
-            'username' => ['required', 'alpha_dash', 'min:3', 'string', 'max:255', 'unique:users,username'.((!auth()->guest()) ? ','.auth()->user()->id : '')],
-            'name' => ['required', 'string', 'max:255'],
+            'username' => ['nullable', 'alpha_dash', 'min:3', 'string', 'max:255', 'unique:users,username' . ((!auth()->guest()) ? ',' . auth()->user()->id : '')],
+            'name' => ['nullable', 'string', 'max:255'],
             'city' => ['nullable', 'string', 'max:255'],
             'state' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:255'],
@@ -46,7 +46,7 @@ class SettingsProfileRequest extends FormRequest
     public function messages()
     {
         return [
-            'avatar.required' => __('Selecione uma imagem de avatar'),
+
             'avatar.image' => __('O avatar deve ser uma imagem válida'),
             'avatar.image' => __('Para o avatar o arquivo deve ser JPG ou PNG'),
             'username.required' => __('O nome de usuário é obrigatório'),

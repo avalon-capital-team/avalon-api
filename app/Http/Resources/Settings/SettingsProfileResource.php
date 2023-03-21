@@ -46,26 +46,6 @@ class SettingsProfileResource
             ]);
         }
 
-        # Cover
-        if ($validated['cover']) {
-            $cover_url = (new FileUploadHelper())->storeFile($validated['cover'], 'covers');
-            $request->user()->profile()->update([
-                'cover' => $cover_url
-            ]);
-        }
-
-        # Address
-        $address = Arr::only($validated, array('city', 'state'));
-        $request->user()->address()->update($address);
-
-        # Profile
-        $profile = Arr::only($validated, array('bio', 'profession'));
-        $request->user()->profile()->update($profile);
-
-        # User
-        $user = Arr::only($validated, array('name', 'username'));
-        $request->user()->update($user);
-
         return true;
     }
 }
