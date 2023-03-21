@@ -58,7 +58,7 @@ class UserComplianceResource
             }
         }
         $document->user_id = $user->id;
-        $document->status_id = 4;
+        $document->status_id = 1;
         $document->type = 'manual';
         $document->document_front = (new FileUploadHelper())->storeFile($files['file'], 'users/documents');
         $document->document_back = (new FileUploadHelper())->storeFile($files['file_back'], 'users/documents');
