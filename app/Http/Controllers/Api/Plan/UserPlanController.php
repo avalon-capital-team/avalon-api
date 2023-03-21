@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Plan;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Document\TransferVoucherRequest;
 use App\Http\Resources\User\UserPlanResource;
+use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Models\Order\Order;
 use App\Http\Requests\User\CreatePlanOrderRequest;
 use Aws\S3\Transfer;
@@ -29,9 +30,12 @@ class UserPlanController extends Controller
     public function getUserPlan()
     {
         try {
+            $plan = (new UserPlanResource())->findByUserId(auth()->user()->id);
+
             return response()->json([
                 'status' => true,
-                'plan' => (new UserPlanResource())->findByUserId(auth()->user()->id),
+                'plan' => $plan,
+                'banace' => (new CreditBalanceResource())->getBalancesByCoinId(auth()->user(), $plan->coin_id),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
