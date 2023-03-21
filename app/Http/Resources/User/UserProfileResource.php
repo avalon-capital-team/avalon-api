@@ -32,6 +32,7 @@ class UserProfileResource
                 'avatar' => $user->profile->avatar,
                 'phone' => $user->phone,
                 'document' => $user->document,
+                'type' => $user->type,
                 'email_verified' => $email_verified_at
             ]
         ];
@@ -49,7 +50,11 @@ class UserProfileResource
                 'id' => $user->id,
                 'name' => $user->name,
                 'username' => $user->username,
-                'avatar' => $user->profile->avatar
+                'email' => $user->email,
+                'avatar' => $user->profile->avatar,
+                'phone' => $user->phone,
+                'document' => $user->document,
+                'type' => $user->type
             ],
         ];
     }

@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    @include('platform.layouts.head', array('title'=> 'Split Assets: '))
+    @include('platform.layouts.head', array('title'=> 'Avalon Capital: '))
 </head>
 
 <body class="">
@@ -29,5 +29,5 @@
     @include('platform.layouts.modals.receipt.index')
 
 </body>
-</html>
 
+</html>

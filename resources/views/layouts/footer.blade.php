@@ -63,7 +63,7 @@
         </div><!-- end section-space-sm -->
         <hr class="bg-white-slim my-0">
         <div class="copyright-wrap d-flex flex-wrap py-3 align-items-center justify-content-between">
-            <p class="footer-copy-text py-2">Split Assets &copy; {{date('Y')}}. Todos os direitos reservados. <a href="https://splitassets.com.br/pdf/termos_de_uso.pdf" target="_blank">Termos de uso </a></p>
+            <p class="footer-copy-text py-2">Avalon Capital &copy; {{date('Y')}}. Todos os direitos reservados. <a href="https://avaloncapital.com.br/pdf/termos_de_uso.pdf" target="_blank">Termos de uso </a></p>
             <ul class="list-item list-item-s1 list-item-inline">
                 <li><a href="#">Compre Tokens</a></li>
                 <li><a href="#">Emitir meu token</a></li>

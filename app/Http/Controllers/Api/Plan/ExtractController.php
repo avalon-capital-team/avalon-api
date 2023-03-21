@@ -22,15 +22,26 @@ class ExtractController extends Controller
      * @param  \App\Http\Resources\User\UserPlanResource $resource
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getExtract()
+    public function getExtract(Request $request)
     {
-        $filters = [
-            'uuid' => '',
-            'coin_id' => '1',
-            'date_from' => '',
-            'date_to' => '',
-            'description' => ''
-        ];
+        if ($request) {
+            $filters = [
+                'uuid' => $request['uuid'],
+                'coin_id' => $request['coin_id'],
+                'date_from' => $request['date_from'],
+                'date_to' => $request['date_to'],
+                'description' => $request['description']
+            ];
+        } else {
+            $filters = [
+                'uuid' => '',
+                'coin_id' => '',
+                'date_from' => '',
+                'date_to' => '',
+                'description' => ''
+            ];
+        }
+
         try {
             return response()->json([
                 'status' => true,

@@ -29,12 +29,21 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::dashboard(\App\Nova\Dashboards\Main::class)->icon('chart-bar'),
                 MenuSection::make('Usuários', [
                     MenuItem::resource(\App\Nova\Models\User\User::class),
+                    MenuItem::resource(\App\Nova\Models\User\UserCompliance::class),
                     MenuItem::resource(\App\Nova\Models\User\UserPlan::class),
-                ])->icon('user')->collapsable(),
+                ])->icon('user-group')->collapsable(),
 
-                MenuSection::make('Dados', [
+                MenuSection::make('Planos', [
                     MenuItem::resource(\App\Nova\Models\Data\DataPlan::class),
-                ])->icon('database')->collapsable(),
+                ])->icon('briefcase')->collapsable(),
+
+                MenuSection::make('Moedas', [
+                    MenuItem::resource(\App\Nova\Models\Coin\Coin::class),
+                ])->icon('currency-dollar')->collapsable(),
+
+                // MenuSection::make('Saques', [
+                //     MenuItem::resource(\App\Nova\Models\Coin\Coin::class),
+                // ])->icon('library')->collapsable(),
 
             ];
         });

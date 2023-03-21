@@ -3,34 +3,25 @@
 namespace App\Nova\Models\Data;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Text;
+use Eminiarts\Tabs\Traits\HasTabs;
+use Eminiarts\Tabs\Tabs;
+use Laravel\Nova\Fields\Badge;
 
 class DataPlan extends Resource
 {
+    use HasTabs;
+
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
     public static $model = \App\Models\Data\DataPlan::class;
-
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
-    public static $title = 'name';
-
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
-    public static $search = [
-        'name',
-    ];
 
     /**
      * Get the displayable label of the resource.
@@ -49,8 +40,24 @@ class DataPlan extends Resource
      */
     public static function singularLabel()
     {
-        return __('Plano');
+        return __('Planos');
     }
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     *
+     * @var string
+     */
+    public static $title = 'symbol';
+
+    /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
+    public static $search = [
+        'name'
+    ];
 
     /**
      * Get the fields displayed by the resource.
@@ -61,10 +68,24 @@ class DataPlan extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('Nome', 'name')->sortable(),
-            Text::make('Porcentagem', 'porcent')->sortable(),
-            Text::make('Resgate', 'rescue')->sortable(),
-            Text::make('Tipo', 'type')->sortable(),
+            // ID::make()->sortable(),
+
+            Text::make('Nome', 'name')
+                ->sortable()
+                ->rules('required', 'string', 'max:254'),
+
+            Text::make('Porcentagem', 'porcent')
+                ->sortable()
+                ->rules('required', 'string', 'max:254'),
+
+            Text::make('Resgate', 'rescue')
+                ->sortable()
+                ->rules('required', 'string', 'max:254'),
+
+            Text::make('Tipo', 'type')
+                ->sortable()
+                ->rules('required', 'string', 'max:254'),
+
         ];
     }
 
@@ -110,5 +131,33 @@ class DataPlan extends Resource
     public function actions(NovaRequest $request)
     {
         return [];
+    }
+    /**
+     * Authorize to create
+     */
+    public static function authorizedToCreate(Request $request)
+    {
+        return false;
+    }
+    /**
+     * Authorize to delete
+     */
+    public function authorizedToDelete(Request $request)
+    {
+        return false;
+    }
+    /**
+     * Authorize to delete
+     */
+    public function authorizedToUpdate(Request $request)
+    {
+        return true;
+    }
+    /**
+     * Authorize to replicate
+     */
+    public function authorizedToReplicate(Request $request)
+    {
+        return false;
     }
 }

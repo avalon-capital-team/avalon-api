@@ -71,11 +71,9 @@ class UserComplianceController extends Controller
 
         try {
             $files = array(
-                array(
-                    'name' => 'driver_license',
-                    'file' => $validated['doc_front'],
-                    'file_back' => $validated['doc_back'],
-                )
+                'name' => 'driver_license',
+                'file' => $validated['doc_front'],
+                'file_back' => $validated['doc_back'],
             );
 
             // (new UserOnboardingResource())->updateStepFour($request);

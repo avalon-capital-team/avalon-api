@@ -73,7 +73,7 @@ class UserPlanResource
         $plan = $this->findByUserId($user->id);
 
         if ($plan['coin_id'] == 1) {
-            $plan->payment_voucher_url = (new FileUploadHelper())->storeFile($data['transfer_voucher'], 'users/documents');
+            $plan->payment_voucher_url = (new FileUploadHelper())->storeFile($data['transfer_voucher'], 'users/vouchers');
         } else if ($plan['coin_id'] == 2) {
             $plan->payment_voucher_url = 'https://www.blockchain.com/explorer/search?search=' . $data['transfer_hash'];
         } else if ($plan['coin_id'] == 3) {

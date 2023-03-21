@@ -46,7 +46,7 @@ class ComplianceDeclineNotification extends Notification implements ShouldQueue
         return (new MailMessage())->view(
             'emails.user.document.compliance_decline',
             ['userCompliance' => $this->userCompliance]
-        )->subject('[Split Assets] Seus documentos foram recusados');
+        )->subject('[Avalon Capital] Seus documentos foram recusados');
     }
 
     /**

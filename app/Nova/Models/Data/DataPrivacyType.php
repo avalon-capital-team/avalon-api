@@ -61,8 +61,8 @@ class DataPrivacyType extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('Código','code')->sortable(),
-            Text::make('Nome','name')->sortable(),
+            Text::make('Código', 'code')->sortable(),
+            Text::make('Nome', 'name')->sortable(),
         ];
     }
 

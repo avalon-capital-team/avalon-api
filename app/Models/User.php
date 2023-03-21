@@ -172,7 +172,7 @@ class User extends Authenticatable
      */
     public function compliance()
     {
-        return $this->hasMany(UserCompliance::class, 'user_id', 'id');
+        return $this->hasOne(UserCompliance::class, 'user_id', 'id');
     }
 
     /**

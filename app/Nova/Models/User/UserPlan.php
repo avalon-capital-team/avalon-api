@@ -11,6 +11,8 @@ use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
+use App\Nova\Actions\ChangeStatusModel;
+use App\Nova\Metrics\CountModel;
 
 class UserPlan extends Resource
 {
@@ -44,7 +46,7 @@ class UserPlan extends Resource
      */
     public static function label()
     {
-        return __('Aprovar Plano');
+        return __('Planos');
     }
 
     /**
@@ -68,9 +70,9 @@ class UserPlan extends Resource
         return [
 
 
-            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')
-                ->searchable()
-                ->withSubtitles(),
+            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
+
+            BelongsTo::make('Plano', 'plan', 'App\Nova\Models\Data\DataPlan'),
 
             Boolean::make('Ativo', 'acting')
                 ->sortable(),
@@ -84,15 +86,11 @@ class UserPlan extends Resource
                 ->creationRules('required', 'numeric', 'not_in:0')
                 ->updateRules('nullable', 'numeric', 'not_in:0'),
 
-            // Currency::make('Valor', 'amount', 'App\Nova\Models\User\User')
-            //     ->displayUsing(function ($value) {
-            //         return currency_format($value, 'brl');
-            //     })
-            //     ->creationRules('required', 'numeric', 'not_in:0')
-            //     ->updateRules('nullable', 'numeric', 'not_in:0'),
-
-            Image::make('Comprovante de deposito', 'payment_voucher_url')
-                ->sortable(),
+            Image::make('Comprovante de deposito', 'payment_voucher_url')->disk('digitalocean')->resolveUsing(function () {
+                if ($this->payment_voucher_url) {
+                    return str_replace(config('filesystems.disks.digitalocean.endpoint') . '/' . config('filesystems.disks.digitalocean.bucket') . '/', '', $this->payment_voucher_url);
+                }
+            })->onlyOnDetail(),
 
         ];
     }
@@ -105,7 +103,10 @@ class UserPlan extends Resource
      */
     public function cards(NovaRequest $request)
     {
-        return [];
+        return [
+            (new CountModel(\App\Models\User\UserPlan::where('acting', 1), 'Planos ativosz'))->width('1/2')->icon('user-group'),
+            (new CountModel(\App\Models\User\UserPlan::where('acting', 0), 'Planos inativos'))->width('1/2')->icon('user-group'),
+        ];
     }
 
     /**

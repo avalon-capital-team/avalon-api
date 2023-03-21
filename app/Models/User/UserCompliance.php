@@ -35,6 +35,8 @@ class UserCompliance extends Model implements AuditableContract
         'form_id',
         'form_url',
         'verification_id',
+        'document_front',
+        'document_back',
     ];
 
 

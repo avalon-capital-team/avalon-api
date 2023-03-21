@@ -2,12 +2,12 @@
 <meta name="author" content="Sortnio">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,  initial-scale=1.0">
-<meta name="description" content="Split Assets - Tokenizar ativos nunca foi tão fácil">
+<meta name="description" content="Avalon Capital - Tokenizar ativos nunca foi tão fácil">
 <meta name="keywords" content="token,tokenização,crypto,eth,btc">
 
 <meta property="og:url" content="{{route('platform.marketplace.home')}}" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Split Assets" />
+<meta property="og:title" content="Avalon Capital" />
 <meta property="og:description" content="Tokenizar ativos nunca foi tão fácil" />
 <meta property="og:image" content="/images/logo-black.svg" />
 

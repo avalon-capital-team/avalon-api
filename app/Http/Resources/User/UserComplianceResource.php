@@ -49,16 +49,8 @@ class UserComplianceResource
         $document->user_id = $user->id;
         $document->status_id = 3;
         $document->type = 'manual';
-
-        foreach ($files as $file) {
-            $data['files'][] = [
-                'name' => $file['name'],
-                'url' => (new FileUploadHelper())->storeFile($file['file'], 'users/documents'),
-                'url_back' => ($file['file_back']) ? (new FileUploadHelper())->storeFile($file['file_back'], 'users/documents') : null,
-            ];
-        }
-
-        $document->documents = json_encode($data['files']);;
+        $document->document_front = (new FileUploadHelper())->storeFile($files['file'], 'users/fileuments');
+        $document->document_back = (new FileUploadHelper())->storeFile($files['file_back'], 'users/documents');
 
         if ($document->save()) {
             return true;
@@ -230,7 +222,7 @@ class UserComplianceResource
     public function notifyDeclineDocuments(UserCompliance $userCompliance)
     {
         if (config('app.env') != 'testing') {
-            $userCompliance->user->notify(new ComplianceDeclineNotification($userCompliance));
+            // $userCompliance->user->notify(new ComplianceDeclineNotification($userCompliance));
         }
     }
 }

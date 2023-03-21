@@ -11,6 +11,7 @@
         "php": "^8.0.2",
         "bacon/bacon-qr-code": "^2.0",
         "coderello/laravel-nova-lang": "^2.0",
+        "devpartners/auditable-log": "^2.0",
         "eminiarts/nova-tabs": "^2.2",
         "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.2",

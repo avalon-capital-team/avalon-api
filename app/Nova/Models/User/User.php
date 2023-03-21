@@ -136,24 +136,31 @@ class User extends Resource
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
 
+            Tabs::make('Relations', [
+                HasOne::make('Compliance', 'compliance', 'App\Nova\Models\User\UserCompliance')
+                    ->exceptOnForms()
+                    ->hideFromDetail(function () {
+                        return $this->type == 'admin';
+                    }),
 
-            HasOne::make('Plano', 'plan', 'App\Nova\Models\User\UserPlan')
-                ->exceptOnForms()
-                ->hideFromDetail(function () {
-                    return $this->type == 'admin';
-                }),
+                HasOne::make('Plano', 'plan', 'App\Nova\Models\User\UserPlan')
+                    ->exceptOnForms()
+                    ->hideFromDetail(function () {
+                        return $this->type == 'admin';
+                    }),
 
-            HasOne::make('Endereço', 'address', 'App\Nova\Models\User\UserAddress')
-                ->exceptOnForms()
-                ->hideFromDetail(function () {
-                    return $this->type == 'admin';
-                }),
+                HasOne::make('Endereço', 'address', 'App\Nova\Models\User\UserAddress')
+                    ->exceptOnForms()
+                    ->hideFromDetail(function () {
+                        return $this->type == 'admin';
+                    }),
 
-            HasOne::make('Segurança', 'security', 'App\Nova\Models\User\UserSecurity')
-                ->exceptOnForms()
-                ->hideFromDetail(function () {
-                    return $this->type == 'admin';
-                }),
+                HasOne::make('Segurança', 'security', 'App\Nova\Models\User\UserSecurity')
+                    ->exceptOnForms()
+                    ->hideFromDetail(function () {
+                        return $this->type == 'admin';
+                    }),
+            ]),
         ];
     }
 
