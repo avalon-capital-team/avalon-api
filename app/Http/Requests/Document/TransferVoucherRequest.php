@@ -24,7 +24,7 @@ class TransferVoucherRequest extends FormRequest
     public function rules()
     {
         return [
-            'transfer_voucher' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'transfer_voucher' => ['nullable', 'file', 'mimes:jpg,jpeg,png'],
             'transfer_hash' => ['nullable', 'string']
         ];
     }
