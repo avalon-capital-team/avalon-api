@@ -110,6 +110,7 @@ class UserCompliance extends Resource
             (new UserComplianceCountByStatus(1))->width('1/4'),
             (new UserComplianceCountByStatus(2))->width('1/4'),
             (new UserComplianceCountByStatus(3))->width('1/4'),
+            (new UserComplianceCountByStatus(4))->width('1/4'),
         ];
     }
 

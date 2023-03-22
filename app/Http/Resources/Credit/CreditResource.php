@@ -37,7 +37,7 @@ class CreditResource
     {
         return Credit::filterSearch($filters)
             ->where('user_id', $userId)
-            ->with('plan', 'coin')
+            ->with('plan', 'coin', 'type')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
     }
