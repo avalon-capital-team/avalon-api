@@ -66,7 +66,6 @@ class CreditBalanceResource
      *
      * @param  \App\Models\User $user
      * @param  \App\Models\Coin\Coin $coin
-     * @param  int|null $tokenSaleId
      * @return \App\Models\Credit\CreditBalance
      */
     public function checkBalanceByCoinId(User $user, Coin $coin)
@@ -84,7 +83,6 @@ class CreditBalanceResource
      * @param  \App\Models\User $user
      * @param  int $coin_id
      * @param  float $amount
-     * @param  int|null $tokenSaleId
      * @return bool
      */
     public function createOrUpdateBalance(User $user, int $coin_id, float $amount, int $plan_id)
@@ -97,9 +95,9 @@ class CreditBalanceResource
             $balance->user_id = $user->id;
             $balance->coin_id = $coin_id;
         }
-
         $balance->plan_id = $plan_id;
         $balance->balance_enable += $amount;
+
         if ($amount > 0) {
             $balance->received += $amount;
         } else {
@@ -114,19 +112,17 @@ class CreditBalanceResource
      * @param  int $coin_id
      * @param  float $amount
      * @param  string $field
-     * @param  int|null $tokenSaleId
      * @return bool
      */
     public function updateField(User $user, int $coin_id, float $amount, string $field, int $tokenSaleId = null)
     {
         $coin = (new CoinResource())->findById($coin_id);
-        $balance = $this->checkBalanceByCoinId($user, $coin, $tokenSaleId);
+        $balance = $this->checkBalanceByCoinId($user, $coin);
 
         if (!$balance) {
             $balance = new CreditBalance();
             $balance->user_id = $user->id;
             $balance->coin_id = $coin_id;
-            $balance->token_sale_id = $tokenSaleId;
         }
 
         $balance->$field += $amount;

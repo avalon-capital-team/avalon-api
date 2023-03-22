@@ -33,12 +33,12 @@ class CheckVerificationCodeRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (in_array(config('app.env'), ['local', 'testing'])) {
-            return true;
-        }
+        // if (in_array(config('app.env'), ['local', 'testing'])) {
+        //     return true;
+        // }
 
-        if (auth()->user()->security->google2fa) {
-            $valid = Google2FA::verifyKey(Crypt::decryptString(auth()->user()->security->google2fa), $value);
+        if (auth()->user()->security->google_2fa) {
+            $valid = Google2FA::verifyKey(Crypt::decryptString(auth()->user()->security->google_2fa), $value);
             return ($valid) ? true : false;
         }
 
