@@ -1,22 +1,28 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Models\Plan;
 
-use App\Models\User;
-use App\Models\Coin\Coin;
-use App\Models\Data\DataPlan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
+use App\Models\User;
+use App\Models\User\UserPlan;
+use App\Models\Coin\Coin;
+use App\Models\Data\DataPlan;
 
-class UserPlan extends Model
+class Plan extends Model implements AuditableContract
 {
     use HasFactory;
+    use Auditable;
+
     /**
      * table
      *
      * @var string
      */
-    protected $table = 'users_plan';
+    protected $table = 'plans';
 
     /**
      * The attributes that are mass assignable.
@@ -25,9 +31,11 @@ class UserPlan extends Model
      */
     protected $fillable = [
         'user_id',
+        'user_plan_id',
         'plan_id',
         'coin_id',
         'amount',
+        'income',
         'acting',
         'payment_voucher_url',
     ];
@@ -63,12 +71,12 @@ class UserPlan extends Model
     }
 
     /**
-     * Get the plans detains
+     * Get the plan detains
      *
-     * @return \App\Models\Data\DataPlan
+     * @return \App\Models\User\UserPlan
      */
-    public function contributionPlan()
+    public function userPlan()
     {
-        return $this->hasMany(Plan::class, 'contribution_id', 'id');
+        return $this->belongsTo(DataPlan::class, 'user_plan_id');
     }
 }

@@ -60,10 +60,10 @@ class CoinsTableSeeder extends Seeder
             ]);
         }
 
-        if (!Coin::where('symbol', 'ETH')->first()) {
+        if (!Coin::where('symbol', 'USDT')->first()) {
             $coinEth = Coin::create([
-                'name' => 'Ethereum',
-                'symbol' => 'ETH',
+                'name' => 'Tether',
+                'symbol' => 'USDT',
                 'type' => 'coin',
                 'explorer_address' => 'https://etherscan.io/address/',
                 'explorer_tx' => 'https://etherscan.io/tx/',
@@ -75,10 +75,10 @@ class CoinsTableSeeder extends Seeder
             ]);
 
             DB::table('currencies')->insert([
-                'name' => 'Ethereum',
-                'code' => 'ETH',
-                'symbol' => 'ETH',
-                'format' => '1!0.000000 ETH',
+                'name' => 'Tether',
+                'code' => 'USDT',
+                'symbol' => 'USDT',
+                'format' => '1!0.000000 USDT',
                 'exchange_rate' => '0',
                 'active' => true,
             ]);

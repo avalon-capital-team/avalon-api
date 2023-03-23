@@ -9,6 +9,7 @@ use App\Models\User\UserPlan;
 use App\Models\Order\Order;
 use App\Helpers\FileUploadHelper;
 use App\Http\Resources\Credit\CreditResource;
+use App\Http\Resources\Plan\PlanResource;
 
 class UserPlanResource
 {
@@ -32,7 +33,7 @@ class UserPlanResource
      * @param  \App\Models\Credit\Credit $credit
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function createPlanOrder(User $user, CreatePlanOrderRequest $request)
+    public function createOrUpdateOrder(User $user, CreatePlanOrderRequest $request)
     {
         $validated = $request->validated();
 
@@ -40,7 +41,7 @@ class UserPlanResource
         $status_id = 2;
         $description = 'Ordem criada com sucesso';
 
-        $plan = $user->plan
+        $user_plan = $user->plan
             ->where('user_id', $user->id)
             ->first()
             ->update([
@@ -50,8 +51,9 @@ class UserPlanResource
             ]);
         $order = (new Order())->createOrder($user, $validated);
         $credit = (new CreditResource())->create($user, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description, $order->id);
+        $plan = (new PlanResource())->create($user, $user_plan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount'], $validated['income'], $validated['acting'], $validated['payment_voucher_url']);
 
-        if (!$plan && !$order && !$credit) {
+        if (!$user_plan && !$order && !$credit  && !$plan) {
             throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!');
         }
 

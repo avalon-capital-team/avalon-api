@@ -41,7 +41,7 @@ class UserPlanController extends Controller
                     'deposited' => '0.000000',
                     'used' => '0.000000',
                     'withdrawal' => '0.000000',
-                    'received' => '100000.000000',
+                    'received' => '0.000000',
                     'income' => '0.000000'
                 ];
             }
@@ -65,10 +65,10 @@ class UserPlanController extends Controller
      * @param \App\Htt\Request\User\CreatePlanOrderRequest @request
      * @return \Illiminate\Http\Json
      */
-    public function createOrder(UserPlanResource $resource, CreatePlanOrderRequest $request)
+    public function createOrUpdate(UserPlanResource $resource, CreatePlanOrderRequest $request)
     {
         try {
-            if ($resource->createPlanOrder(auth()->user(), $request)) {
+            if ($resource->createOrUpdateOrder(auth()->user(), $request)) {
                 DB::commit();
 
                 return response()->json([

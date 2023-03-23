@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\User\UserOnboardingResource;
 use App\Http\Resources\User\UserProfileResource;
+use App\Http\Resources\Settings\SettingsSecurityResource;
 use App\Http\Resources\User\UserComplianceResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -43,8 +44,6 @@ class LoginController extends Controller
             $user = User::where('email', $request->email)->first();
             $apiName = ($request->header('device-type')) ? $request->header('device-type') : 'web';
 
-
-
             return response()->json([
                 'status' => true,
                 'message' => 'Acesso realizado com sucesso',
@@ -52,9 +51,8 @@ class LoginController extends Controller
                 'onboarding' => [
                     'step' => (new UserOnboardingResource())->getActualStep($user)
                 ],
-                'compliance' => [
-                    (new UserComplianceResource())->findByComplianceStatus($user)
-                ],
+                '2fa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
+                'compliance' => (new UserComplianceResource())->findByComplianceStatus($user),
                 'user' => (new UserProfileResource())->profileDetail(auth()->user()),
             ], 200);
         } catch (\Exception $e) {

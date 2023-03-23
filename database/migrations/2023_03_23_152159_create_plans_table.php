@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users_plan', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('user_plan_id')->nullable();
             $table->unsignedInteger('plan_id')->nullable();
             $table->unsignedInteger('coin_id')->nullable();
             $table->decimal('amount', 15, 8);
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->string('payment_voucher_url')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->foreign('plan_id')->references('id')->on('data_plans')->nullOnDelete();
+            $table->foreign('user_plan_id')->references('id')->on('users_plan')->nullOnDelete();
             $table->foreign('coin_id')->references('id')->on('coins')->nullOnDelete();
             $table->timestamps();
         });
@@ -36,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('uses_plan');
+        Schema::dropIfExists('plans');
     }
 };

@@ -73,7 +73,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('plan', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlan']);
 
         # Plan
-        Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrder']);
+        Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrUpdate']);
         #UploadFile
         Route::post('plan/upload-voucher', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'uploadeVoucher']);
         #Extract
