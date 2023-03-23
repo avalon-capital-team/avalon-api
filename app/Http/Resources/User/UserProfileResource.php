@@ -32,6 +32,7 @@ class UserProfileResource
                 'avatar' => $user->profile->avatar,
                 'phone' => $user->phone,
                 'document' => $user->document,
+                'birth_date' => $user->birth_date,
                 'type' => $user->type,
                 'email_verified' => $email_verified_at
             ]

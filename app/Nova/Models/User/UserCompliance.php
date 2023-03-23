@@ -145,23 +145,8 @@ class UserCompliance extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            (new ApproveValidation())->canSee(function ($request) {
-                return $request->user()->can(
-                    'approve documentation',
-                    User::class
-                );
-            })->canRun(function (NovaRequest $request) {
-                return $request->user()->can('approve documentation');
-            }),
-
-            (new RejectValidation())->canSee(function ($request) {
-                return $request->user()->can(
-                    'reject documentation',
-                    User::class
-                );
-            })->canRun(function (NovaRequest $request) {
-                return $request->user()->can('reject documentation');
-            }),
+            new ApproveValidation(\App\Models\User\UserCompliance::get()),
+            new RejectValidation(\App\Models\User\UserCompliance::get()),
         ];
     }
 
@@ -184,7 +169,7 @@ class UserCompliance extends Resource
      */
     public function authorizedToUpdate(Request $request)
     {
-        return true;
+        return false;
     }
     /**
      * Authorize to replicate

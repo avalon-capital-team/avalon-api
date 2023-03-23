@@ -39,7 +39,7 @@ class CreditResource
             ->where('user_id', $userId)
             ->with('plan', 'coin', 'type')
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(13);
     }
 
     /**

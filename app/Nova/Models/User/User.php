@@ -3,6 +3,7 @@
 namespace App\Nova\Models\User;
 
 use App\Nova\Actions\ChangeStatusModel;
+use App\Nova\Actions\User\ChangeUserType;
 use App\Nova\Metrics\CountModel;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
@@ -61,7 +62,7 @@ class User extends Resource
      */
     public function title()
     {
-        return '@' . $this->username;
+        return $this->name;
     }
 
     /**
@@ -208,7 +209,9 @@ class User extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            new ChangeStatusModel(\App\Models\User\UserStatus::get(), 'Alterar status do usuário')
+            // new ChangeStatusModel(\App\Models\User\UserStatus::get(), 'Alterar status do usuário'),
+            new ChangeUserType(\App\Models\User\UserStatus::get(), 'Alterar tipo do usuário'),
+
         ];
     }
 

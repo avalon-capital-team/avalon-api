@@ -24,15 +24,9 @@ class ApproveValidation extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
-            if (in_array($model->status_id, [1])) {
-                $model->status_id = 2;
-                $model->save();
-                if ($model->user->settings) {
-                    $model->user->settings->compliance = 1;
-                    $model->user->settings->save();
-                }
-                $this->markAsFinished($model);
-            }
+            $model->status_id = 2;
+            $model->save();
+            $this->markAsFinished($model);
         }
     }
 
@@ -47,9 +41,9 @@ class ApproveValidation extends Action
         return [];
     }
     /**
-    * The displayable name of the action.
-    *
-    * @var string
-    */
+     * The displayable name of the action.
+     *
+     * @var string
+     */
     public $name = 'Aprovar validação';
 }

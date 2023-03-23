@@ -6,11 +6,8 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Eminiarts\Tabs\Traits\HasTabs;
-use Eminiarts\Tabs\Tabs;
-use Laravel\Nova\Fields\Badge;
 
 class DataPlan extends Resource
 {
@@ -48,7 +45,7 @@ class DataPlan extends Resource
      *
      * @var string
      */
-    public static $title = 'symbol';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -68,7 +65,7 @@ class DataPlan extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            // ID::make()->sortable(),
+            ID::make()->sortable(),
 
             Text::make('Nome', 'name')
                 ->sortable()

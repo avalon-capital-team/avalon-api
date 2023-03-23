@@ -49,7 +49,7 @@ class UserPlan extends Model
      */
     public function coin()
     {
-        return $this->hasOne(Coin::class, 'id', 'coin_id');
+        return $this->belongsTo(Coin::class, 'coin_id');
     }
 
     /**
@@ -59,6 +59,6 @@ class UserPlan extends Model
      */
     public function plan()
     {
-        return $this->hasOne(DataPlan::class, 'id', 'plan_id');
+        return $this->belongsTo(DataPlan::class, 'plan_id');
     }
 }

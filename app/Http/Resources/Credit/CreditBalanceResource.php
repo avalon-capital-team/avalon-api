@@ -99,7 +99,7 @@ class CreditBalanceResource
         $balance->balance_enable += $amount;
 
         if ($amount > 0) {
-            $balance->received += $amount;
+            $balance->deposited += $amount;
         } else {
             $balance->used += $amount;
         }

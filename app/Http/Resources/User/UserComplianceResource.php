@@ -145,7 +145,7 @@ class UserComplianceResource
 
         $userCompliance = new UserCompliance();
         $userCompliance->user_id = $user->id;
-        $userCompliance->status_id = 2;
+        $userCompliance->status_id = 4;
         $userCompliance->type = 'manual';
         $userCompliance->documents = json_encode($data['files']);
         $userCompliance->save();
@@ -208,7 +208,7 @@ class UserComplianceResource
 
         $userCompliance = new UserCompliance();
         $userCompliance->user_id = $user->id;
-        $userCompliance->status_id = 1;
+        $userCompliance->status_id = 4;
         $userCompliance->type = 'manual';
         $userCompliance->documents = json_encode($data['files']);
         $userCompliance->save();
@@ -236,7 +236,7 @@ class UserComplianceResource
     public function notifyDeclineDocuments(UserCompliance $userCompliance)
     {
         if (config('app.env') != 'testing') {
-            // $userCompliance->user->notify(new ComplianceDeclineNotification($userCompliance));
+            $userCompliance->user->notify(new ComplianceDeclineNotification($userCompliance));
         }
     }
 }

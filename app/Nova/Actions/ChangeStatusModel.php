@@ -42,12 +42,11 @@ class ChangeStatusModel extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        foreach($models as $model){
-            if($model){
+        foreach ($models as $model) {
+            if ($model) {
                 $model->status_id = $fields->status;
                 $model->save();
                 $this->markAsFinished($model);
-
             }
         }
     }
@@ -61,9 +60,9 @@ class ChangeStatusModel extends Action
     public function fields(NovaRequest $request)
     {
         return [
-            Select::make('Status','status')->options(function(){
+            Select::make('Status', 'status')->options(function () {
                 $array = [];
-                foreach($this->model_status as $status){
+                foreach ($this->model_status as $status) {
                     $array[$status->id] = $status->name;
                 }
                 return $array;
@@ -80,8 +79,4 @@ class ChangeStatusModel extends Action
     {
         return $this->name;
     }
-
 }
-
-
-

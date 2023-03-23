@@ -3,16 +3,12 @@
 namespace App\Nova\Models\User;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
-use App\Nova\Actions\ChangeStatusModel;
-use App\Nova\Metrics\CountModel;
 
 class UserPlan extends Resource
 {
@@ -68,14 +64,11 @@ class UserPlan extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-
-
             BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
 
             BelongsTo::make('Plano', 'plan', 'App\Nova\Models\Data\DataPlan'),
 
-            Boolean::make('Ativo', 'acting')
-                ->sortable(),
+            Boolean::make('Ativo', 'acting'),
 
             BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
@@ -91,9 +84,10 @@ class UserPlan extends Resource
                     return str_replace(config('filesystems.disks.digitalocean.endpoint') . '/' . config('filesystems.disks.digitalocean.bucket') . '/', '', $this->payment_voucher_url);
                 }
             })->onlyOnDetail(),
-
         ];
     }
+
+
 
     /**
      * Get the cards available for the request.
@@ -103,10 +97,7 @@ class UserPlan extends Resource
      */
     public function cards(NovaRequest $request)
     {
-        return [
-            (new CountModel(\App\Models\User\UserPlan::where('acting', 1), 'Planos ativosz'))->width('1/2')->icon('user-group'),
-            (new CountModel(\App\Models\User\UserPlan::where('acting', 0), 'Planos inativos'))->width('1/2')->icon('user-group'),
-        ];
+        return [];
     }
 
     /**

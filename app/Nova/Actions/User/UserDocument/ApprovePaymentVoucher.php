@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Nova\Actions\User;
+namespace App\Nova\Actions;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class ChangeUserType extends Action
+class ApprovePaymentVoucher extends Action
 {
     use InteractsWithQueue;
     use Queueable;
@@ -25,12 +25,10 @@ class ChangeUserType extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
-            try {
-                $model->type = $fields->type;
+            if (in_array($model->acting, [1])) {
+                $model->acting = 1;
                 $model->save();
                 $this->markAsFinished($model);
-            } catch (\Exception $e) {
-                $this->markAsFailed($model, $e);
             }
         }
     }
@@ -43,20 +41,12 @@ class ChangeUserType extends Action
      */
     public function fields(NovaRequest $request)
     {
-        return [
-            Select::make('Tipo', 'type')->options([
-                'user' => 'Cliente',
-                'mananger' => 'Gestor',
-                'advidor' => 'Acessor',
-
-            ]),
-        ];
+        return [];
     }
-
     /**
      * The displayable name of the action.
      *
      * @var string
      */
-    public $name = 'Alterar tipo do usuário';
+    public $name = 'Aprovar Comprovante';
 }
