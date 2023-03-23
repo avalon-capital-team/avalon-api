@@ -51,7 +51,7 @@ class LoginController extends Controller
                 'onboarding' => [
                     'step' => (new UserOnboardingResource())->getActualStep($user)
                 ],
-                '2fa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
+                'twoFa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
                 'compliance' => (new UserComplianceResource())->findByComplianceStatus($user),
                 'user' => (new UserProfileResource())->profileDetail(auth()->user()),
             ], 200);
