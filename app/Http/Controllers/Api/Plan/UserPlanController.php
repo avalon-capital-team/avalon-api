@@ -31,11 +31,25 @@ class UserPlanController extends Controller
     {
         try {
             $plan = (new UserPlanResource())->findByUserId(auth()->user()->id);
-            // dd($plan);
+            if ($plan->coin_id != null) {
+                $balance = (new CreditBalanceResource())->getBalancesByCoinId(auth()->user(), $plan->coin_id);
+            } else {
+                $balance = [
+                    'balance_enable' => '0.000000',
+                    'balance_pending' => '0.000000',
+                    'balance_canceled' => '0.000000',
+                    'deposited' => '0.000000',
+                    'used' => '0.000000',
+                    'withdrawal' => '0.000000',
+                    'received' => '100000.000000',
+                    'income' => '0.000000'
+                ];
+            }
+
             return response()->json([
                 'status' => true,
                 'plan' => $plan,
-                'balace' => (new CreditBalanceResource())->getBalancesByCoinId(auth()->user(), $plan->coin_id),
+                'balace' => $balance,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
