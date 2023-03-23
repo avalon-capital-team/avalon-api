@@ -53,7 +53,7 @@ class UserPlanResource
         $credit = (new CreditResource())->create($user, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description, $order->id);
         // $plan = (new PlanResource())->create($user, $user_plan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount'], $validated['income'], $validated['acting'], $validated['payment_voucher_url']);
 
-        if (!$user_plan && !$order && !$credit  && !$plan) {
+        if (!$user_plan && !$order && !$credit) {
             throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!');
         }
 
