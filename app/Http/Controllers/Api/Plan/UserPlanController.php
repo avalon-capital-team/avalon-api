@@ -31,11 +31,11 @@ class UserPlanController extends Controller
     {
         try {
             $plan = (new UserPlanResource())->findByUserId(auth()->user()->id);
-
+            // dd($plan);
             return response()->json([
                 'status' => true,
                 'plan' => $plan,
-                'banace' => (new CreditBalanceResource())->getBalancesByCoinId(auth()->user(), $plan->coin_id),
+                'balace' => (new CreditBalanceResource())->getBalancesByCoinId(auth()->user(), $plan->coin_id),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
