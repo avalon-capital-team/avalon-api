@@ -144,7 +144,7 @@ class User extends Resource
                         return $this->type == 'admin';
                     }),
 
-                HasOne::make('Plano', 'plan', 'App\Nova\Models\User\UserPlan')
+                HasOne::make('Plano', 'userPlan', 'App\Nova\Models\User\UserPlan')
                     ->exceptOnForms()
                     ->hideFromDetail(function () {
                         return $this->type == 'admin';

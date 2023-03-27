@@ -58,13 +58,13 @@ class UserObserver
                 ]);
             }
 
-            # Plan
+            # Withdrawal
             $user->financial()->create(['type' => 'pix']);
             $user->financial()->create(['type' => 'bank']);
             $user->financial()->create(['type' => 'crypto']);
 
-            # Withdrawal
-            $user->plan()->create();
+            # Plan
+            $user->userPlan()->create();
         }
     }
 

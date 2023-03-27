@@ -120,7 +120,7 @@ class Order extends Model implements AuditableContract
         $order->payment_method_id   = 1;
         $order->status_id           = 1;
         $order->coin_id             = $data['coin_id'];
-        $order->plan_id               = $data['plan_id'];
+        $order->plan_id             = $data['plan_id'];
         $order->total               = $data['amount'];
         $order->fee                 = 0;
 
@@ -252,7 +252,7 @@ class Order extends Model implements AuditableContract
      *
      * @return \App\Models\Data\DataPlan
      */
-    public function plan()
+    public function dataPlan()
     {
         return $this->hasOne(DataPlan::class, 'id', 'plan_id');
     }

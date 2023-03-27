@@ -230,7 +230,7 @@ class User extends Authenticatable
      *
      * @return \App\Models\User\UserPlan
      */
-    public function plan()
+    public function userPlan()
     {
         return $this->hasOne(UserPlan::class, 'user_id', 'id');
     }

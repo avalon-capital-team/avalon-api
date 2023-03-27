@@ -4,7 +4,6 @@ namespace App\Models\Plan;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use OwenIt\Auditing\Auditable;
 use App\Models\User;
@@ -65,7 +64,7 @@ class Plan extends Model implements AuditableContract
      *
      * @return \App\Models\Data\DataPlan
      */
-    public function plan()
+    public function dataPlan()
     {
         return $this->belongsTo(DataPlan::class, 'plan_id');
     }
@@ -77,6 +76,6 @@ class Plan extends Model implements AuditableContract
      */
     public function userPlan()
     {
-        return $this->belongsTo(DataPlan::class, 'user_plan_id');
+        return $this->belongsTo(UserPlan::class, 'user_plan_id');
     }
 }

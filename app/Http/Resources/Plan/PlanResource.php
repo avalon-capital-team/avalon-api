@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Plan;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\Plan\Plan;
 use App\Models\User;
 
@@ -46,29 +45,34 @@ class PlanResource
      *
      * @param  \App\Models\User $user
      * @param  \App\Models\Coin $coin
-     * @param  int $type_id
-     * @param  int $status_id
-     * @param  float $amount
-     * @param  string $description
-     * @param  int $order_id
-     * @param  bool $external
-     * @param  int $plan_id
-     * @param  int $transfer_user_id
-     * @return \App\Models\Plan\Plan
+     * @param  int user_id
+     * @param  int user_plan_id
+     * @param  int plan_id
+     * @param  int coin_id
+     * @param  float amount
+     * @param  float income
+     * @param  bool acting
+     * @param  string payment_voucher_url
+     * @return \App\Models\Plan
      */
-    public function create(User $user, int $user_plan_id, int $plan_id, int $coin_id, float $amount, float $income = 0.000000, bool $acting = 0, $payment_voucher_url)
-    {
-        $credit = Plan::create([
+    public function createPlan(
+        User $user,
+        int $user_plan_id,
+        int $plan_id,
+        int $coin_id,
+        float $amount,
+    ) {
+
+        $plan = Plan::create([
             'user_id' => $user->id,
             'user_plan_id' => $user_plan_id,
             'plan_id' => $plan_id,
             'coin_id' => $coin_id,
             'amount' => $amount,
-            'income' => $income,
-            'acting' => $acting,
-            'payment_voucher_url' => $payment_voucher_url,
+            'income' => 0.000000,
+            'acting' => 0,
         ]);
 
-        return $credit;
+        return $plan;
     }
 }

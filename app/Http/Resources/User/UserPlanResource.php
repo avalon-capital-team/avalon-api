@@ -41,7 +41,7 @@ class UserPlanResource
         $status_id = 2;
         $description = 'Ordem criada com sucesso';
 
-        $user_plan = $user->plan
+        $user_plan = $user->userPlan
             ->where('user_id', $user->id)
             ->first()
             ->update([
@@ -49,15 +49,18 @@ class UserPlanResource
                 'coin_id' => ($validated['coin_id']),
                 'amount' => ($validated['amount']),
             ]);
+
+        $plan = (new PlanResource())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount'],);
         $order = (new Order())->createOrder($user, $validated);
         $credit = (new CreditResource())->create($user, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description, $order->id);
-        // $plan = (new PlanResource())->create($user, $user_plan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount'], $validated['income'], $validated['acting'], $validated['payment_voucher_url']);
 
-        if (!$user_plan && !$order && !$credit) {
+        if (!$user_plan && !$order && !$credit && !$plan) {
             throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!');
         }
 
-        return $order;
+        $data = [$plan, $order];
+
+        return $data;
     }
 
     /**

@@ -1,26 +1,17 @@
 <?php
 
-namespace App\Nova\Models\User;
+namespace App\Nova\Models\Plan;
 
-use Illuminate\Http\Request;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
-use Laravel\Nova\Fields\HasMany;
-use Devpartners\AuditableLog\AuditableLog;
-use Eminiarts\Tabs\Tabs;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class UserPlan extends Resource
+class Plan extends Resource
 {
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var string
-     */
-    public static $model = \App\Models\User\UserPlan::class;
+
+    public static $model = \App\Models\Plan\Plan::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -39,26 +30,6 @@ class UserPlan extends Resource
     ];
 
     /**
-     * Get the displayable label of the resource.
-     *
-     * @return string
-     */
-    public static function label()
-    {
-        return __('Planos');
-    }
-
-    /**
-     * Get the displayable singular label of the resource.
-     *
-     * @return string
-     */
-    public static function singularLabel()
-    {
-        return __('Plano');
-    }
-
-    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
@@ -67,13 +38,9 @@ class UserPlan extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
-
-            BelongsTo::make('Plano', 'dataPlan', 'App\Nova\Models\Data\DataPlan'),
+            ID::make()->sortable(),
 
             Boolean::make('Ativo', 'acting'),
-
-            BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
             Currency::make('Valor', 'amount')
                 ->displayUsing(function ($value) {
@@ -88,21 +55,8 @@ class UserPlan extends Resource
                 })
                 ->creationRules('required', 'numeric', 'not_in:0')
                 ->updateRules('nullable', 'numeric', 'not_in:0'),
-
-            Tabs::make('Relations', [
-                HasMany::make('Histórico', 'plan', 'App\Nova\Models\Plan\Plan'),
-                AuditableLog::make(),
-            ]),
-
-            // Image::make('Comprovante de deposito', 'payment_voucher_url')->disk('digitalocean')->resolveUsing(function () {
-            //     if ($this->payment_voucher_url) {
-            //         return str_replace(config('filesystems.disks.digitalocean.endpoint') . '/' . config('filesystems.disks.digitalocean.bucket') . '/', '', $this->payment_voucher_url);
-            //     }
-            // })->onlyOnDetail(),
         ];
     }
-
-
 
     /**
      * Get the cards available for the request.
@@ -112,7 +66,9 @@ class UserPlan extends Resource
      */
     public function cards(NovaRequest $request)
     {
-        return [];
+        return [
+            new \App\Nova\Metrics\Plan\PlanCount(),
+        ];
     }
 
     /**
@@ -146,37 +102,5 @@ class UserPlan extends Resource
     public function actions(NovaRequest $request)
     {
         return [];
-    }
-
-    /**
-     * Authorize to create
-     */
-    public static function authorizedToCreate(Request $request)
-    {
-        return false;
-    }
-
-    /**
-     * Authorize to delete
-     */
-    public function authorizedToDelete(Request $request)
-    {
-        return false;
-    }
-
-    /**
-     * Authorize to delete
-     */
-    public function authorizedToUpdate(Request $request)
-    {
-        return true;
-    }
-
-    /**
-     * Authorize to replicate
-     */
-    public function authorizedToReplicate(Request $request)
-    {
-        return false;
     }
 }

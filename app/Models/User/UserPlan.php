@@ -5,6 +5,7 @@ namespace App\Models\User;
 use App\Models\User;
 use App\Models\Coin\Coin;
 use App\Models\Data\DataPlan;
+use App\Models\Plan\Plan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -57,7 +58,7 @@ class UserPlan extends Model
      *
      * @return \App\Models\Data\DataPlan
      */
-    public function plan()
+    public function dataPlan()
     {
         return $this->belongsTo(DataPlan::class, 'plan_id');
     }
@@ -67,8 +68,8 @@ class UserPlan extends Model
      *
      * @return \App\Models\Data\DataPlan
      */
-    public function contributionPlan()
+    public function plan()
     {
-        return $this->hasMany(Plan::class, 'contribution_id', 'id');
+        return $this->hasMany(Plan::class, 'user_plan_id', 'id');
     }
 }

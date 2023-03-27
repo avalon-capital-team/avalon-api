@@ -33,6 +33,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(\App\Nova\Models\User\UserPlan::class),
                 ])->icon('user-group')->collapsable(),
 
+                MenuSection::make('Vendas', [
+                    MenuItem::resource(\App\Nova\Models\Order\Order::class),
+                ])->icon('shopping-bag')->collapsable(),
+
+                MenuSection::make('Extratos', [
+                    MenuItem::resource(\App\Nova\Models\Credit\Credit::class),
+                ])->icon('cash')->collapsable(),
+
                 MenuSection::make('Planos', [
                     MenuItem::resource(\App\Nova\Models\Data\DataPlan::class),
                 ])->icon('briefcase')->collapsable(),
@@ -44,6 +52,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 // MenuSection::make('Saques', [
                 //     MenuItem::resource(\App\Nova\Models\Coin\Coin::class),
                 // ])->icon('library')->collapsable(),
+
 
             ];
         });

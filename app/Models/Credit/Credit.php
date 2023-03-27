@@ -143,7 +143,7 @@ class Credit extends Model implements AuditableContract
      *
      * @return \App\Models\Order\Order
      */
-    public function plan()
+    public function dataPlan()
     {
         return $this->hasOne(DataPlan::class, 'id', 'plan_id');
     }
