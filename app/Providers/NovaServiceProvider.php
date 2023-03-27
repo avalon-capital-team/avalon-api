@@ -52,8 +52,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 // MenuSection::make('Saques', [
                 //     MenuItem::resource(\App\Nova\Models\Coin\Coin::class),
                 // ])->icon('library')->collapsable(),
-
-
             ];
         });
 
