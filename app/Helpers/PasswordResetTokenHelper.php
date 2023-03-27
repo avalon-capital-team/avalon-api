@@ -15,7 +15,12 @@ class PasswordResetTokenHelper
     {
         do {
             // $token = Str::random(6);
-
+            // $token = rand(100000, 999999);
+            // $token = rand(100000, 999999);
+            // $token = rand(100000, 999999);
+            // $token = rand(100000, 999999);
+            // $token = rand(100000, 999999);
+            // $token = rand(100000, 999999);
             $token = rand(100000, 999999);
         } while (PasswordResetToken::where('token', $token)->exists());
 
