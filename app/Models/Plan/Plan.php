@@ -39,6 +39,41 @@ class Plan extends Model implements AuditableContract
         'payment_voucher_url',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            do {
+                $token = substr(md5(uniqid(1, true)), 0, 8);
+            } while (self::where('token', $token)->exists());
+
+            $model->token = $token;
+        });
+    }
+
+    /**
+     * createOrder
+     *
+     * @param  App\Models\User $user
+     * @param  int $coin_id
+     * @param  int $payment_method
+     * @return \App\Models\Plan\Plan || boolean;
+     */
+    public function createPlan(User $user, int $user_plan_id, int $plan_id, int $coin_id, float $amount,)
+    {
+        $plan = Plan::create([
+            'user_id' => $user->id,
+            'user_plan_id' => $user_plan_id,
+            'plan_id' => $plan_id,
+            'coin_id' => $coin_id,
+            'amount' => $amount,
+            'income' => 0.000000,
+            'acting' => 0,
+        ]);
+
+        return $plan;
+    }
+
     /**
      * Get user
      *

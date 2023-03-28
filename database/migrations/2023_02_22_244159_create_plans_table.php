@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('token')->unique();
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('user_plan_id')->nullable();
             $table->unsignedInteger('plan_id')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->decimal('income', 15, 8);
             $table->boolean('acting')->default(false);
             $table->string('payment_voucher_url')->nullable();
+            $table->dateTime('activated_at')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->foreign('plan_id')->references('id')->on('data_plans')->nullOnDelete();
             $table->foreign('user_plan_id')->references('id')->on('users_plan')->nullOnDelete();

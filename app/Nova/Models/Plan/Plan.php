@@ -2,11 +2,18 @@
 
 namespace App\Nova\Models\Plan;
 
+use App\Nova\Actions\User\Voucher\ApprovePaymentVoucher;
+use App\Nova\Actions\User\Voucher\RejectPaymentVoucher;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Illuminate\Http\Request;
+
 
 class Plan extends Resource
 {
@@ -42,6 +49,8 @@ class Plan extends Resource
 
             Boolean::make('Ativo', 'acting'),
 
+            BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
+
             Currency::make('Valor', 'amount')
                 ->displayUsing(function ($value) {
                     return currency_format($value, 'brl');
@@ -55,6 +64,14 @@ class Plan extends Resource
                 })
                 ->creationRules('required', 'numeric', 'not_in:0')
                 ->updateRules('nullable', 'numeric', 'not_in:0'),
+
+            DateTime::make('Criado em', 'created_at'),
+
+            Image::make('Comprovante de deposito', 'payment_voucher_url')->disk('digitalocean')->resolveUsing(function () {
+                if ($this->payment_voucher_url) {
+                    return str_replace(config('filesystems.disks.digitalocean.endpoint') . '/' . config('filesystems.disks.digitalocean.bucket') . '/', '', $this->payment_voucher_url);
+                }
+            })->onlyOnDetail(),
         ];
     }
 
@@ -101,6 +118,38 @@ class Plan extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new ApprovePaymentVoucher(\App\Models\Plan\Plan::get()),
+            new RejectPaymentVoucher(\App\Models\User\UserPlan::get()),
+        ];
+    }
+
+    /**
+     * Authorize to create
+     */
+    public static function authorizedToCreate(Request $request)
+    {
+        return false;
+    }
+    /**
+     * Authorize to delete
+     */
+    public function authorizedToDelete(Request $request)
+    {
+        return false;
+    }
+    /**
+     * Authorize to delete
+     */
+    public function authorizedToUpdate(Request $request)
+    {
+        return true;
+    }
+    /**
+     * Authorize to replicate
+     */
+    public function authorizedToReplicate(Request $request)
+    {
+        return false;
     }
 }

@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\HasMany;
-use Devpartners\AuditableLog\AuditableLog;
+use App\Nova\Actions\User\Voucher\ApprovePaymentVoucher;
+use App\Nova\Actions\User\Voucher\RejectPaymentVoucher;
 use Eminiarts\Tabs\Tabs;
 
 class UserPlan extends Resource
@@ -73,8 +73,6 @@ class UserPlan extends Resource
 
             Boolean::make('Ativo', 'acting'),
 
-            BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
-
             Currency::make('Valor', 'amount')
                 ->displayUsing(function ($value) {
                     return currency_format($value, 'brl');
@@ -91,14 +89,8 @@ class UserPlan extends Resource
 
             Tabs::make('Relations', [
                 HasMany::make('Histórico', 'plan', 'App\Nova\Models\Plan\Plan'),
-                AuditableLog::make(),
+                // AuditableLog::make(),
             ]),
-
-            // Image::make('Comprovante de deposito', 'payment_voucher_url')->disk('digitalocean')->resolveUsing(function () {
-            //     if ($this->payment_voucher_url) {
-            //         return str_replace(config('filesystems.disks.digitalocean.endpoint') . '/' . config('filesystems.disks.digitalocean.bucket') . '/', '', $this->payment_voucher_url);
-            //     }
-            // })->onlyOnDetail(),
         ];
     }
 
@@ -145,7 +137,10 @@ class UserPlan extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new ApprovePaymentVoucher(\App\Models\User\UserPlan::get()),
+            new RejectPaymentVoucher(\App\Models\User\UserPlan::get()),
+        ];
     }
 
     /**

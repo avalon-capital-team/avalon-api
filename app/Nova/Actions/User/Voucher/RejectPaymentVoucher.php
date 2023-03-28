@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Nova\Actions;
+namespace App\Nova\Actions\User\Voucher;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,10 +10,9 @@ use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class ApprovePaymentVoucher extends Action
+class RejectPaymentVoucher extends Action
 {
-    use InteractsWithQueue;
-    use Queueable;
+    use InteractsWithQueue, Queueable;
 
     /**
      * Perform the action on the given models.
@@ -25,11 +24,9 @@ class ApprovePaymentVoucher extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
-            if (in_array($model->acting, [1])) {
-                $model->acting = 1;
-                $model->save();
-                $this->markAsFinished($model);
-            }
+            $model->acting = 0;
+            $model->save();
+            $this->markAsFinished($model);
         }
     }
 
@@ -43,10 +40,4 @@ class ApprovePaymentVoucher extends Action
     {
         return [];
     }
-    /**
-     * The displayable name of the action.
-     *
-     * @var string
-     */
-    public $name = 'Aprovar Comprovante';
 }

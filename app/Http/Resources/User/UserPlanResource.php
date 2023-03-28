@@ -7,6 +7,7 @@ use App\Http\Requests\User\CreatePlanOrderRequest;
 use App\Models\User;
 use App\Models\User\UserPlan;
 use App\Models\Order\Order;
+use App\Models\Plan\Plan;
 use App\Helpers\FileUploadHelper;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Plan\PlanResource;
@@ -29,7 +30,6 @@ class UserPlanResource
      *
      * @param  \App\Http\Requests\User\UserPlanRequest $request
      * @param  \App\Models\User\UserPlan $plan
-     * @param  \App\Models\Order\Order $order
      * @param  \App\Models\Credit\Credit $credit
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
@@ -39,7 +39,12 @@ class UserPlanResource
 
         $type_id = 1;
         $status_id = 2;
-        $description = 'Ordem criada com sucesso';
+        $description = 'Ordem do plano criada com sucesso';
+
+        $plan = (new Plan())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount']);
+        $credit = (new CreditResource())->create($user->id, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description);
+
+        $amount = $user->userPlan->amount += $validated['amount'];
 
         $user_plan = $user->userPlan
             ->where('user_id', $user->id)
@@ -47,35 +52,29 @@ class UserPlanResource
             ->update([
                 'plan_id' => ($validated['plan_id']),
                 'coin_id' => ($validated['coin_id']),
-                'amount' => ($validated['amount']),
+                'amount' => ($amount),
             ]);
 
-        $plan = (new PlanResource())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount'],);
-        $order = (new Order())->createOrder($user, $validated);
-        $credit = (new CreditResource())->create($user, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description, $order->id);
-
-        if (!$user_plan && !$order && !$credit && !$plan) {
+        if (!$user_plan && !$credit && !$plan) {
             throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!');
         }
 
-        $data = [$plan, $order];
 
-        return $data;
+
+        return $plan;
     }
 
     /**
      * Store or update documentation
      *
      * @param  \App\Models\User $user
-     * @param  void $doc_front
-     * @param  void $doc_back
-     * @param  void $proof_address
-     * @return bool
+     * @param  array $data
      * @throws \Exception
      */
     public function upDate(User $user, $data)
     {
-        $plan = $this->findByUserId($user->id);
+
+        $plan = (new PlanResource())->listPlan($user->id, $data['plan_id']);
 
         if ($plan['coin_id'] == 1) {
             $plan->payment_voucher_url = (new FileUploadHelper())->storeFile($data['transfer_voucher'], 'users/vouchers');

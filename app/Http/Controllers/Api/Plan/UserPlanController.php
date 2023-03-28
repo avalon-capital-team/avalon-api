@@ -68,16 +68,14 @@ class UserPlanController extends Controller
     public function createOrUpdate(UserPlanResource $resource, CreatePlanOrderRequest $request)
     {
         try {
-            if ($resource->createOrUpdateOrder(auth()->user(), $request)) {
-                DB::commit();
+            $plan = $resource->createOrUpdateOrder(auth()->user(), $request);
+            DB::commit();
 
-                return response()->json([
-                    'status'  => true,
-                    'message' => 'A orden foi criada com sucesso',
-                    'order' => (new Order())->findByOrderUserId(auth()->user()->id),
-                    'plan' => (new UserPlanResource())->findByUserId(auth()->user()->id),
-                ]);
-            }
+            return response()->json([
+                'status'  => true,
+                'message' => 'A orden foi criada com sucesso',
+                'plan' => $plan,
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,

@@ -4,9 +4,25 @@ namespace App\Http\Resources\Plan;
 
 use App\Models\Plan\Plan;
 use App\Models\User;
+use App\Models\Data\DataPlan;
+use App\Http\Resources\Credit\CreditResource;
 
 class PlanResource
 {
+    /**
+     * List of plans of user
+     *
+     * @param  int $user_id
+     * @param  int $coin_id
+     * @return \App\Models\Plan\Plan
+     */
+    public function listPlan(int $user_id, int $plan_id)
+    {
+        return Plan::where('user_id', $user_id)
+            ->where('id', $plan_id)
+            ->first();
+    }
+
     /**
      * List of credits of user w/ limit
      *
@@ -41,38 +57,30 @@ class PlanResource
     }
 
     /**
-     * Create new Plan
+     * Check if need pay installments
      *
-     * @param  \App\Models\User $user
-     * @param  \App\Models\Coin $coin
-     * @param  int user_id
-     * @param  int user_plan_id
-     * @param  int plan_id
-     * @param  int coin_id
-     * @param  float amount
-     * @param  float income
-     * @param  bool acting
-     * @param  string payment_voucher_url
-     * @return \App\Models\Plan
+     * @return void
      */
-    public function createPlan(
-        User $user,
-        int $user_plan_id,
-        int $plan_id,
-        int $coin_id,
-        float $amount,
-    ) {
+    public function checkIfNeedPayToday()
+    {
+        $plans = Plan::where('activated_at', 'LIKE', date('Y-m-d', strtotime('-30 days')) . '%')->where('acting', 1)->get();
+        foreach ($plans as $plan) {
+            $this->dispatchIncomes($plan);
+        }
+    }
 
-        $plan = Plan::create([
-            'user_id' => $user->id,
-            'user_plan_id' => $user_plan_id,
-            'plan_id' => $plan_id,
-            'coin_id' => $coin_id,
-            'amount' => $amount,
-            'income' => 0.000000,
-            'acting' => 0,
-        ]);
+    public function dispatchIncomes(Plan $plan)
+    {
+        $data_plan = DataPlan::where('id', $plan->plan_id)->first();
 
-        return $plan;
+        $income = $plan->amount * $data_plan->porcent;
+
+        $status_id = 2;
+        $description = 'Rendimento mensal';
+
+        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 1, $status_id, $income, $description);
+
+        $plan->income = $income;
+        $plan->save();
     }
 }

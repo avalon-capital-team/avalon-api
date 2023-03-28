@@ -15,7 +15,7 @@ class TotalSaleAll extends Value
      */
     public function name()
     {
-        return 'Total de Vendas';
+        return 'Total dos Aportes';
     }
 
     /**

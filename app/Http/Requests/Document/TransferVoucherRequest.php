@@ -25,7 +25,8 @@ class TransferVoucherRequest extends FormRequest
     {
         return [
             'transfer_voucher' => ['nullable', 'file', 'mimes:jpg,jpeg,png'],
-            'transfer_hash' => ['nullable', 'string']
+            'transfer_hash' => ['nullable', 'string'],
+            'plan_id' => ['required', 'string']
         ];
     }
 
@@ -37,7 +38,8 @@ class TransferVoucherRequest extends FormRequest
     public function messages()
     {
         return [
-            'transfer_voucher.file' => __('O arquivo é inválido')
+            'transfer_voucher.file' => __('O arquivo é inválido'),
+            'plan_id.required' => __('O id do plano é obrigatorio')
         ];
     }
 }

@@ -33,9 +33,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(\App\Nova\Models\User\UserPlan::class),
                 ])->icon('user-group')->collapsable(),
 
-                MenuSection::make('Vendas', [
-                    MenuItem::resource(\App\Nova\Models\Order\Order::class),
-                ])->icon('shopping-bag')->collapsable(),
+                // MenuSection::make('Vendas', [
+                //     MenuItem::resource(\App\Nova\Models\Order\Order::class),
+                // ])->icon('shopping-bag')->collapsable(),
 
                 MenuSection::make('Extratos', [
                     MenuItem::resource(\App\Nova\Models\Credit\Credit::class),
