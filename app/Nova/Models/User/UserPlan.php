@@ -71,8 +71,6 @@ class UserPlan extends Resource
 
             BelongsTo::make('Plano', 'dataPlan', 'App\Nova\Models\Data\DataPlan'),
 
-            Boolean::make('Ativo', 'acting'),
-
             Currency::make('Valor', 'amount')
                 ->displayUsing(function ($value) {
                     return currency_format($value, 'brl');

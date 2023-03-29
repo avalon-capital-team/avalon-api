@@ -65,7 +65,7 @@ class Plan extends Resource
                 ->creationRules('required', 'numeric', 'not_in:0')
                 ->updateRules('nullable', 'numeric', 'not_in:0'),
 
-            DateTime::make('Criado em', 'created_at'),
+            // DateTime::make('Ativo em', 'activated_at'),
 
             Image::make('Comprovante de deposito', 'payment_voucher_url')->disk('digitalocean')->resolveUsing(function () {
                 if ($this->payment_voucher_url) {

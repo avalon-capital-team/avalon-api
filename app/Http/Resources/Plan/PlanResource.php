@@ -5,7 +5,9 @@ namespace App\Http\Resources\Plan;
 use App\Models\Plan\Plan;
 use App\Models\User;
 use App\Models\Data\DataPlan;
+use App\Models\User\UserPlan;
 use App\Http\Resources\Credit\CreditResource;
+use App\Http\Resources\Credit\CreditBalanceResource;
 
 class PlanResource
 {
@@ -72,15 +74,28 @@ class PlanResource
     public function dispatchIncomes(Plan $plan)
     {
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
+        $user_plan = UserPlan::where('user_id', $plan->user_id)->first();
+        $user = User::where('id', $plan->user_id)->select('sponsor_id', 'name')->first();
 
         $income = $plan->amount * $data_plan->porcent;
+        $status_id = 1;
 
-        $status_id = 2;
+        #gestor/acessor = 0.01;
+        if ($user->sponsor_id) {
+            $rent = $user_plan->amount * 0.01;
+            $description = 'Ganho de rendimento do user: ' . $user->name;
+
+            (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 1, $status_id, $rent, $description);
+        }
+
         $description = 'Rendimento mensal';
 
         (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 1, $status_id, $income, $description);
 
-        $plan->income = $income;
+        $plan->income = $plan->income += $income;
+        $user_plan->income = $user_plan->income += $income;
+
+        $user_plan->save();
         $plan->save();
     }
 }
