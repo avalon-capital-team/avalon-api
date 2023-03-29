@@ -36,6 +36,17 @@ class UserResource
      *
      * @return \App\Models\User
      */
+    public function findBySponsorshipId(string $id)
+    {
+        return User::where('sponsor_id', $id)->get();
+    }
+
+
+    /**
+     * @param int $id
+     *
+     * @return \App\Models\User
+     */
     public function findById(string $id)
     {
         return User::where('id', $id)->first();

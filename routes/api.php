@@ -80,6 +80,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('plan/extract', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getExtract']);
     });
 
+    # Manange/Accessor
+    Route::group(['prefix' => 'manange'], function () {
+        Route::get('list', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getIndicateList']);
+        Route::get('plan', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getIndicatePlan']);
+    });
+
     # Withdrawl
     Route::group(['prefix' => 'withdrawl'], function () {
         # Request

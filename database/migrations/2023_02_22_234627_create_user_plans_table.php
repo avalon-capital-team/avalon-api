@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('users_plan', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('token')->unique();
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('plan_id')->nullable();
             $table->unsignedInteger('coin_id')->nullable();
