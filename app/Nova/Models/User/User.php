@@ -97,9 +97,9 @@ class User extends Resource
                 }
             })->map([
                 'Usuário' => 'success',
-                'Gestor' => 'success',
-                'Assessor' => 'success',
-                'Admin' => 'warning'
+                'Gestor' => 'warning',
+                'Assessor' => 'info',
+                'Admin' => 'danger'
             ]),
 
             Text::make('Nome', 'name')

@@ -136,8 +136,8 @@ class UserPlan extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            new ApprovePaymentVoucher(\App\Models\User\UserPlan::get()),
-            new RejectPaymentVoucher(\App\Models\User\UserPlan::get()),
+            // new ApprovePaymentVoucher(\App\Models\User\UserPlan::get()),
+            // new RejectPaymentVoucher(\App\Models\User\UserPlan::get()),
         ];
     }
 

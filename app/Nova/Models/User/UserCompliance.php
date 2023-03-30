@@ -68,7 +68,8 @@ class UserCompliance extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
+            BelongsTo::make('Nome', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
+            BelongsTo::make('Nome de usuário', 'username', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
 
             Image::make('Frente do documento', 'document_front')->disk('digitalocean')->resolveUsing(function () {
                 if ($this->document_front) {
