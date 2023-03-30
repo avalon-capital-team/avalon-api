@@ -69,7 +69,6 @@ class UserCompliance extends Resource
     {
         return [
             BelongsTo::make('Nome', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
-            BelongsTo::make('Nome de usuário', 'username', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
 
             Image::make('Frente do documento', 'document_front')->disk('digitalocean')->resolveUsing(function () {
                 if ($this->document_front) {
