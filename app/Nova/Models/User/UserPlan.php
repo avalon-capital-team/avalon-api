@@ -81,9 +81,7 @@ class UserPlan extends Resource
             Currency::make('Rendimento', 'income')
                 ->displayUsing(function ($value) {
                     return currency_format($value, 'brl');
-                })
-                ->creationRules('required', 'numeric', 'not_in:0')
-                ->updateRules('nullable', 'numeric', 'not_in:0'),
+                }),
 
             Tabs::make('Relations', [
                 HasMany::make('Histórico', 'plan', 'App\Nova\Models\Plan\Plan'),
