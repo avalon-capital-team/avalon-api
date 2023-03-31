@@ -81,9 +81,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     # Manange/Accessor
-    Route::group(['prefix' => 'manange'], function () {
+    Route::group(['prefix' => 'mananger'], function () {
         Route::get('list', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getIndicateList']);
-        Route::get('plan', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getIndicatePlan']);
+        Route::post('set-mananger', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'setMananger']);
     });
 
     # Withdrawl

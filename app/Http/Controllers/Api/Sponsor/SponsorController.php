@@ -20,12 +20,7 @@ class SponsorController extends Controller
             $list = (new UserResource())->findBySponsorshipId(auth()->user()->id);
 
             $manangers_count = $list->where('type', 'mananger')->count();
-            $users_count = $list->where('type', 'user')->count();
-
             $manangers = $list->where('type', 'mananger');
-            $users = $list->where('type', 'user');
-
-
 
             foreach ($manangers as $mananger) {
                 $mananger->plan = (new UserPlanResource())->findByUserId($mananger->id);
@@ -34,6 +29,9 @@ class SponsorController extends Controller
                 }
             }
 
+            $users_count = $list->where('type', 'user')->count();
+            $users = $list->where('type', 'user');
+
             foreach ($users as $user) {
                 $user->plan = (new UserPlanResource())->findByUserId($user->id);
                 if ($user->plan) {
@@ -41,15 +39,12 @@ class SponsorController extends Controller
                 }
             }
 
-
-
             return response()->json([
                 'status' => true,
                 'manangers_count' => $manangers_count,
                 'users_count' => $users_count,
                 'manangers' => $manangers,
-                'users' => $users,
-                // 'list' => $list
+                'users' => $users
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -63,17 +58,19 @@ class SponsorController extends Controller
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getIndicatePlan(Request $request)
+    public function setMananger(Request $request)
     {
         try {
-            $plan = (new UserPlanResource())->findByUserId($request->user_id);
-            if ($plan) {
-                $plan->list = (new PlanResource())->listPlans($plan->user_id);
+            $user = (new UserResource())->findById($request->user_id);
+
+            if ($user) {
+                $user->type = 'mananger';
+                $user->save();
             }
 
             return response()->json([
                 'status' => true,
-                'plan' => $plan,
+                'message' => 'Este cliente agora é um gestor'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
