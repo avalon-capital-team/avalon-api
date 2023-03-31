@@ -18,30 +18,40 @@ class SponsorController extends Controller
     {
         try {
             $list = (new UserResource())->findBySponsorshipId(auth()->user()->id);
+
+
+
             $manangers_count = $list->where('type', 'mananger')->count();
             $users_count = $list->where('type', 'user')->count();
 
             $manangers = $list->where('type', 'mananger');
             $users = $list->where('type', 'user');
 
-            // dd($list[0]);
-            // if ($list[0]) {
-            //     dd('aq');
-            //     foreach ($list as $user) {
-            //         $plan = (new UserPlanResource())->findByUserId($user->id);
 
-            //         $sun = $plan->amount;
-            //     }
-            //     $total = $sun;
-            //     dd($total);
-            // }
+
+            foreach ($manangers as $mananger) {
+                $mananger->plan = (new UserPlanResource())->findByUserId($mananger->id);
+                if ($mananger->plan) {
+                    $mananger->plan->list = (new PlanResource())->listPlans($mananger->id);
+                }
+            }
+
+            foreach ($users as $user) {
+                $user->plan = (new UserPlanResource())->findByUserId($user->id);
+                if ($user->plan) {
+                    $user->plan->list = (new PlanResource())->listPlans($user->id);
+                }
+            }
+
+
 
             return response()->json([
                 'status' => true,
                 'manangers_count' => $manangers_count,
                 'users_count' => $users_count,
                 'manangers' => $manangers,
-                'users' => $users
+                'users' => $users,
+                // 'list' => $list
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
