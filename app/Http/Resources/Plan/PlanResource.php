@@ -18,7 +18,18 @@ class PlanResource
      * @param  int $coin_id
      * @return \App\Models\Plan\Plan
      */
-    public function listPlan(int $user_id, int $plan_id)
+    public function listPlans(int $user_id)
+    {
+        return Plan::where('user_id', $user_id)->get();
+    }
+    /**
+     * List of plans of user
+     *
+     * @param  int $user_id
+     * @param  int $coin_id
+     * @return \App\Models\Plan\Plan
+     */
+    public function getPlan(int $user_id, int $plan_id)
     {
         return Plan::where('user_id', $user_id)
             ->where('id', $plan_id)

@@ -74,7 +74,7 @@ class UserPlanResource
     public function upDate(User $user, $data)
     {
 
-        $plan = (new PlanResource())->listPlan($user->id, $data['plan_id']);
+        $plan = (new PlanResource())->getPlan($user->id, $data['plan_id']);
 
         if ($plan['coin_id'] == 1) {
             $plan->payment_voucher_url = (new FileUploadHelper())->storeFile($data['transfer_voucher'], 'users/vouchers');
