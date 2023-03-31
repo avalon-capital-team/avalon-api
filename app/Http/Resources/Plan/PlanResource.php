@@ -20,7 +20,7 @@ class PlanResource
      */
     public function listPlans(int $user_id)
     {
-        return Plan::where('user_id', $user_id)->get();
+        return Plan::where('user_id', $user_id)->select('acting', 'token', 'amount', 'income', 'activated_at')->get();
     }
     /**
      * List of plans of user

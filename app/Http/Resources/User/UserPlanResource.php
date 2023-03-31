@@ -22,7 +22,7 @@ class UserPlanResource
      */
     public function findByUserId(int $id)
     {
-        return UserPlan::where('user_id', $id)->first();
+        return UserPlan::where('user_id', $id)->select('plan_id', 'coin_id', 'amount', 'income')->first();
     }
 
     /**
