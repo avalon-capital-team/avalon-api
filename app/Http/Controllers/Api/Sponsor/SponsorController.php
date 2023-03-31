@@ -27,6 +27,7 @@ class SponsorController extends Controller
                 if ($mananger->plan) {
                     $mananger->plan->list = (new PlanResource())->listPlans($mananger->id);
                 }
+                $manange_amount = $mananger->plan->amount;
             }
 
             $users_count = $list->where('type', 'user')->count();
@@ -37,10 +38,14 @@ class SponsorController extends Controller
                 if ($user->plan) {
                     $user->plan->list = (new PlanResource())->listPlans($user->id);
                 }
+                $user_amount = $user->plan->amount;
             }
+
+            $total = $manange_amount += $user_amount;
 
             return response()->json([
                 'status' => true,
+                'total' => $total,
                 'manangers_count' => $manangers_count,
                 'users_count' => $users_count,
                 'manangers' => $manangers,
