@@ -68,6 +68,10 @@ class SponsorController extends Controller
                 $user->save();
             }
 
+            if (!$user) {
+                throw new \Exception('Não foi possível adicionar o cliente como gestor. Tente novamente mais tarde!');
+            }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Este cliente agora é um gestor'
