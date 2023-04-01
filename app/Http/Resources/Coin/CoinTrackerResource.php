@@ -37,8 +37,8 @@ class CoinTrackerResource
                 $variable_buy = $track['currency']['price_usd'] * $porcent_buy;
                 $variable_sale = $track['currency']['price_usd'] * $porcent_sale;
 
-                $exchange['prace_buy'] = number_format((float)$track['currency']['price_usd'] - $variable_buy, 2, '.', '');
-                $exchange['prace_sale'] = number_format((float)$track['currency']['price_usd'] + $variable_sale, 2, '.', '');
+                $exchange['price_buy'] = number_format((float)$track['currency']['price_usd'] - $variable_buy, 2, '.', '');
+                $exchange['price_sale'] = number_format((float)$track['currency']['price_usd'] + $variable_sale, 2, '.', '');
             }
         }
 
