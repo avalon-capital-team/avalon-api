@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('withdrawal_statuses', function (Blueprint $table) {
-            $table->id();
+        Schema::create('withdrawals_status', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('color')->nullable();
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('withdrawal_statuses');
+        Schema::dropIfExists('withdrawals_status');
     }
 };
