@@ -88,6 +88,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('set-mananger', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'setMananger']);
     });
 
+
+
     # Withdrawl
     Route::group(['prefix' => 'withdrawl'], function () {
         # Request
@@ -128,6 +130,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     # Notifications
     Route::get('/notifications', [App\Http\Controllers\Api\Notifications\NotificationsController::class, 'list'])->name('api.notifications');
+});
+
+# Coin Tracker
+Route::group(['prefix' => 'coin'], function () {
+    Route::get('tracker', [App\Http\Controllers\Api\Coin\CoinTrackerController::class, 'coinTracker']);
 });
 
 # Helpers
