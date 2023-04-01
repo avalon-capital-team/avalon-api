@@ -16,10 +16,6 @@ class CoinTrackerController extends Controller
     public function coinTracker(Request $request)
     {
         try {
-            // $kraken = (new CoinTrackerResource())->coinTracking('24');
-            // $coin_base = (new CoinTrackerResource())->coinTracking('89');
-            // $bit_stamp = (new CoinTrackerResource())->coinTracking('70');
-
             $binance = (new CoinTrackerResource())->coinTracking('270');
             $kucoin = (new CoinTrackerResource())->coinTracking('311');
             $bitfinix = (new CoinTrackerResource())->coinTracking('37');
