@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Coin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Coin\CoinTrackerResource;
+use Illuminate\Http\Request;
 
 class CoinTrackerController extends Controller
 {
@@ -12,7 +13,7 @@ class CoinTrackerController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illiminate\Http\Json
      */
-    public function coinTracker()
+    public function coinTracker(Request $request)
     {
         try {
             // $kraken = (new CoinTrackerResource())->coinTracking('24');
@@ -26,14 +27,25 @@ class CoinTrackerController extends Controller
             $zero_kx = (new CoinTrackerResource())->coinTracking('294');
             $bitget = (new CoinTrackerResource())->coinTracking('513');
 
+            $binance['exchange'] = 'binance';
+            $kucoin['exchange'] = 'kucoin';
+            $bitfinix['exchange'] = 'bitfinix';
+            $bybit['exchange'] = 'bybit';
+            $zero_kx['exchange'] = 'zerokx';
+            $bitget['exchange'] = 'bitget';
+
+            $tracker = [
+                $binance,
+                $kucoin,
+                $bitfinix,
+                $bybit,
+                $zero_kx,
+                $bitget
+            ];
+
             return response()->json([
                 'status'  => true,
-                'binance'  => $binance,
-                'kucoin'  => $kucoin,
-                'bitfinix'  => $bitfinix,
-                'bybit'  => $bybit,
-                'zerokx'  => $zero_kx,
-                'bitget'  => $bitget,
+                'tracker' => $tracker
             ]);
         } catch (\Exception $e) {
             return response()->json([
