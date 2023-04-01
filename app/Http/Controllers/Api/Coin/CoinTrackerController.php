@@ -16,25 +16,30 @@ class CoinTrackerController extends Controller
     public function coinTracker(Request $request)
     {
         try {
-            $binance = (new CoinTrackerResource())->coinTracking('270');
-            $kucoin = (new CoinTrackerResource())->coinTracking('311');
-            $bitfinix = (new CoinTrackerResource())->coinTracking('37');
-            $bybit = (new CoinTrackerResource())->coinTracking('521');
-            $zero_kx = (new CoinTrackerResource())->coinTracking('294');
-            $bitget = (new CoinTrackerResource())->coinTracking('513');
 
-            $binance['exchange'] = 'binance';
+            $binance = (new CoinTrackerResource())->coinTracking('270');
             $binance['id'] = 1;
-            $kucoin['exchange'] = 'kucoin';
+            $binance['exchange'] = 'Binance';
+
+            $kucoin = (new CoinTrackerResource())->coinTracking('311');
             $kucoin['id'] = 2;
-            $bitfinix['exchange'] = 'bitfinix';
+            $kucoin['exchange'] = 'Kucoin';
+
+            $bitfinix = (new CoinTrackerResource())->coinTracking('37');
             $bitfinix['id'] = 3;
-            $bybit['exchange'] = 'bybit';
+            $bitfinix['exchange'] = 'Bitfinix';
+
+            $bybit = (new CoinTrackerResource())->coinTracking('521');
             $bybit['id'] = 4;
-            $zero_kx['exchange'] = 'zerokx';
+            $bybit['exchange'] = 'Bybit';
+
+            $zero_kx = (new CoinTrackerResource())->coinTracking('294');
             $zero_kx['id'] = 5;
-            $bitget['exchange'] = 'bitget';
+            $zero_kx['exchange'] = 'Okx';
+
+            $bitget = (new CoinTrackerResource())->coinTracking('513');
             $bitget['id'] = 6;
+            $bitget['exchange'] = 'Bitget';
 
             $tracker = [
                 $binance,

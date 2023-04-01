@@ -12,22 +12,24 @@ class CoinTrackerResource
      */
     public function coinTracking(string $exchange)
     {
-
         $coinMarketCapApi = new CoinMarketCapApi();
         $trackers = $coinMarketCapApi->listAllCoinsTracker($exchange);
 
         return $this->currencyTreatment($trackers);
     }
 
+    /**
+     * @param  array $trackers
+     * @return array
+     */
     public function currencyTreatment($trackers)
     {
-        $trackers = $trackers['data'];
-
-        foreach ($trackers as $track) {
+        foreach ($trackers['data'] as $track) {
             if ($track['currency']['symbol'] == 'BTC') {
                 $exchange = $track['currency'];
             }
         }
+
         return $exchange;
     }
 }
