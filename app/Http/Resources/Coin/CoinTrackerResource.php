@@ -38,8 +38,8 @@ class CoinTrackerResource
                 $variable_sale = $track['currency']['price_usd'] * $porcent_sale;
 
                 if ($i == 1) {
-                    $exchange['price_buy'] = $track['currency']['price_usd'] + $variable_buy;
-                    $exchange['price_sale'] = $track['currency']['price_usd'] - $variable_sale;
+                    $exchange['price_buy'] = $track['currency']['price_usd'] - $variable_buy;
+                    $exchange['price_sale'] = $track['currency']['price_usd'] + $variable_sale;
                 } else {
                     $exchange['prace_buy'] = $track['currency']['price_usd'] - $variable_buy;
                     $exchange['prace_sale'] = $track['currency']['price_usd'] + $variable_sale;
