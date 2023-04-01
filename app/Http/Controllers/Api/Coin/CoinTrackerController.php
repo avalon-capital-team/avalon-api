@@ -24,11 +24,17 @@ class CoinTrackerController extends Controller
             $bitget = (new CoinTrackerResource())->coinTracking('513');
 
             $binance['exchange'] = 'binance';
+            $binance['id'] = 1;
             $kucoin['exchange'] = 'kucoin';
+            $kucoin['id'] = 2;
             $bitfinix['exchange'] = 'bitfinix';
+            $bitfinix['id'] = 3;
             $bybit['exchange'] = 'bybit';
+            $bybit['id'] = 4;
             $zero_kx['exchange'] = 'zerokx';
+            $zero_kx['id'] = 5;
             $bitget['exchange'] = 'bitget';
+            $bitget['id'] = 6;
 
             $tracker = [
                 $binance,
