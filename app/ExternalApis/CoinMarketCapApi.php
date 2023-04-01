@@ -28,6 +28,15 @@ class CoinMarketCapApi
     }
 
     /**
+     * @return mixed
+     */
+    public function listAllCoins()
+    {
+        $endpoint = "/cryptocurrency/quotes/latest";
+        return $this->executeCurl('GET', $endpoint);
+    }
+
+    /**
      * @param string $method
      * @param string $endpoint
      * @param array|null|json $body

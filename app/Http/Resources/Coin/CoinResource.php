@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Coin;
 
 use App\Models\Coin\Coin;
-use App\Models\Coin\CoinNetworkContractType;
+use App\ExternalApis\CoinMarketCapApi;
 
 class CoinResource
 {
@@ -37,5 +37,16 @@ class CoinResource
     public function findBySymbol(string $symbol)
     {
         return Coin::where('symbol', $symbol)->first();
+    }
+
+    /**
+     * @return array
+     */
+    public function coinData()
+    {
+        $coinMarketCapApi = new CoinMarketCapApi();
+        $coin = $coinMarketCapApi->listAllCoins();
+
+        dd($coin);
     }
 }
