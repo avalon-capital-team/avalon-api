@@ -24,11 +24,10 @@ class CoinTrackerResource
      */
     public function currencyTreatment($trackers)
     {
-        $buy = $this->rand_float(0.1, 0.9) / 100;
+        $buy = $this->rand_float(0.1, 0.7) / 100;
         $porcent_buy = $buy / 100;
 
-
-        $sale = $this->rand_float(0.1, 0.9) / 100;
+        $sale = $this->rand_float(0.1, 0.7) / 100;
         $porcent_sale = $sale / 100;
 
         foreach ($trackers['data'] as $track) {

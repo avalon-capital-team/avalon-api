@@ -55,7 +55,6 @@ class WithdrawalFiatResource
             $withdrawal->data = $user->financial()->where('type', $type)->first()->getData();
             $withdrawal->save();
 
-
             # Update withdrawal field in balance
             (new CreditBalanceResource())->updateField(
                 $user,
@@ -156,7 +155,7 @@ class WithdrawalFiatResource
             $withdrawalFiat->save();
 
             # Send mail
-            $withdrawalFiat->user->notify(new WithdrawalFiatNotification($withdrawalFiat));
+            // $withdrawalFiat->user->notify(new WithdrawalFiatNotification($withdrawalFiat));
         }
     }
     /**

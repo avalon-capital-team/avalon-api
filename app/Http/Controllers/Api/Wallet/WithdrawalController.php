@@ -32,7 +32,7 @@ class WithdrawalController extends Controller
 
             return response()->json([
                 'status' => true,
-                'resource' => $resource
+                'message' => 'A solicitação de saque foi realizada com sucesso.'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
