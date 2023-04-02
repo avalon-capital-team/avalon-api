@@ -41,6 +41,10 @@ class UserPlanResource
         $status_id = 2;
         $description = 'Ordem do plano criada com sucesso';
 
+        if ($validated['plan_id'] != $user->userPlan->plan_id) {
+            throw new \Exception('Não foi possível gerar o plano. Tente novamente mais tarde!');
+        }
+
         $plan = (new Plan())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount']);
         $credit = (new CreditResource())->create($user->id, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description);
 

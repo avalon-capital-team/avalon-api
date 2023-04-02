@@ -38,20 +38,11 @@ class WithdrawalFiatResource
         } else if ($type == 'pix') {
             $description = 'Saque para o PIX';
         } else {
-            $description = 'Saque para o Wallet';
+            $description = 'Saque para a Wallet';
         }
 
         # Create debit
-        $debit = (new CreditResource())->create(
-            $user,
-            $coin_id,
-            $user->userPlan->plan_id,
-            2,
-            1,
-            $description,
-            '-' . $amount
-        );
-        dd($debit);
+        $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->plan_id, 2, 1, floatval('-' . $amount), $description);
 
         if ($debit) {
             # Create Withdrawal
@@ -64,6 +55,7 @@ class WithdrawalFiatResource
             $withdrawal->data = $user->financial()->where('type', $type)->first()->getData();
             $withdrawal->save();
 
+
             # Update withdrawal field in balance
             (new CreditBalanceResource())->updateField(
                 $user,
@@ -72,12 +64,12 @@ class WithdrawalFiatResource
                 'withdrawal',
             );
 
-            # Send mail
-            if (env('APP_ENV') != 'testing') {
-                $user->notify(
-                    new WithdrawalFiatNotification($withdrawal)
-                );
-            }
+            // # Send mail
+            // if (env('APP_ENV') != 'testing') {
+            //     $user->notify(
+            //         new WithdrawalFiatNotification($withdrawal)
+            //     );
+            // }
 
             return true;
         }

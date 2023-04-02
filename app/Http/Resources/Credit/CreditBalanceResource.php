@@ -115,7 +115,7 @@ class CreditBalanceResource
      * @param  string $field
      * @return bool
      */
-    public function updateField(User $user, int $coin_id, float $amount, string $field, int $tokenSaleId = null)
+    public function updateField(User $user, int $coin_id, float $amount, string $field)
     {
         $coin = (new CoinResource())->findById($coin_id);
         $balance = $this->checkBalanceByCoinId($user, $coin);
