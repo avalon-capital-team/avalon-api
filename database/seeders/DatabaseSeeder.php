@@ -22,6 +22,8 @@ use Database\Seeders\Credit\CreditTypeTableSeeder;
 use Database\Seeders\Credit\CreditStatusTableSeeder;
 use Database\Seeders\Order\OrderStatusTableSeeder;
 use Database\Seeders\System\PaymentMethodTableSeeder;
+use Database\Seeders\System\LimitOfUserTableSeeder;
+use Database\Seeders\Withdrawal\WithdrawalStatusTableSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -34,35 +36,39 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         # Coin
-        $this->call(CoinsTableSeeder::class);
+        // $this->call(CoinsTableSeeder::class);
 
         # Credit
-        $this->call(CreditTypeTableSeeder::class);
-        $this->call(CreditStatusTableSeeder::class);
+        // $this->call(CreditTypeTableSeeder::class);
+        // $this->call(CreditStatusTableSeeder::class);
 
-        # Payment Method
-        $this->call(PaymentMethodTableSeeder::class);
+        # System
+        // $this->call(PaymentMethodTableSeeder::class);
+        $this->call(LimitOfUserTableSeeder::class);
 
         # Order
-        $this->call(OrderStatusTableSeeder::class);
+        // $this->call(OrderStatusTableSeeder::class);
+
+        # Withdrawal
+        $this->call(WithdrawalStatusTableSeeder::class);
 
         # Data
-        $this->call(DataGenreSeeder::class);
-        $this->call(DataNotificationChannelSeeder::class);
-        $this->call(DataNotificationTypeSeeder::class);
-        $this->call(DataPrivacyTypeOptionSeeder::class);
-        $this->call(DataPlanSeeder::class);
-        $this->call(DataOngSeeder::class);
-        $this->call(DataPrivacyTypeSeeder::class);
-        $this->call(DataBankSeeder::class);
-        $this->call(DataCountrySeeder::class);
+        // $this->call(DataGenreSeeder::class);
+        // $this->call(DataNotificationChannelSeeder::class);
+        // $this->call(DataNotificationTypeSeeder::class);
+        // $this->call(DataPrivacyTypeOptionSeeder::class);
+        // $this->call(DataPlanSeeder::class);
+        // $this->call(DataOngSeeder::class);
+        // $this->call(DataPrivacyTypeSeeder::class);
+        // $this->call(DataBankSeeder::class);
+        // $this->call(DataCountrySeeder::class);
 
         # Onboarding
-        $this->call(OnboardingStepSeeder::class);
+        // $this->call(OnboardingStepSeeder::class);
 
         # User
-        $this->call(UserComplianceStatusSeeder::class);
-        $this->call(UserStatusSeeder::class);
-        $this->call(UserSeeder::class);
+        // $this->call(UserComplianceStatusSeeder::class);
+        // $this->call(UserStatusSeeder::class);
+        // $this->call(UserSeeder::class);
     }
 }

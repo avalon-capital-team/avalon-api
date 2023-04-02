@@ -18,22 +18,17 @@ class CoinTrackerResource
         return $this->currencyTreatment($trackers);
     }
 
-    function rand_float($st_num = 0, $end_num = 1, $mul = 1000000)
-    {
-        if ($st_num > $end_num) return false;
-        return mt_rand($st_num * $mul, $end_num * $mul) / $mul;
-    }
-
     /**
      * @param  array $trackers
      * @return array
      */
     public function currencyTreatment($trackers)
     {
-        $buy = $this->rand_float(0.1, 0.5) / 100;
+        $buy = $this->rand_float(0.1, 0.9) / 100;
         $porcent_buy = $buy / 100;
 
-        $sale = $this->rand_float(0.1, 0.5) / 100;
+
+        $sale = $this->rand_float(0.1, 0.9) / 100;
         $porcent_sale = $sale / 100;
 
         foreach ($trackers['data'] as $track) {
@@ -49,5 +44,11 @@ class CoinTrackerResource
         }
 
         return $exchange;
+    }
+
+    function rand_float($st_num = 0, $end_num = 1, $mul = 1000000)
+    {
+        if ($st_num > $end_num) return false;
+        return mt_rand($st_num * $mul, $end_num * $mul) / $mul;
     }
 }

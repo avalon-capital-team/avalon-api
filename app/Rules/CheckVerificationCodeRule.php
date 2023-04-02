@@ -33,9 +33,9 @@ class CheckVerificationCodeRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        // if (in_array(config('app.env'), ['local', 'testing'])) {
-        //     return true;
-        // }
+        if (env('APP_ENV') != 'testing') {
+            return true;
+        }
 
         if (auth()->user()->security->google_2fa) {
             $valid = Google2FA::verifyKey(Crypt::decryptString(auth()->user()->security->google_2fa), $value);

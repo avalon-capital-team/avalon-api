@@ -88,12 +88,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('set-mananger', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'setMananger']);
     });
 
-
-
     # Withdrawl
-    Route::group(['prefix' => 'withdrawl'], function () {
+    Route::group(['prefix' => 'withdrawal'], function () {
         # Request
-        Route::get('{username}', [App\Http\Controllers\Api\Profile\ProfileController::class, 'data']);
+        Route::post('request', [App\Http\Controllers\Api\Wallet\WithdrawalController::class, 'withdrawl']);
     });
 
     # Settings
