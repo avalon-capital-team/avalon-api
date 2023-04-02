@@ -6,8 +6,11 @@ use App\Models\Plan\Plan;
 use App\Models\User;
 use App\Models\Data\DataPlan;
 use App\Models\User\UserPlan;
+use App\Models\Coin\Coin;
+use App\Models\Credit\CreditBalance;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
+
 
 class PlanResource
 {
@@ -85,6 +88,7 @@ class PlanResource
     public function dispatchIncomes(Plan $plan)
     {
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
+        $coin = Coin::where('id', $plan->coin_id)->first();
         $user_plan = UserPlan::where('user_id', $plan->user_id)->first();
         $user = User::where('id', $plan->user_id)->select('sponsor_id', 'name')->first();
 
@@ -102,10 +106,21 @@ class PlanResource
         $description = 'Rendimento mensal';
 
         (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 1, $status_id, $income, $description);
+        $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
+
+        if (!$balance) {
+            $balance = new CreditBalance();
+            $balance->user_id = $user_plan->id;
+            $balance->coin_id = $coin->id;
+        }
+        $balance->plan_id = $plan->id;
 
         $plan->income = $plan->income += $income;
         $user_plan->income = $user_plan->income += $income;
+        $balance->balance_enable += $income;
+        $balance->income += $income;
 
+        $balance->save();
         $user_plan->save();
         $plan->save();
     }
