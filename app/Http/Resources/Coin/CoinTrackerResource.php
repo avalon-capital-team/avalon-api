@@ -3,9 +3,58 @@
 namespace App\Http\Resources\Coin;
 
 use App\ExternalApis\CoinMarketCapApi;
+use App\Models\Coin\CoinTracker;
 
 class CoinTrackerResource
 {
+
+    /**
+     * @param  string $exchange
+     * @return array
+     */
+    public function coinTrackingList()
+    {
+        $binance = $this->coinTracking('270');
+        $this->saveCoinTracking($binance['data'], 'Binance');
+
+        $kucoin = $this->coinTracking('311');
+        $this->saveCoinTracking($kucoin['data'], 'KuCoin');
+
+        $bitfinix = $this->coinTracking('37');
+        $this->saveCoinTracking($bitfinix['data'], 'Bitfinix');
+
+        $bybit = $this->coinTracking('521');
+        $this->saveCoinTracking($bybit['data'], 'Bybit');
+
+        $zero_kx = $this->coinTracking('294');
+        $this->saveCoinTracking($zero_kx['data'], 'OKX');
+
+        $bitget = $this->coinTracking('513');
+        $this->saveCoinTracking($bitget['data'], 'Bitget');
+
+
+        return true;
+    }
+
+    /**
+     * @param  array $exchange
+     * @return array
+     */
+    public function saveCoinTracking(array $coins, $name)
+    {
+        $coin_id = 1;
+        foreach ($coins as $coin) {
+            if ($coin['currency']['symbol'] == 'BTC') {
+                $coin = CoinTracker::create([
+                    'coin_id' => $coin_id,
+                    'name' => $name,
+                    'price_usd' => floatval($coin['currency']['price_usd']),
+                ]);
+                return true;
+            }
+        }
+    }
+
     /**
      * @param  string $exchange
      * @return array
@@ -13,16 +62,27 @@ class CoinTrackerResource
     public function coinTracking(string $exchange)
     {
         $coinMarketCapApi = new CoinMarketCapApi();
-        $trackers = $coinMarketCapApi->listAllCoinsTracker($exchange);
+        $exchange = $coinMarketCapApi->listAllCoinsTracker($exchange);
 
-        return $this->currencyTreatment($trackers);
+        return $exchange;
+    }
+
+    /**
+     * @param  string $exchange
+     * @return array
+     */
+    public function getExchanges()
+    {
+        $exchanges = CoinTracker::get();
+
+        return $this->currencyTreatment($exchanges);
     }
 
     /**
      * @param  array $trackers
      * @return array
      */
-    public function currencyTreatment($trackers)
+    public function currencyTreatment($exchanges)
     {
         $buy = $this->rand_float(0.1, 0.7) / 100;
         $porcent_buy = $buy / 100;
@@ -30,19 +90,18 @@ class CoinTrackerResource
         $sale = $this->rand_float(0.1, 0.7) / 100;
         $porcent_sale = $sale / 100;
 
-        foreach ($trackers['data'] as $track) {
-            if ($track['currency']['symbol'] == 'BTC') {
-                $exchange = $track['currency'];
+        foreach ($exchanges as $exchange) {
 
-                $variable_buy = $track['currency']['price_usd'] * $porcent_buy;
-                $variable_sale = $track['currency']['price_usd'] * $porcent_sale;
+            $variable_buy = $exchange['price_usd'] * $porcent_buy;
 
-                $exchange['price_buy'] = number_format((float)$track['currency']['price_usd'] - $variable_buy, 2, '.', '');
-                $exchange['price_sale'] = number_format((float)$track['currency']['price_usd'] + $variable_sale, 2, '.', '');
-            }
+            $variable_sale = $exchange['price_usd'] * $porcent_sale;
+
+            $exchange['price_buy'] = number_format((float)$exchange['price_usd'] - $variable_buy, 2, '.', '');
+            $exchange['price_sale'] = number_format((float)$exchange['price_usd'] + $variable_sale, 2, '.', '');
+            $exchange->save();
         }
 
-        return $exchange;
+        return $exchanges;
     }
 
     function rand_float($st_num = 0, $end_num = 1, $mul = 1000000)

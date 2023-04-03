@@ -45,7 +45,7 @@ class WithdrawalFiatRequest extends FormRequest
             'type.required' => 'Você precisa definir um conta de destino.',
             'amount.required' => 'Informe o valor que deseja depositar.',
             'amount.numeric' => 'O valor deve ser um número.',
-            'amount.min' => 'O valor mínimo para deposito é de R$25.00',
+            'amount.min' => 'O valor mínimo para saque é de R$50.00',
             'accepted_terms.accepted' => 'Você precisa estar ciente sobre a origem do deposito.',
             'code.required' => 'Informe o código.',
             'code.digits' => 'O código deve ter no mínimo 6 dígitos.'
