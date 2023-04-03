@@ -90,7 +90,7 @@ class User extends Resource
                     return 'Usuário';
                 } else if ($this->type == 'mananger') {
                     return 'Gestor';
-                } else  if ($this->type == 'advidor') {
+                } else  if ($this->type == 'advisor') {
                     return 'Assessor';
                 } else {
                     return 'Admin';

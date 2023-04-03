@@ -121,9 +121,7 @@ class CreditBalanceResource
     }
 
     /**
-     * @param  \App\Models\User $user
-     * @param  int $coin_id
-     * @param  float $amount
+     * @param  arrey $data
      * @return bool
      */
     public function updateBalance($data)
