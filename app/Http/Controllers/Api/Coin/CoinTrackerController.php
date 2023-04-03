@@ -13,7 +13,7 @@ class CoinTrackerController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illiminate\Http\Json
      */
-    public function coinTracker(Request $request)
+    public function coinTracker()
     {
         try {
             $tracker = (new CoinTrackerResource())->getExchanges();

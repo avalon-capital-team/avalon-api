@@ -98,7 +98,6 @@ class CoinTrackerResource
 
             $exchange['price_buy'] = number_format((float)$exchange['price_usd'] - $variable_buy, 2, '.', '');
             $exchange['price_sale'] = number_format((float)$exchange['price_usd'] + $variable_sale, 2, '.', '');
-            $exchange->save();
         }
 
         return $exchanges;
