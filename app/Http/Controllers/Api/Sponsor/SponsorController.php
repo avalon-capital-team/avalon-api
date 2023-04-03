@@ -56,6 +56,7 @@ class SponsorController extends Controller
             return response()->json([
                 'status' => true,
                 'total' => $total,
+                'name' => auth()->user()->name,
                 'manangers_count' => $manangers_count,
                 'users_count' => $users_count,
                 'manangers' => $manangers,

@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
+use App\Http\Resources\Credit\CreditBalanceResource;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -26,6 +27,7 @@ class ApprovePaymentVoucher extends Action
     {
         foreach ($models as $model) {
             $model->acting = 1;
+            (new CreditBalanceResource())->updateBalance($model);
             $model->save();
             $this->markAsFinished($model);
         }

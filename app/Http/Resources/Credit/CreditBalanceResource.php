@@ -6,6 +6,7 @@ use App\Http\Resources\Coin\CoinResource;
 use App\Models\Credit\CreditBalance;
 use App\Models\User;
 use App\Models\Coin\Coin;
+use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Support\Facades\DB;
 
 class CreditBalanceResource
@@ -20,14 +21,14 @@ class CreditBalanceResource
     public function getGraphicData(User $user, int $coinId)
     {
         $coin = (new CoinResource())->findById($coinId);
+        $plans = (new PlanResource())->listActingPlans($user->id);
+
+        foreach ($plans as $plan) {
+            $value = $plan->amount;
+        }
+        dd($plans);
+
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
-
-        /*
-
-        100 / 3
-
-        */
-
 
         $balance_total = $creditBalance->deposited + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
         $balance_placed = $creditBalance->deposited * 100 / $balance_total;
@@ -125,6 +126,24 @@ class CreditBalanceResource
      * @param  float $amount
      * @return bool
      */
+    public function updateBalance($data)
+    {
+        $coin = (new CoinResource())->findById($data->coin_id);
+        $user = (new User())->findById($data->user_id);
+        $balance = $this->checkBalanceByCoinId($user, $coin);
+
+        $balance->balance_pending -= $data->amount;
+        $balance->balance_enabled += $data->amount;
+
+        return $balance->save();
+    }
+
+    /**
+     * @param  \App\Models\User $user
+     * @param  int $coin_id
+     * @param  float $amount
+     * @return bool
+     */
     public function createOrUpdateBalance(User $user, int $coin_id, float $amount, int $plan_id)
     {
         $coin = (new CoinResource())->findById($coin_id);
@@ -136,7 +155,7 @@ class CreditBalanceResource
             $balance->coin_id = $coin_id;
         }
         $balance->plan_id = $plan_id;
-        $balance->balance_enable += $amount;
+        $balance->balance_pending += $amount;
 
         if ($amount > 0) {
             $balance->deposited += $amount;

@@ -34,6 +34,25 @@ class PlanResource
     }
 
     /**
+     * List of plans of user in acting
+     *
+     * @param  int $user_id
+     * @return \App\Models\Plan\Plan
+     */
+    public function listActingPlans(int $user_id)
+    {
+        return Plan::where('user_id', $user_id)
+            ->where('acting', 1)
+            ->select(
+                'token',
+                'amount',
+                'income',
+                'activated_at'
+            )
+            ->get();
+    }
+
+    /**
      * Get plan of user
      *
      * @param  int $user_id
