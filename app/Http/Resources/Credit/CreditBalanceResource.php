@@ -17,6 +17,45 @@ class CreditBalanceResource
      * @param  int $coinId
      * @return float
      */
+    public function getGraphicData(User $user, int $coinId)
+    {
+        $coin = (new CoinResource())->findById($coinId);
+        $creditBalance = $this->checkBalanceByCoinId($user, $coin);
+
+        /*
+
+        100 / 3
+
+        */
+
+
+        $balance_total = $creditBalance->deposited + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
+        $balance_placed = $creditBalance->deposited * 100 / $balance_total;
+        $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
+        $balance_income = $creditBalance->income * 100 / $balance_total;
+
+        $data = [
+            'balance_enable' => $creditBalance->balance_enable,
+            'balance_placed' => $creditBalance->deposited,
+            'balance_rendeem' => $creditBalance->used,
+            'balance_income' => $creditBalance->income,
+            'graphic_pizza' => [
+                'placed' => $balance_placed,
+                'rendeem' => $balance_rendeem,
+                'income' => $balance_income
+            ]
+        ];
+
+        return $data;
+    }
+
+    /**
+     * Get balance of user logged by CoinID
+     *
+     * @param  \App\Models\User $user
+     * @param  int $coinId
+     * @return float
+     */
     public function getBalanceByCoinId(User $user, int $coinId)
     {
         $coin = (new CoinResource())->findById($coinId);

@@ -18,18 +18,26 @@ class PlanResource
      * List of plans of user
      *
      * @param  int $user_id
-     * @param  int $coin_id
      * @return \App\Models\Plan\Plan
      */
     public function listPlans(int $user_id)
     {
-        return Plan::where('user_id', $user_id)->select('acting', 'token', 'amount', 'income', 'activated_at')->get();
+        return Plan::where('user_id', $user_id)
+            ->select(
+                'acting',
+                'token',
+                'amount',
+                'income',
+                'activated_at'
+            )
+            ->get();
     }
+
     /**
-     * List of plans of user
+     * Get plan of user
      *
      * @param  int $user_id
-     * @param  int $coin_id
+     * @param  int $plan_id
      * @return \App\Models\Plan\Plan
      */
     public function getPlan(int $user_id, int $plan_id)
@@ -89,39 +97,32 @@ class PlanResource
     {
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
         $coin = Coin::where('id', $plan->coin_id)->first();
-        $user_plan = UserPlan::where('user_id', $plan->user_id)->first();
-        $user = User::where('id', $plan->user_id)->select('sponsor_id', 'name')->first();
+
+        $user = User::where('id', $plan->user_id)->first();
 
         $income = $plan->amount * $data_plan->porcent;
         $status_id = 1;
 
         #gestor/acessor = 0.01;
         if ($user->sponsor_id) {
-            $rent = $user_plan->amount * 0.01;
+            $rent = $plan->amount * 0.01;
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
-            (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 1, $status_id, $rent, $description);
+            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, $plan->id, 1, $status_id, $rent, $description);
         }
 
         $description = 'Rendimento mensal';
 
         (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 1, $status_id, $income, $description);
-        $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
+        $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user);
 
-        if (!$balance) {
-            $balance = new CreditBalance();
-            $balance->user_id = $user_plan->id;
-            $balance->coin_id = $coin->id;
-        }
-        $balance->plan_id = $plan->id;
-
-        $plan->income = $plan->income += $income;
-        $user_plan->income = $user_plan->income += $income;
-        $balance->balance_enable += $income;
         $balance->income += $income;
 
+        $plan->income = $plan->income += $income;
+        $user->userPlan->income = $user->userPlan->income += $income;
+
         $balance->save();
-        $user_plan->save();
+        $user->userPlan->save();
         $plan->save();
     }
 }

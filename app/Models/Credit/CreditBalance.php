@@ -68,27 +68,4 @@ class CreditBalance extends Model implements AuditableContract
     {
         return ($this->coin->price_brl * $field);
     }
-
-    /**
-     * Get name of balance.
-     *
-     * @return string
-     */
-    public function balanceName()
-    {
-        if ($this->tokenSale) {
-            return 'Vendas de ' . $this->tokenSale->name;
-        }
-        return 'Principal';
-    }
-
-    /**
-     * Get the token sale.
-     *
-     * @return \App\Models\TokenSale\TokenSale
-     */
-    public function tokenSale()
-    {
-        return $this->belongsTo(TokenSale::class, 'token_sale_id');
-    }
 }

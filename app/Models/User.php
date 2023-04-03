@@ -212,7 +212,7 @@ class User extends Authenticatable
      */
     public function creditBalance()
     {
-        return $this->hasMany(CreditBalance::class, 'user_id', 'id');
+        return $this->hasOne(CreditBalance::class, 'user_id', 'id');
     }
 
     /**

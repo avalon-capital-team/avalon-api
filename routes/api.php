@@ -135,6 +135,11 @@ Route::group(['prefix' => 'coin'], function () {
     Route::get('tracker', [App\Http\Controllers\Api\Coin\CoinTrackerController::class, 'coinTracker']);
 });
 
+# Graphic
+Route::group(['prefix' => 'graphic'], function () {
+    Route::get('get-data', [App\Http\Controllers\Api\Graphic\GraphicDataController::class, 'getGraphic']);
+});
+
 # Helpers
 Route::group(['prefix' => 'helpers'], function () {
 
