@@ -31,7 +31,6 @@ class CreditBalanceResource
 
         $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
 
-        dd($plans['total'] * 100 / $balance_total);
         $balance_placed = $plans['total'] * 100 / $balance_total;
         $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
         $balance_income = $creditBalance->income * 100 / $balance_total;
