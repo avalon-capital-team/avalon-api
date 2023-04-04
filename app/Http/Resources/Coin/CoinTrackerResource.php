@@ -42,14 +42,22 @@ class CoinTrackerResource
      */
     public function saveCoinTracking(array $coins, $name)
     {
+        $exchange = CoinTracker::where('name', $name)->first();
+
         $coin_id = 1;
         foreach ($coins as $coin) {
             if ($coin['currency']['symbol'] == 'BTC') {
-                $coin = CoinTracker::create([
-                    'coin_id' => $coin_id,
-                    'name' => $name,
-                    'price_usd' => floatval($coin['currency']['price_usd']),
-                ]);
+                if (!$exchange) {
+                    $exchange = CoinTracker::create([
+                        'coin_id' => $coin_id,
+                        'name' => $name,
+                        'price_usd' => floatval($coin['currency']['price_usd']),
+                    ]);
+                } else {
+                    $exchange->price_usd = floatval($coin['currency']['price_usd']);
+                    $exchange->save();
+                }
+
                 return true;
             }
         }
@@ -84,10 +92,10 @@ class CoinTrackerResource
      */
     public function currencyTreatment($exchanges)
     {
-        $buy = $this->rand_float(0.1, 0.7) / 100;
+        $buy = $this->rand_float(0.01, 0.7) / 100;
         $porcent_buy = $buy / 100;
 
-        $sale = $this->rand_float(0.1, 0.7) / 100;
+        $sale = $this->rand_float(0.01, 0.7) / 100;
         $porcent_sale = $sale / 100;
 
         foreach ($exchanges as $exchange) {
