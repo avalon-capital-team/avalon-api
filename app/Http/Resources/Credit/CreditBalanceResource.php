@@ -6,12 +6,9 @@ use App\Http\Resources\Coin\CoinResource;
 use App\Models\Credit\CreditBalance;
 use App\Models\User;
 use App\Models\Plan\Plan;
-use App\Models\Credit\Credit;
 use App\Models\Coin\Coin;
 use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use DateTime;
 use Log;
 
 class CreditBalanceResource
@@ -30,13 +27,13 @@ class CreditBalanceResource
         $plans['list'] = Credit::where('user_id', $user->id)->where('type_id', 3)->select('amount', 'created_at')->get();
 
 
+
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
         $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
         $balance_placed = $plans['total'] * 100 / $balance_total;
         $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
         $balance_income = $creditBalance->income * 100 / $balance_total;
-        // $balance_placed = $plans['total'] * 100 / $plans['total'] - $balance_rendeem - $balance_income;
 
         $data = [
             'balance_enable' => $creditBalance->balance_enable,
