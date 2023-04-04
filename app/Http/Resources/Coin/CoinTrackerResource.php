@@ -94,10 +94,10 @@ class CoinTrackerResource
     {
 
         foreach ($exchanges as $exchange) {
-            $buy = $this->rand_float(0.01, 0.07) / 100;
+            $buy = $this->rand_float(0.1, 0.7) / 100;
             $porcent_buy = $buy / 100;
 
-            $sale = $this->rand_float(0.01, 0.07) / 100;
+            $sale = $this->rand_float(0.1, 0.7) / 100;
             $porcent_sale = $sale / 100;
 
             $variable_buy = $exchange['price_usd'] * $porcent_buy;
