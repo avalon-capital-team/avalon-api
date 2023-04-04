@@ -92,7 +92,6 @@ class CoinTrackerResource
      */
     public function currencyTreatment($exchanges)
     {
-
         foreach ($exchanges as $exchange) {
             $buy = $this->rand_float(0.1, 0.7) / 100;
             $porcent_buy = $buy / 100;
@@ -101,7 +100,6 @@ class CoinTrackerResource
             $porcent_sale = $sale / 100;
 
             $variable_buy = $exchange['price_usd'] * $porcent_buy;
-
             $variable_sale = $exchange['price_usd'] * $porcent_sale;
 
             $exchange['price_buy'] = number_format((float)$exchange['price_usd'] - $variable_buy, 2, '.', '');
@@ -111,6 +109,9 @@ class CoinTrackerResource
         return $exchanges;
     }
 
+    /**
+     * @return
+     */
     function rand_float($st_num = 0, $end_num = 1, $mul = 1000000)
     {
         if ($st_num > $end_num) return false;
