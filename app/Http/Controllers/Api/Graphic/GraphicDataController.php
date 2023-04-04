@@ -27,7 +27,7 @@ class GraphicDataController extends Controller
         try {
             return response()->json([
                 'status' => true,
-                'data' => (new CreditBalanceResource())->getGraphicData(auth()->user(), $request->coin_id),
+                'data' => (new CreditBalanceResource())->getGraphicData(auth()->user(), 1),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

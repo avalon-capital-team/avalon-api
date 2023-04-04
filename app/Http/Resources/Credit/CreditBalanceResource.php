@@ -19,8 +19,9 @@ class CreditBalanceResource
      * @param  int $coinId
      * @return float
      */
-    public function getGraphicData(User $user, int $coinId)
+    public function getGraphicData(User $user, int $coinId = 1)
     {
+
         $coin = (new CoinResource())->findById($coinId);
         $plans = (new PlanResource())->listActingPlans($user->id);
 
@@ -38,6 +39,7 @@ class CreditBalanceResource
 
         $data = [
             'balance_enable' => $creditBalance->balance_enable,
+            'balance_pending' => $creditBalance->balance_pending,
             'balance_placed' => $creditBalance->deposited,
             'balance_rendeem' => $creditBalance->used,
             'balance_income' => $creditBalance->income,
@@ -104,6 +106,18 @@ class CreditBalanceResource
     }
 
     /**
+     * Move Balance to pending
+     *
+     * @param \App\Models\Credit\CreditBalance $credit
+     */
+    public function moveBalanceToEnable(CreditBalance $creditBalance, float $amount)
+    {
+        $creditBalance->balance_pending -= $amount;
+        $creditBalance->balance_enable += $amount;
+        $creditBalance->save();
+    }
+
+    /**
      * Check balance of user by CoinID
      *
      * @param  \App\Models\User $user
@@ -127,13 +141,16 @@ class CreditBalanceResource
      */
     public function updateBalance($data)
     {
-        $coin = (new CoinResource())->findById($data->coin_id);
-        $user = (new User())->findById($data->user_id);
+
+        $coin = (new CoinResource())->findById($data['coin_id']);
+
+        $user = (new User())->findById($data['user_id']);
+        Log::info($user);
         $balance = $this->checkBalanceByCoinId($user, $coin);
 
         $balance->balance_pending -= $data->amount;
         $balance->balance_enabled += $data->amount;
-        Log::info($balance);
+
         return $balance->save();
     }
 
