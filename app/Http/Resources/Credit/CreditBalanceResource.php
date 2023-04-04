@@ -25,22 +25,22 @@ class CreditBalanceResource
     {
         $coin = (new CoinResource())->findById($coinId);
         $plans['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
+        $plans['income'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('income');
         $plans['list'] = Credit::where('user_id', $user->id)->where('type_id', 3)->select('amount', 'created_at')->get();
 
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
-        $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
-
+        $balance_total = $plans['total'] + $plans['income'] + floatval(str_replace('-', '', $creditBalance->used));
         $balance_placed = $plans['total'] * 100 / $balance_total;
         $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
-        $balance_income = $creditBalance->income * 100 / $balance_total;
+        $balance_income = $plans['income'] * 100 / $balance_total;
 
         $data = [
             'balance_enable' => $creditBalance->balance_enable,
             'balance_pending' => $creditBalance->balance_pending,
             'balance_placed' => $plans['total'],
             'balance_rendeem' => $creditBalance->used,
-            'balance_income' => $creditBalance->income,
+            'balance_income' => $plans['income'],
             'pie_chart' => [
                 'placed' => $balance_placed,
                 'rendeem' => $balance_rendeem,
