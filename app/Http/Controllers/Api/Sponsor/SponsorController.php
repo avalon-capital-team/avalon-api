@@ -27,7 +27,7 @@ class SponsorController extends Controller
     public function getIndicateList()
     {
         try {
-            $list = (new UserResource())->findBySponsorshipId(auth()->user()->id);
+            $list = (new UserResource())->getBySponsorshipId(auth()->user()->id);
 
             $manangers_count = $list->where('type', 'mananger')->count();
             $users_count = $list->where('type', 'user')->count();
@@ -94,6 +94,27 @@ class SponsorController extends Controller
                 'status' => true,
                 'message' => 'Este cliente agora é um gestor'
             ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => $e->getMessage()
+            ], $e->getCode() ?? 400);
+        }
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setIndicate(Request $request)
+    {
+        try {
+            if ((new UserResource())->setIndicatUsername($request->username, auth()->user())) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'O indicador realizado com sucesso'
+                ], 200);
+            };
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => false,

@@ -36,7 +36,7 @@ class UserResource
      *
      * @return \App\Models\User
      */
-    public function findBySponsorshipId(string $id)
+    public function getBySponsorshipId(string $id)
     {
         return User::where('sponsor_id', $id)->get();
     }
@@ -67,7 +67,6 @@ class UserResource
      * Register new user
      *
      * @param  \App\Http\Requests\Auth\RegisterRequest $request
-     *
      * @return \App\Models\User
      * @throws \Exception
      */
@@ -93,6 +92,30 @@ class UserResource
 
         $user->notify(new RegisterNotification($user->id));
         $user->notify(new VerifyCodeNotification($user->id, $code));
+
+        return $user;
+    }
+
+    /**
+     * Register user indicad
+     *
+     * @param  \App\Http\Requests\Auth\RegisterRequest $request
+     * @return \App\Models\User
+     * @throws \Exception
+     */
+    public function setIndicatUsername($username, $user)
+    {
+        $sponsor = $this->findByUsername($username);
+        if (!$sponsor) {
+            throw new \Exception('Username do indicador nao existe. Tente novamente!');
+        }
+
+        $user->sponsor_id = $sponsor->id;
+        $user->save();
+        if (!$user) {
+            throw new \Exception('Não foi possível cadastrar o indicador. Tente novamente!');
+        }
+
 
         return $user;
     }

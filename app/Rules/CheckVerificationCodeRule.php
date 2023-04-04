@@ -33,7 +33,7 @@ class CheckVerificationCodeRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (env('APP_ENV') != 'testing') {
+        if (env('APP_ENV') == 'testing') {
             return true;
         }
 

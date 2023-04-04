@@ -122,7 +122,7 @@ class PlanResource
             $rent = $plan->amount * 0.01;
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
-            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, $plan->id, 3, $status_id, $rent, $description);
+            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 3, $status_id, $rent, $description);
         }
 
         $description = 'Rendimento mensal';
