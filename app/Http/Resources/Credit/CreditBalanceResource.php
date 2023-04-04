@@ -9,6 +9,7 @@ use App\Models\Plan\Plan;
 use App\Models\Coin\Coin;
 use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Log;
 
 class CreditBalanceResource
@@ -24,13 +25,21 @@ class CreditBalanceResource
     {
         $coin = (new CoinResource())->findById($coinId);
         $plans['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
+        $plans['list'] = Plan::where('user_id', $user->id)->where('acting', 1)->select('income', 'activated_at')->get();
+
+        // foreach ($plans['list'] as $plan) {
+        //     $diferenca = strtotime($plan->activated_at) - strtotime(Carbon::now());
+        //     $dias = floor($diferenca / (60 * 60 * 24));
+        //     dd($dias);
+        // }
 
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
         $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
-        $balance_placed = $plans['total'] * 100 / $balance_total;
-        $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
-        $balance_income = $creditBalance->income * 100 / $balance_total;
+        // $balance_placed = $plans['total'] * 100 / $plans['total'];
+        $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $plans['total'];
+        $balance_income = $creditBalance->income * 100 / $plans['total'];
+        $balance_placed = $plans['total'] * 100 / $plans['total'] - $balance_rendeem - $balance_income;
 
         $data = [
             'balance_enable' => $creditBalance->balance_enable,
@@ -38,11 +47,13 @@ class CreditBalanceResource
             'balance_placed' => $plans['total'],
             'balance_rendeem' => $creditBalance->used,
             'balance_income' => $creditBalance->income,
-            'graphic_pizza' => [
+            'pie_chart' => [
                 'placed' => $balance_placed,
                 'rendeem' => $balance_rendeem,
                 'income' => $balance_income
-            ]
+            ],
+            'tower_chart' => $plans['list'],
+
         ];
 
         return $data;
