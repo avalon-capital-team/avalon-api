@@ -92,17 +92,13 @@ class CoinTrackerResource
      */
     public function currencyTreatment($exchanges)
     {
-        $buy = $this->rand_float(0.01, 0.7) / 100;
-        $porcent_buy = $buy / 100;
-
-        $sale = $this->rand_float(0.01, 0.7) / 100;
-        $porcent_sale = $sale / 100;
+        $buy = $this->rand_float(0.01, 0.07) / 100;
+        $sale = $this->rand_float(0.01, 0.07) / 100;
 
         foreach ($exchanges as $exchange) {
 
-            $variable_buy = $exchange['price_usd'] * $porcent_buy;
-
-            $variable_sale = $exchange['price_usd'] * $porcent_sale;
+            $variable_buy = $exchange['price_usd'] * $buy;
+            $variable_sale = $exchange['price_usd'] * $sale;
 
             $exchange['price_buy'] = number_format((float)$exchange['price_usd'] - $variable_buy, 2, '.', '');
             $exchange['price_sale'] = number_format((float)$exchange['price_usd'] + $variable_sale, 2, '.', '');
