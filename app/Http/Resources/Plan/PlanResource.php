@@ -43,12 +43,7 @@ class PlanResource
     {
         return Plan::where('user_id', $user_id)
             ->where('acting', 1)
-            ->select(
-                'token',
-                'amount',
-                'income',
-                'activated_at'
-            )
+            ->sum('amount')
             ->get();
     }
 

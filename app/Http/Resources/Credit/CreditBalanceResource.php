@@ -5,6 +5,7 @@ namespace App\Http\Resources\Credit;
 use App\Http\Resources\Coin\CoinResource;
 use App\Models\Credit\CreditBalance;
 use App\Models\User;
+use App\Models\Plan\Plan;
 use App\Models\Coin\Coin;
 use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Support\Facades\DB;
@@ -21,26 +22,20 @@ class CreditBalanceResource
      */
     public function getGraphicData(User $user, int $coinId = 1)
     {
-
         $coin = (new CoinResource())->findById($coinId);
-        $plans = (new PlanResource())->listActingPlans($user->id);
-
-        foreach ($plans as $plan) {
-            $value = $plan->amount;
-        }
-        // dd($plans);
+        $plans['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
 
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
-        $balance_total = $creditBalance->deposited + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
-        $balance_placed = $creditBalance->deposited * 100 / $balance_total;
+        $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
+        $balance_placed = $plans['total'] * 100 / $balance_total;
         $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
         $balance_income = $creditBalance->income * 100 / $balance_total;
 
         $data = [
             'balance_enable' => $creditBalance->balance_enable,
             'balance_pending' => $creditBalance->balance_pending,
-            'balance_placed' => $creditBalance->deposited,
+            'balance_placed' => $plans['total'],
             'balance_rendeem' => $creditBalance->used,
             'balance_income' => $creditBalance->income,
             'graphic_pizza' => [
