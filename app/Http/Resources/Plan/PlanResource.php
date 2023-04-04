@@ -115,15 +115,16 @@ class PlanResource
         $income = $plan->amount * $data_plan->porcent;
         $status_id = 1;
 
-        #gestor/acessor = 0.01;
+        # Acessor/ Gestor = 0.01;
         if ($user->sponsor_id) {
             $rent = $plan->amount * 0.01;
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
             (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 3, $status_id, $rent, $description);
             $user_sponsor = User::where('id', $user->sponsor_id)->first();
-            $balance_sponsor = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user_sponsor);
 
+            // $balance_sponsor = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user_sponsor);
+            $balance_sponsor = $user_sponsor->creditBalance;
             $balance_sponsor->income += $income;
             $balance_sponsor->save();
         }

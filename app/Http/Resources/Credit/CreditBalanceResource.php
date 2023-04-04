@@ -42,11 +42,11 @@ class CreditBalanceResource
             'balance_placed' => $plans['total'],
             'balance_rendeem' => $creditBalance->used,
             'balance_income' => $creditBalance->income,
-            'pie_chart' => [
-                'placed' => $balance_placed,
-                'rendeem' => $balance_rendeem,
-                'income' => $balance_income
-            ],
+            // 'pie_chart' => [
+            //     'placed' => $balance_placed,
+            //     'rendeem' => $balance_rendeem,
+            //     'income' => $balance_income
+            // ],
             'tower_chart' => $plans['list'],
 
         ];
