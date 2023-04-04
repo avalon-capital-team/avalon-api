@@ -141,15 +141,12 @@ class CreditBalanceResource
      */
     public function updateBalance($data)
     {
-
         $coin = (new CoinResource())->findById($data['coin_id']);
+        $user = User::where('id', ($data['user_id']))->first();
 
-        $user = (new User())->findById($data['user_id']);
-        Log::info($user);
         $balance = $this->checkBalanceByCoinId($user, $coin);
-
-        $balance->balance_pending -= $data->amount;
-        $balance->balance_enabled += $data->amount;
+        $balance['balance_pending'] -= $data->amount;
+        $balance['balance_enable'] += $data->amount;
 
         return $balance->save();
     }
