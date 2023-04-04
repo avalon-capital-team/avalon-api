@@ -7,6 +7,7 @@ use App\Models\Credit\CreditBalance;
 use App\Models\User;
 use App\Models\Plan\Plan;
 use App\Models\Coin\Coin;
+use App\Models\Credit\Credit;
 use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Support\Facades\DB;
 use Log;
