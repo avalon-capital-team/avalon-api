@@ -91,14 +91,14 @@ class User extends Resource
                 } else if ($this->type == 'mananger') {
                     return 'Gestor';
                 } else  if ($this->type == 'advisor') {
-                    return 'Assessor';
+                    return 'Acessor';
                 } else {
                     return 'Admin';
                 }
             })->map([
                 'Usuário' => 'success',
                 'Gestor' => 'warning',
-                'Assessor' => 'info',
+                'Acessor' => 'info',
                 'Admin' => 'danger'
             ]),
 

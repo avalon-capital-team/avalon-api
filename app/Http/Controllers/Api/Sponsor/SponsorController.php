@@ -29,10 +29,9 @@ class SponsorController extends Controller
         try {
             $list = (new UserResource())->findBySponsorshipId(auth()->user()->id);
 
-
-
             $manangers_count = $list->where('type', 'mananger')->count();
             $users_count = $list->where('type', 'user')->count();
+
             foreach ($list as $user) {
                 if ($user['type'] == 'user') {
                     $user->plan = (new UserPlanResource())->findByUserId($user->id);

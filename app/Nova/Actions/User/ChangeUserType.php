@@ -47,8 +47,7 @@ class ChangeUserType extends Action
             Select::make('Tipo', 'type')->options([
                 'user' => 'Cliente',
                 'mananger' => 'Gestor',
-                'advisor' => 'Acessor',
-
+                'advisor' => 'Acessor'
             ]),
         ];
     }
