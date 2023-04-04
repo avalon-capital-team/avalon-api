@@ -29,26 +29,25 @@ class SponsorController extends Controller
         try {
             $list = (new UserResource())->findBySponsorshipId(auth()->user()->id);
 
+
+
             $manangers_count = $list->where('type', 'mananger')->count();
-            $manangers = $list->where('type', 'mananger');
-
-            foreach ($manangers as $mananger) {
-                $mananger->plan = (new UserPlanResource())->findByUserId($mananger->id);
-                if ($mananger->plan) {
-                    $mananger->plan->list = (new PlanResource())->listPlans($mananger->id);
-                }
-                $manange_amount = $mananger->plan->amount;
-            }
-
             $users_count = $list->where('type', 'user')->count();
-            $users = $list->where('type', 'user');
-
-            foreach ($users as $user) {
-                $user->plan = (new UserPlanResource())->findByUserId($user->id);
-                if ($user->plan) {
-                    $user->plan->list = (new PlanResource())->listPlans($user->id);
+            foreach ($list as $user) {
+                if ($user['type'] == 'user') {
+                    $user->plan = (new UserPlanResource())->findByUserId($user->id);
+                    if ($user->plan) {
+                        $user->plan->list = (new PlanResource())->listPlans($user->id);
+                    }
+                    $user_amount = $user->plan->amount;
                 }
-                $user_amount = $user->plan->amount;
+                if ($user['type'] == 'mananger') {
+                    $user->plan = (new UserPlanResource())->findByUserId($user->id);
+                    if ($user->plan) {
+                        $user->plan->list = (new PlanResource())->listPlans($user->id);
+                    }
+                    $manange_amount = $user->plan->amount;
+                }
             }
 
             $total = $manange_amount += $user_amount;
@@ -59,8 +58,7 @@ class SponsorController extends Controller
                 'name' => auth()->user()->name,
                 'manangers_count' => $manangers_count,
                 'users_count' => $users_count,
-                'manangers' => $manangers,
-                'users' => $users
+                'list' => $list
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
