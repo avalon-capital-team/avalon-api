@@ -33,6 +33,7 @@ class UserProfileResource
                 'phone' => $user->phone,
                 'document' => $user->document,
                 'birth_date' => $user->birth_date,
+                'sponsor_id' => $user->sponsor_id,
                 'type' => $user->type,
                 'email_verified' => $email_verified_at
             ]

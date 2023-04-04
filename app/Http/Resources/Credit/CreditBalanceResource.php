@@ -30,6 +30,10 @@ class CreditBalanceResource
 
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
+        foreach ($plans['list'] as $credit) {
+            $credit['balance_enable'] = $creditBalance->balance_enable;
+        }
+
         $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
 
         $balance_placed = $plans['total'] * 100 / $balance_total;
@@ -42,11 +46,11 @@ class CreditBalanceResource
             'balance_placed' => $plans['total'],
             'balance_rendeem' => $creditBalance->used,
             'balance_income' => $creditBalance->income,
-            // 'pie_chart' => [
-            //     'placed' => $balance_placed,
-            //     'rendeem' => $balance_rendeem,
-            //     'income' => $balance_income
-            // ],
+            'pie_chart' => [
+                'placed' => $balance_placed,
+                'rendeem' => $balance_rendeem,
+                'income' => $balance_income
+            ],
             'tower_chart' => $plans['list'],
 
         ];
