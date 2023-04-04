@@ -122,12 +122,12 @@ class PlanResource
             $rent = $plan->amount * 0.01;
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
-            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, $plan->id, 1, $status_id, $rent, $description);
+            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, $plan->id, 3, $status_id, $rent, $description);
         }
 
         $description = 'Rendimento mensal';
 
-        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 1, $status_id, $income, $description);
+        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, $income, $description);
         $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user);
 
         $balance->income += $income;
