@@ -77,7 +77,7 @@ class SponsorController extends Controller
             $user = (new UserResource())->findById($request->user_id);
 
             if ($user) {
-                $user->type = 'mananger';
+                $user->type = $request->type;
                 $user->save();
             }
 
