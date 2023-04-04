@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Coin\Coin;
 use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class CreditBalanceResource
 {
@@ -26,7 +27,7 @@ class CreditBalanceResource
         foreach ($plans as $plan) {
             $value = $plan->amount;
         }
-        dd($plans);
+        // dd($plans);
 
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
@@ -132,7 +133,7 @@ class CreditBalanceResource
 
         $balance->balance_pending -= $data->amount;
         $balance->balance_enabled += $data->amount;
-
+        Log::info($balance);
         return $balance->save();
     }
 

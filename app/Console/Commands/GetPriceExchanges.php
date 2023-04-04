@@ -19,7 +19,7 @@ class GetPriceExchanges extends Command
      *
      * @var string
      */
-    protected $description = 'get p rice exchanges by coinmarketcap';
+    protected $description = 'Get price exchanges by coinmarketcap';
 
     /**
      * Execute the console command.
