@@ -110,8 +110,6 @@ class PlanResource
     public function dispatchIncomes(Plan $plan)
     {
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
-        $coin = Coin::where('id', $plan->coin_id)->first();
-
         $user = User::where('id', $plan->user_id)->first();
 
         $income = $plan->amount * $data_plan->porcent;
@@ -123,6 +121,11 @@ class PlanResource
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
             (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 3, $status_id, $rent, $description);
+            $user_sponsor = User::where('id', $user->sponsor_id)->first();
+            $balance_sponsor = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user_sponsor);
+
+            $balance_sponsor->income += $income;
+            $balance_sponsor->save();
         }
 
         $description = 'Rendimento mensal';
