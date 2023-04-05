@@ -35,62 +35,59 @@ class CreditBalanceResource
         // $datai = date('Y-m-d', strtotime('-6 months'));
         // $lastDayMonth = date('t');
         // dd($lastDayMonth, $datai, $plans);
+        foreach ($plans['list'] as $credit) {
+            $month = date('n', strtotime($credit['created_at']));
+            $monthJan['month'] = 'January';
+            $monthFev['month'] = 'February';
+            $monthMar['month'] = 'March';
+            $monthApr['month'] = 'April';
+            $monthMay['month'] = 'May';
+            $monthJun['month'] = 'June';
+            $monthJul['month'] = 'July';
+            $monthAug['month'] = 'August';
+            $monthSep['month'] = 'September';
+            $monthOct['month'] = 'October';
+            $monthNov['month'] = 'November';
+            $monthDec['month'] = 'December';
 
-        // foreach ($plans['list'] as $credit) {
-        //     $month = date('n', strtotime($credit['created_at']));
-        //     if ($month == 1) {
-        //         $month['month'] = 'January';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 2) {
-        //         $month['month'] = 'February';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 3) {
-        //         $month['month'] = 'March';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 4) {
-        //         $month['month'] = 'April';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 5) {
-        //         $month['month'] = 'May';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 6) {
-        //         $month['month'] = 'June';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 7) {
-        //         $month['month'] = 'July';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 8) {
-        //         $month['month'] = 'August';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 9) {
-        //         $month['month'] = 'September';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     } else if ($month == 10) {
-        //         $month['month'] = 'October';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         // $oct['income'] = $credit['created_at'];
-        //     } else if ($month == 11) {
-        //         $month['month'] = 'November';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         // $nov['income'] = $credit['created_at'];
-        //     } else if ($month == 12) {
-        //         $month['month'] = 'December';
-        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
-        //         $month['income'] = 0.000000;
-        //     }
-        //     // dd($month);
-        // }
-
-
+            if ($month == 1) {
+                $monthJan['amount'] = $credit['amount'];
+                $monthJan['income'] = 0.000000;
+            } else if ($month == 2) {
+                $monthFev['income'] = $credit['amount'];
+                $monthFev['amount'] = 0.000000;
+            } else if ($month == 3) {
+                $monthMar['income'] = $credit['amount'];
+                $monthMar['amount'] = 0.000000;
+            } else if ($month == 4) {
+                $monthApr['income'] = $credit['amount'];
+                $monthApr['amount'] = 0.000000;
+            } else if ($month == 5) {
+                $monthMay['income'] = $credit['amount'];
+                $monthMay['amount'] = 0.000000;
+            } else if ($month == 6) {
+                $monthJun['income'] = $credit['amount'];
+                $monthJun['amount'] = 0.000000;
+            } else if ($month == 7) {
+                $monthJul['income'] = $credit['amount'];
+                $monthJul['amount'] = 0.000000;
+            } else if ($month == 8) {
+                $monthAug['income'] = $credit['amount'];
+                $monthAug['amount'] = 0.000000;
+            } else if ($month == 9) {
+                $monthSep['income'] = $credit['amount'];
+                $monthSep['amount'] = 0.000000;
+            } else if ($month == 10) {
+                $monthOct['income'] = $credit['amount'];
+                $monthOct['amount'] = 0.000000;
+            } else if ($month == 11) {
+                $monthNov['income'] = $credit['amount'];
+                $monthNov['amount'] = 0.000000;
+            } else if ($month == 12) {
+                $monthDec['income'] = $credit['amount'];
+                $monthDec['amount'] = 0.000000;
+            }
+        }
 
 
 
@@ -112,6 +109,20 @@ class CreditBalanceResource
                 'income' => $balance_income
             ],
             'tower_chart' => $plans['list'],
+            'chart' => [
+                $monthJan,
+                $monthFev,
+                $monthMar,
+                $monthApr,
+                $monthMay,
+                $monthJun,
+                $monthJul,
+                $monthAug,
+                $monthSep,
+                $monthOct,
+                $monthNov,
+                $monthDec
+            ],
 
         ];
 
