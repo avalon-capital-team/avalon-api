@@ -27,8 +27,7 @@ class CreditBalanceResource
         $coin = (new CoinResource())->findById($coinId);
         $plans['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
         $plans['income'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('income');
-
-        $plans['list'] = Credit::where('user_id', $user->id)->where('created_at', 'LIKE', date('Y-m-d', strtotime('-6 months')) . '%')->select('amount', 'created_at')->get();
+        $plans['list'] = Credit::where('user_id', $user->id)->select('amount', 'created_at')->get();
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
 
@@ -36,7 +35,7 @@ class CreditBalanceResource
         // $lastDayMonth = date('t');
         // dd($lastDayMonth, $datai, $plans);
         foreach ($plans['list'] as $credit) {
-            $month = date('n', strtotime($credit['created_at']));
+            $month = date('y-n', strtotime($credit['created_at']));
             $monthJan['month'] = 'January';
             $monthFev['month'] = 'February';
             $monthMar['month'] = 'March';
@@ -50,46 +49,56 @@ class CreditBalanceResource
             $monthNov['month'] = 'November';
             $monthDec['month'] = 'December';
 
-            if ($month == 1) {
+            if ($month == '23-1') {
                 $monthJan['amount'] = $credit['amount'];
+                $monthJan['created_at'] = $credit['created_at'];
                 $monthJan['income'] = 0.000000;
-            } else if ($month == 2) {
+            } else if ($month == '23-2') {
                 $monthFev['income'] = $credit['amount'];
+                $monthFev['created_at'] = $credit['created_at'];
                 $monthFev['amount'] = 0.000000;
-            } else if ($month == 3) {
+            } else if ($month == '23-3') {
                 $monthMar['income'] = $credit['amount'];
+                $monthMar['created_at'] = $credit['created_at'];
                 $monthMar['amount'] = 0.000000;
-            } else if ($month == 4) {
+            } else if ($month == '23-4') {
                 $monthApr['income'] = $credit['amount'];
+                $monthApr['created_at'] = $credit['created_at'];
                 $monthApr['amount'] = 0.000000;
-            } else if ($month == 5) {
+            } else if ($month == '23-5') {
                 $monthMay['income'] = $credit['amount'];
+                $monthMay['created_at'] = $credit['created_at'];
                 $monthMay['amount'] = 0.000000;
-            } else if ($month == 6) {
+            } else if ($month == '23-6') {
                 $monthJun['income'] = $credit['amount'];
+                $monthJun['created_at'] = $credit['created_at'];
                 $monthJun['amount'] = 0.000000;
-            } else if ($month == 7) {
+            } else if ($month == '23-7') {
                 $monthJul['income'] = $credit['amount'];
+                $monthJul['created_at'] = $credit['created_at'];
                 $monthJul['amount'] = 0.000000;
-            } else if ($month == 8) {
+            } else if ($month == '23-8') {
                 $monthAug['income'] = $credit['amount'];
+                $monthAug['created_at'] = $credit['created_at'];
                 $monthAug['amount'] = 0.000000;
-            } else if ($month == 9) {
+            } else if ($month == '23-9') {
                 $monthSep['income'] = $credit['amount'];
+                $monthSep['created_at'] = $credit['created_at'];
                 $monthSep['amount'] = 0.000000;
-            } else if ($month == 10) {
+            } else if ($month == '23-10') {
                 $monthOct['income'] = $credit['amount'];
+                $monthOct['created_at'] = $credit['created_at'];
                 $monthOct['amount'] = 0.000000;
-            } else if ($month == 11) {
+            } else if ($month == '23-11') {
                 $monthNov['income'] = $credit['amount'];
+                $monthNov['created_at'] = $credit['created_at'];
                 $monthNov['amount'] = 0.000000;
-            } else if ($month == 12) {
+            } else if ($month == '23-12') {
                 $monthDec['income'] = $credit['amount'];
+                $monthDec['created_at'] = $credit['created_at'];
                 $monthDec['amount'] = 0.000000;
             }
         }
-
-
 
         $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
 
@@ -108,8 +117,8 @@ class CreditBalanceResource
                 'rendeem' => $balance_rendeem,
                 'income' => $balance_income
             ],
-            'tower_chart' => $plans['list'],
-            'chart' => [
+            // 'tower_chart' => $plans['list'],
+            'tower_chart' => [
                 $monthJan,
                 $monthFev,
                 $monthMar,
