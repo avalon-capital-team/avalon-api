@@ -7,7 +7,9 @@ use App\Http\Requests\Document\TransferVoucherRequest;
 use App\Http\Resources\User\UserPlanResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Models\Order\Order;
+
 use App\Http\Requests\User\CreatePlanOrderRequest;
+use App\Http\Resources\Plan\PlanResource;
 use Aws\S3\Transfer;
 use Illuminate\Support\Facades\DB;
 
@@ -22,6 +24,28 @@ class UserPlanController extends Controller
     {
         $this->middleware('auth:sanctum');
     }
+
+    /**
+     * @param  \App\Http\Resources\User\UserPlanResource $resource
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserPlans()
+    {
+        try {
+            $plans = (new PlanResource())->listPlans(auth()->user()->id);
+
+            return response()->json([
+                'status' => true,
+                'plans' => $plans,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => $e->getMessage()
+            ], $e->getCode() ?? 400);
+        }
+    }
+
 
     /**
      * @param  \App\Http\Resources\User\UserPlanResource $resource

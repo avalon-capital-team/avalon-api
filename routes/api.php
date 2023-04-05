@@ -78,6 +78,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('plan/upload-voucher', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'uploadeVoucher']);
         #Extract
         Route::get('plan/extract', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getExtract']);
+
+        Route::get('plan/get-plans', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlans']);
     });
 
     # Manange/Accessor

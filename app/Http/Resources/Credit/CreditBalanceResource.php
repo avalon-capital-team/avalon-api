@@ -11,6 +11,7 @@ use App\Models\Credit\Credit;
 use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Support\Facades\DB;
 use Log;
+use Carbon\Carbon;
 
 class CreditBalanceResource
 {
@@ -26,13 +27,72 @@ class CreditBalanceResource
         $coin = (new CoinResource())->findById($coinId);
         $plans['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
         $plans['income'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('income');
-        $plans['list'] = Credit::where('user_id', $user->id)->where('type_id', 3)->select('amount', 'created_at')->get();
 
+        $plans['list'] = Credit::where('user_id', $user->id)->where('created_at', 'LIKE', date('Y-m-d', strtotime('-6 months')) . '%')->select('amount', 'created_at')->get();
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
-        foreach ($plans['list'] as $credit) {
-            $credit['balance_enable'] = $creditBalance->balance_enable;
-        }
+
+        // $datai = date('Y-m-d', strtotime('-6 months'));
+        // $lastDayMonth = date('t');
+        // dd($lastDayMonth, $datai, $plans);
+
+        // foreach ($plans['list'] as $credit) {
+        //     $month = date('n', strtotime($credit['created_at']));
+        //     if ($month == 1) {
+        //         $month['month'] = 'January';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 2) {
+        //         $month['month'] = 'February';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 3) {
+        //         $month['month'] = 'March';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 4) {
+        //         $month['month'] = 'April';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 5) {
+        //         $month['month'] = 'May';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 6) {
+        //         $month['month'] = 'June';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 7) {
+        //         $month['month'] = 'July';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 8) {
+        //         $month['month'] = 'August';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 9) {
+        //         $month['month'] = 'September';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     } else if ($month == 10) {
+        //         $month['month'] = 'October';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         // $oct['income'] = $credit['created_at'];
+        //     } else if ($month == 11) {
+        //         $month['month'] = 'November';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         // $nov['income'] = $credit['created_at'];
+        //     } else if ($month == 12) {
+        //         $month['month'] = 'December';
+        //         $month['amount'] = $credit['amount'] ? $credit['amount'] : 0.000000;
+        //         $month['income'] = 0.000000;
+        //     }
+        //     // dd($month);
+        // }
+
+
+
+
 
         $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
 
