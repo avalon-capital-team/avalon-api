@@ -117,8 +117,8 @@ class CreditBalanceResource
                 'rendeem' => $balance_rendeem,
                 'income' => $balance_income
             ],
-            // 'tower_chart' => $plans['list'],
-            'tower_chart' => [
+            'tower_chart' => $plans['list'],
+            'chart' => [
                 $monthJan,
                 $monthFev,
                 $monthMar,
