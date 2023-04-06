@@ -37,8 +37,8 @@ class GraphicDataController extends Controller
 
             return response()->json([
                 'status' => true,
-                'plan' => (new PlanResource())->checkIfNeedPayToday(),
-                // 'data' => (new CreditBalanceResource())->getGraphicData(auth()->user(), 1, $filters),
+                // 'plan' => (new PlanResource())->checkIfNeedPayToday(),
+                'data' => (new CreditBalanceResource())->getGraphicData(auth()->user(), 1, $filters),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
