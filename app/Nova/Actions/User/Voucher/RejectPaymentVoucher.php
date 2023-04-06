@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use App\Http\Resources\Credit\CreditBalanceResource;
 
 class RejectPaymentVoucher extends Action
 {
@@ -25,6 +26,7 @@ class RejectPaymentVoucher extends Action
     {
         foreach ($models as $model) {
             $model->acting = 0;
+            (new CreditBalanceResource())->inativePlan($model);
             $model->save();
             $this->markAsFinished($model);
         }

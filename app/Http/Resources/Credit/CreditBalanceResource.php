@@ -187,6 +187,26 @@ class CreditBalanceResource
      * @param  arrey $data
      * @return bool
      */
+    public function inativePlan($data)
+    {
+        $coin = (new CoinResource())->findById($data['coin_id']);
+        $user = User::where('id', ($data['user_id']))->first();
+
+        $user->userPlan->amount -= $data['amount'];
+
+        $balance = $this->checkBalanceByCoinId($user, $coin);
+        $balance['balance_enable'] -= $data->amount;
+        $balance['balance_pending'] += $data->amount;
+
+        $user->userPlan->save();
+
+        return $balance->save();
+    }
+
+    /**
+     * @param  arrey $data
+     * @return bool
+     */
     public function updateBalance($data)
     {
         $coin = (new CoinResource())->findById($data['coin_id']);
