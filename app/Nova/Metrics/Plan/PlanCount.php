@@ -16,8 +16,7 @@ class PlanCount extends Trend
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->count($request, Plan::class, 'action', false);
-        return $this->sumByDays($request, Plan::where('action', false), 'total')->prefix('R$')->format('0,0.00');
+        //     return $this->sum($request, Plan::class, 'amount')->prefix('R$')->format('0,0.00');
     }
 
     /**

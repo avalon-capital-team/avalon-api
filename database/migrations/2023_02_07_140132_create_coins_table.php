@@ -27,6 +27,7 @@ return new class() extends Migration
             $table->string('explorer_token')->nullable();
             $table->string('volume_24h')->default(0);
             $table->string('volume_change_24h')->default(0);
+            $table->string('percent_change_24h')->default(0);
             $table->boolean('show_wallet')->default(false);
             $table->double('decimals')->default(2);
             $table->unsignedInteger('token_based')->nullable();

@@ -174,7 +174,9 @@ class User extends Resource
     public function cards(NovaRequest $request)
     {
         return [
-            (new CountModel(\App\Models\User::where('type', 'user'), 'Total de usuários'))->width('1/2')->icon('user-group'),
+            (new CountModel(\App\Models\User::where('type', 'user'), 'Total de usuários'))->width('1/3')->icon('user-group'),
+            (new CountModel(\App\Models\User::where('type', 'advisor'), 'Total de acessores'))->width('1/3')->icon('user-group'),
+            (new CountModel(\App\Models\User::where('type', 'mananger'), 'Total de gestores'))->width('1/3')->icon('user-group'),
         ];
     }
 

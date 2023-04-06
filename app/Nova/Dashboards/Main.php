@@ -31,7 +31,8 @@ class Main extends Dashboard
     public function cards()
     {
         return [
-            (new \App\Nova\Metrics\Order\TotalSaleAll())->width('1/2'),
+            // (new \App\Nova\Metrics\Plan\PlanCount())->width('1/2'),
+            // (new \App\Nova\Metrics\Plan\PlanCount())->width('1/2'),
             (new CountModel(\App\Models\User::where('type', 'user'), 'Total de usuários'))->width('1/3')->icon('user-group'),
             // (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatApproved())->width('1/4'),
             // (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatTotal())->width('1/4'),

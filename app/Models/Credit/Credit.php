@@ -38,6 +38,7 @@ class Credit extends Model implements AuditableContract
         'user_id',
         'coin_id',
         'amount',
+        'base_amount',
         'description',
         'order_id',
         'type_id',

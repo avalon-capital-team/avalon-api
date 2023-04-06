@@ -45,7 +45,7 @@ class UserPlanResource
         // }
 
         $plan = (new Plan())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount']);
-        $credit = (new CreditResource())->create($user->id, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], $description);
+        $credit = (new CreditResource())->create($user->id, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], 0.000000, $description);
 
         $amount = $user->userPlan->amount += $validated['amount'];
 

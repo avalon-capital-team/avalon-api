@@ -42,7 +42,7 @@ class WithdrawalFiatResource
         }
 
         # Create debit
-        $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->plan_id, 2, 1, floatval('-' . $amount), $description);
+        $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->plan_id, 2, 1, floatval('-' . $amount), 0.000000, $description);
 
         if ($debit) {
             # Create Withdrawal
@@ -100,6 +100,7 @@ class WithdrawalFiatResource
                 3,
                 1,
                 floatval(str_replace('-', '', $withdrawalFiat->debit->amount)),
+                0.000000,
                 $description
             );
 

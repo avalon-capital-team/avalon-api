@@ -20,84 +20,37 @@ class CreditBalanceResource
      *
      * @param  \App\Models\User $user
      * @param  int $coinId
+     * @param  array $filters
      * @return float
      */
-    public function getGraphicData(User $user, int $coinId = 1)
+    public function getGraphicData(User $user, int $coinId = 1, array $filters)
     {
         $coin = (new CoinResource())->findById($coinId);
         $plans['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
         $plans['income'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('income');
-        $plans['list'] = Credit::where('user_id', $user->id)->select('amount', 'created_at')->get();
+
+        $plans['list'] = Credit::where('user_id', $user->id)
+            ->where('type_id', 3)
+            ->filterSearch($filters)
+            ->orderBy('created_at', 'desc')
+            ->select('amount', 'base_amount', 'created_at')
+            ->get();
+
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
-
-        // $datai = date('Y-m-d', strtotime('-6 months'));
-        // $lastDayMonth = date('t');
-        // dd($lastDayMonth, $datai, $plans);
+        $i = 0;
         foreach ($plans['list'] as $credit) {
-            $month = date('y-n', strtotime($credit['created_at']));
-            $monthJan['month'] = 'January';
-            $monthFev['month'] = 'February';
-            $monthMar['month'] = 'March';
-            $monthApr['month'] = 'April';
-            $monthMay['month'] = 'May';
-            $monthJun['month'] = 'June';
-            $monthJul['month'] = 'July';
-            $monthAug['month'] = 'August';
-            $monthSep['month'] = 'September';
-            $monthOct['month'] = 'October';
-            $monthNov['month'] = 'November';
-            $monthDec['month'] = 'December';
+            $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+            $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
 
-            if ($month == '23-1') {
-                $monthJan['amount'] = $credit['amount'];
-                $monthJan['created_at'] = $credit['created_at'];
-                $monthJan['income'] = 0.000000;
-            } else if ($month == '23-2') {
-                $monthFev['amount'] = $credit['amount'];
-                $monthFev['created_at'] = $credit['created_at'];
-                $monthFev['income'] = 0.000000;
-            } else if ($month == '23-3') {
-                $monthMar['amount'] = $credit['amount'];
-                $monthMar['created_at'] = $credit['created_at'];
-                $monthMar['income'] = 0.000000;
-            } else if ($month == '23-4') {
-                $monthApr['amount'] = $credit['amount'];
-                $monthApr['created_at'] = $credit['created_at'];
-                $monthApr['income'] = 0.000000;
-            } else if ($month == '23-5') {
-                $monthMay['amount'] = $credit['amount'];
-                $monthMay['created_at'] = $credit['created_at'];
-                $monthMay['income'] = 0.000000;
-            } else if ($month == '23-6') {
-                $monthJun['amount'] = $credit['amount'];
-                $monthJun['created_at'] = $credit['created_at'];
-                $monthJun['income'] = 0.000000;
-            } else if ($month == '23-7') {
-                $monthJul['amount'] = $credit['amount'];
-                $monthJul['created_at'] = $credit['created_at'];
-                $monthJul['income'] = 0.000000;
-            } else if ($month == '23-8') {
-                $monthAug['amount'] = $credit['amount'];
-                $monthAug['created_at'] = $credit['created_at'];
-                $monthAug['income'] = 0.000000;
-            } else if ($month == '23-9') {
-                $monthSep['amount'] = $credit['amount'];
-                $monthSep['created_at'] = $credit['created_at'];
-                $monthSep['income'] = 0.000000;
-            } else if ($month == '23-10') {
-                $monthOct['amount'] = $credit['amount'];
-                $monthOct['created_at'] = $credit['created_at'];
-                $monthOct['income'] = 0.000000;
-            } else if ($month == '23-11') {
-                $monthNov['amount'] = $credit['amount'];
-                $monthNov['created_at'] = $credit['created_at'];
-                $monthNov['income'] = 0.000000;
-            } else if ($month == '23-12') {
-                $monthDec['amount'] = $credit['amount'];
-                $monthDec['created_at'] = $credit['created_at'];
-                $monthDec['income'] = 0.000000;
-            }
+            $filters = [
+                'date_from' => $initialMonth,
+                'date_to' => $finalMonth
+            ];
+            $monthSelected = $this->sumBalanceMonth($user, $filters);
+            $month = date('M - y', strtotime($credit['created_at']));
+            $monthSelected['month'] = $month;
+            $monthData[++$i] = $monthSelected;
         }
 
         $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
@@ -118,24 +71,33 @@ class CreditBalanceResource
                 'income' => $balance_income
             ],
             'tower_chart' => $plans['list'],
-            'chart' => [
-                $monthJan,
-                $monthFev,
-                $monthMar,
-                $monthApr,
-                $monthMay,
-                $monthJun,
-                $monthJul,
-                $monthAug,
-                $monthSep,
-                $monthOct,
-                $monthNov,
-                $monthDec
-            ],
+            'chart' => $monthData,
 
         ];
 
         return $data;
+    }
+
+    /**
+     * Get balance of user logged by CoinID
+     *
+     * @param  \App\Models\User $user
+     * @param  array $filters
+     * @return float
+     */
+    public function sumBalanceMonth(User $user, array $filters)
+    {
+        $credit['amount'] = Credit::where('user_id', $user->id)
+            ->where('type_id', 3)
+            ->filterSearch($filters)
+            ->sum('amount');
+
+        $credit['base_amount'] = Credit::where('user_id', $user->id)
+            ->where('type_id', 3)
+            ->filterSearch($filters)
+            ->sum('base_amount');
+
+        return $credit;
     }
 
     /**

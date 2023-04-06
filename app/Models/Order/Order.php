@@ -153,13 +153,6 @@ class Order extends Model implements AuditableContract
 
         if ($status_id == 6 && !$this->paid_at) {
             $this->paid_at = date("Y-m-d H:i:s");
-
-            $fee = $this->orderTotal()->where('code', 'fee')->first();
-            if ($fee) {
-                // $orderType = ($this->orderDeposit) ? 'deposit' : 'buy';
-                // $description = 'Taxa do Pedido #'.$this->id;
-                // (new FeeHistoryResource())->create($this->coin, $this->user, $orderType, 'Order', $this->id, $fee->value, $description);
-            }
         }
 
         return $this->save();
@@ -176,15 +169,6 @@ class Order extends Model implements AuditableContract
         $this->save();
     }
 
-    // /**
-    //  * executeWhenOrderIsPaid
-    //  */
-    // public function executeWhenOrderIsPaid()
-    // {
-    //     if ($this->orderTokenSale) {
-    //         return (new OrderResource())->approveOrderTokenSale($this);
-    //     }
-    // }
 
     /**
      * Get the user.

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('coin_id')->nullable();
             $table->decimal('amount', 15, 8);
+            $table->decimal('base_amount', 15, 8);
             $table->string('description')->nullable();
             $table->unsignedInteger('type_id')->nullable();
             $table->unsignedInteger('status_id')->nullable();

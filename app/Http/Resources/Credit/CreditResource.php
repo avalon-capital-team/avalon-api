@@ -56,7 +56,7 @@ class CreditResource
      * @param  int $transfer_user_id
      * @return \App\Models\Credit\Credit
      */
-    public function create($user_id, int $coin_id, int $plan_id = null, int $type_id = 1, int $status_id = 2, float $amount, string $description = '', int $order_id = null)
+    public function create($user_id, int $coin_id, int $plan_id = null, int $type_id = 1, int $status_id = 2, float $amount, float $base_amount = 0.000000, string $description = '', int $order_id = null)
     {
         $credit = Credit::create([
             'user_id' => $user_id,
@@ -66,6 +66,7 @@ class CreditResource
             'status_id' => $status_id,
             'description' => $description,
             'amount' => $amount,
+            'base_amount' => $base_amount,
             'order_id' => $order_id,
             'transfer_user_id' => null,
             'external' => null

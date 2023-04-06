@@ -5,11 +5,9 @@ namespace App\Http\Resources\Plan;
 use App\Models\Plan\Plan;
 use App\Models\User;
 use App\Models\Data\DataPlan;
-use App\Models\User\UserPlan;
-use App\Models\Coin\Coin;
-use App\Models\Credit\CreditBalance;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
+use DateTime;
 
 
 class PlanResource
@@ -101,18 +99,47 @@ class PlanResource
      */
     public function checkIfNeedPayToday()
     {
-        $plans = Plan::where('activated_at', 'LIKE', date('Y-m-d', strtotime('-30 days')) . '%')->where('acting', 1)->get();
+
+        $plans = Plan::where('acting', 1)->get();
+
         foreach ($plans as $plan) {
-            $this->dispatchIncomes($plan);
+            $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
+            $this->dispatchIncomes($plan, $dateInterval);
         }
     }
 
-    public function dispatchIncomes(Plan $plan)
+    /**
+     * Check a days installments
+     *
+     * @param  string $date_from
+     * @param  string $date_to
+     * @return string
+     */
+    function dateInterval($date_from, $date_to)
+    {
+        $date_from = new DateTime($date_from);
+        $date_to = new DateTime($date_to);
+
+        // Redeem the difference between the dates
+        $dateInterval = $date_from->diff($date_to);
+        return $dateInterval->days + 1;
+    }
+
+
+    public function dispatchIncomes(Plan $plan, $dateInterval)
     {
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
         $user = User::where('id', $plan->user_id)->first();
 
-        $income = $plan->amount * $data_plan->porcent;
+        $date_from = date('Y-m-t');
+        $date_to = date('Y-m-' . '01');
+
+        $days = $this->dateInterval($date_to, $date_from);
+
+        $percent = $data_plan->porcent / $days;
+        $percentPeriodo = $dateInterval * $percent;
+        $income = $plan->amount * $percentPeriodo;
+
         $status_id = 1;
 
         # Acessor/ Gestor = 0.01;
@@ -120,18 +147,18 @@ class PlanResource
             $rent = $plan->amount * 0.01;
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
-            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 3, $status_id, $rent, $description);
+            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 4, $status_id, $rent, 0.000000, $description);
             $user_sponsor = User::where('id', $user->sponsor_id)->first();
 
-            // $balance_sponsor = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user_sponsor);
+            $balance_sponsor = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user_sponsor);
             $balance_sponsor = $user_sponsor->creditBalance;
             $balance_sponsor->income += $income;
             $balance_sponsor->save();
         }
 
         $description = 'Rendimento mensal';
+        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, $income, $plan->amount,  $description);
 
-        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, $income, $description);
         $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user);
 
         $balance->income += $income;
