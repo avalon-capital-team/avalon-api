@@ -24,6 +24,7 @@ class PlanResource
             ->select(
                 'id',
                 'acting',
+                'plan_id',
                 'token',
                 'amount',
                 'income',
