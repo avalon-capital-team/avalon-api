@@ -22,6 +22,7 @@ class PlanResource
     {
         return Plan::where('user_id', $user_id)
             ->select(
+                'id',
                 'acting',
                 'token',
                 'amount',

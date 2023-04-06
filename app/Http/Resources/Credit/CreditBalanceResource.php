@@ -192,9 +192,13 @@ class CreditBalanceResource
         $coin = (new CoinResource())->findById($data['coin_id']);
         $user = User::where('id', ($data['user_id']))->first();
 
+        $user->userPlan->amount = $data['amount'];
+
         $balance = $this->checkBalanceByCoinId($user, $coin);
         $balance['balance_pending'] -= $data->amount;
         $balance['balance_enable'] += $data->amount;
+
+        $user->userPlan->save();
 
         return $balance->save();
     }
