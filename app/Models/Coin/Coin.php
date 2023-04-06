@@ -34,6 +34,7 @@ class Coin extends Model
         'explorer_token',
         'volume_24h',
         'volume_change_24h',
+        'percent_change_24h',
         'show_wallet',
         'decimals',
         'chain_api',

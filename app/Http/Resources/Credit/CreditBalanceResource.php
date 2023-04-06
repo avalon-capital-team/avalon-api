@@ -48,10 +48,11 @@ class CreditBalanceResource
                 'date_to' => $finalMonth
             ];
             $monthSelected = $this->sumBalanceMonth($user, $filters);
-            $month = date('M - y', strtotime($credit['created_at']));
+            $month = $credit['created_at'];
             $monthSelected['month'] = $month;
             $monthData[++$i] = $monthSelected;
         }
+
 
         $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
 

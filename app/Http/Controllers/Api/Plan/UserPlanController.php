@@ -133,4 +133,22 @@ class UserPlanController extends Controller
             ], 400);
         }
     }
+
+
+    public function rentabil()
+    {
+        try {
+            return response()->json([
+                'status'  => true,
+                'plan' => (new PlanResource())->checkIfNeedPayToday(),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message'  => $e->getMessage()
+            ], 400);
+        }
+    }
 }

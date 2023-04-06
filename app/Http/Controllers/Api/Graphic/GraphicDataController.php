@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Graphic;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Credit\CreditBalanceResource;
-use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -37,7 +36,6 @@ class GraphicDataController extends Controller
 
             return response()->json([
                 'status' => true,
-                // 'plan' => (new PlanResource())->checkIfNeedPayToday(),
                 'data' => (new CreditBalanceResource())->getGraphicData(auth()->user(), 1, $filters),
             ], 200);
         } catch (\Exception $e) {

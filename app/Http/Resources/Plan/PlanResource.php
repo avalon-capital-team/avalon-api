@@ -147,7 +147,7 @@ class PlanResource
             $rent = $plan->amount * 0.01;
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
-            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 4, $status_id, $rent, 0.000000, $description);
+            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 4, $status_id, floatval($rent), floatval(0.000000), $description);
             $user_sponsor = User::where('id', $user->sponsor_id)->first();
 
             $balance_sponsor = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user_sponsor);
@@ -157,7 +157,7 @@ class PlanResource
         }
 
         $description = 'Rendimento mensal';
-        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, $income, $plan->amount,  $description);
+        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($plan->amount),  $description);
 
         $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user);
 

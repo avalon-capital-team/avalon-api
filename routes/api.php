@@ -72,6 +72,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('data', [App\Http\Controllers\Api\Account\AccountController::class, 'userData']);
         Route::get('plan', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlan']);
 
+        # TESTE RENTABIL
+        Route::get('rentabil', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
+
         # Plan
         Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrUpdate']);
         #UploadFile
