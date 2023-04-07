@@ -29,7 +29,7 @@ class CreditBalanceResource
         $plans['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
         $plans['income'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('income');
 
-        $plans['list'] = Credit::where('user_id', $user->id)
+        $credits = Credit::where('user_id', $user->id)
             ->where('type_id', 3)
             ->filterSearch($filters)
             ->orderBy('created_at', 'desc')
@@ -38,40 +38,52 @@ class CreditBalanceResource
 
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
-        $i = 0;
-        foreach ($plans['list'] as $credit) {
-            $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
-            $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
-
-            $filters = [
-                'date_from' => $initialMonth,
-                'date_to' => $finalMonth
+        if (count($credits) == 0) {
+            $monthData = [
+                'amount' => 0,
+                'base_amount' => 0,
+                'month' => null
             ];
-            $monthSelected = $this->sumBalanceMonth($user, $filters);
-            $month = $credit['created_at'];
-            $monthSelected['month'] = $month;
-            $monthData[++$i] = $monthSelected;
+        } else {
+            $i = 0;
+            foreach ($credits as $credit) {
+                $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+                $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
+
+                $filters = [
+                    'date_from' => $initialMonth,
+                    'date_to' => $finalMonth
+                ];
+
+                $monthSelected = $this->sumBalanceMonth($user, $filters);
+                $month = $credit['created_at'];
+                $monthSelected['month'] = $month;
+                $monthData[++$i] = $monthSelected;
+            }
         }
 
-
-        $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
-
-        $balance_placed = $plans['total'] * 100 / $balance_total;
-        $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
-        $balance_income = $creditBalance->income * 100 / $balance_total;
+        $balance_total = $plans['total'] + floatval($creditBalance->income) + floatval(str_replace('-', '', $creditBalance->used));
+        if (!$balance_total == 0.0) {
+            $balance_placed = $plans['total'] * 100 / $balance_total;
+            $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
+            $balance_income = floatval($creditBalance->income) * 100 / $balance_total;
+        } else {
+            $balance_placed = 0;
+            $balance_rendeem = 0;
+            $balance_income = 0;
+        }
 
         $data = [
-            'balance_enable' => $creditBalance->balance_enable,
-            'balance_pending' => $creditBalance->balance_pending,
+            'balance_enable' => floatval($creditBalance->balance_enable),
+            'balance_pending' => floatval($creditBalance->balance_pending),
             'balance_placed' => $plans['total'],
-            'balance_rendeem' => $creditBalance->used,
-            'balance_income' => $creditBalance->income,
+            'balance_rendeem' => floatval($creditBalance->used),
+            'balance_income' => floatval($creditBalance->income),
             'pie_chart' => [
                 'placed' => $balance_placed,
                 'rendeem' => $balance_rendeem,
                 'income' => $balance_income
             ],
-            'tower_chart' => $plans['list'],
             'chart' => $monthData,
 
         ];
