@@ -30,16 +30,10 @@ class SponsorController extends Controller
             $list = (new UserResource())->getBySponsorshipId(auth()->user()->id);
 
             $manangers_count = $list->where('type', 'mananger')->count();
+            $advisor_count = $list->where('type', 'advisor')->count();
             $users_count = $list->where('type', 'user')->count();
 
             foreach ($list as $user) {
-                if ($user['type'] == 'user') {
-                    $user->plan = (new UserPlanResource())->findByUserId($user->id);
-                    if ($user->plan) {
-                        $user->plan->list = (new PlanResource())->listPlans($user->id);
-                    }
-                    $user_amount = $user->plan->amount;
-                }
                 if ($user['type'] == 'mananger') {
                     $user->plan = (new UserPlanResource())->findByUserId($user->id);
                     if ($user->plan) {
@@ -47,15 +41,30 @@ class SponsorController extends Controller
                     }
                     $manange_amount = $user->plan->amount;
                 }
+                if ($user['type'] == 'advisor') {
+                    $user->plan = (new UserPlanResource())->findByUserId($user->id);
+                    if ($user->plan) {
+                        $user->plan->list = (new PlanResource())->listPlans($user->id);
+                    }
+                    $advisor_amount = $user->plan->amount;
+                }
+                if ($user['type'] == 'user') {
+                    $user->plan = (new UserPlanResource())->findByUserId($user->id);
+                    if ($user->plan) {
+                        $user->plan->list = (new PlanResource())->listPlans($user->id);
+                    }
+                    $user_amount = $user->plan->amount;
+                }
             }
 
-            $total = $manange_amount += $user_amount;
+            $total = $advisor_amount += $user_amount;
 
             return response()->json([
                 'status' => true,
                 'total' => $total,
                 'name' => auth()->user()->name,
                 'manangers_count' => $manangers_count,
+                'advisor_count' => $advisor_count,
                 'users_count' => $users_count,
                 'list' => $list
             ], 200);
@@ -93,6 +102,25 @@ class SponsorController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Este cliente agora é um gestor'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => $e->getMessage()
+            ], $e->getCode() ?? 400);
+        }
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUsersTypes()
+    {
+        try {
+            return response()->json([
+                'status' => true,
+                'users' => (new UserResource())->getUsersType()
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

@@ -27,6 +27,7 @@ class PlanResource
                 'acting',
                 'plan_id',
                 'coin_id',
+                'payment_voucher_url',
                 'token',
                 'amount',
                 'income',

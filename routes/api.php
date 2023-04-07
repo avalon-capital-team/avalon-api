@@ -89,6 +89,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['prefix' => 'mananger'], function () {
         Route::get('list', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getIndicateList']);
 
+        # List of Managers and Adivisors
+        Route::get('users', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getUsersTypes']);
+
         # Set Indicate
         Route::post('set-indicator', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'setIndicate']);
 

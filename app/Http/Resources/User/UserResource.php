@@ -41,6 +41,19 @@ class UserResource
         return User::where('sponsor_id', $id)->get();
     }
 
+    /**
+     * @param int $id
+     *
+     * @return \App\Models\User
+     */
+    public function getUsersType()
+    {
+        $data['manangers'] = User::where('type', 'mananger')->select('name', 'username', 'email')->get();
+        $data['advisors'] = User::where('type', 'advisor')->select('name', 'username', 'email')->get();
+
+        return $data;
+    }
+
 
     /**
      * @param int $id
