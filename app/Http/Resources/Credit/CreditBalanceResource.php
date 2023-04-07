@@ -42,7 +42,6 @@ class CreditBalanceResource
                 'month' => null
             ];
         } else {
-            // dd($credits);
             $monthData = $this->towerChart($user, $credits);
         }
 
@@ -83,7 +82,6 @@ class CreditBalanceResource
     public function towerChart(User $user, $credits)
     {
         $i = 0;
-        $monthData = [];
         foreach ($credits as $credit) {
             $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
             $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
@@ -92,28 +90,14 @@ class CreditBalanceResource
                 'date_from' => $initialMonth,
                 'date_to' => $finalMonth
             ];
+
             $monthSelected = $this->sumBalanceMonth($user, $filters);
-            $monthSelected = $this->validateMonth($monthData);
 
             $monthSelected['month'] = $credit['created_at'];
             $monthData[++$i] = $monthSelected;
         }
 
         return $monthData;
-    }
-
-    /**
-     * Perform the sum of credit and base
-     *
-     * @param  \App\Models\User $user
-     * @param  array $filters
-     * @return float
-     */
-    public function validateMonth(array $monthData)
-    {
-        dd($monthData);
-
-        return true;
     }
 
     /**
@@ -250,6 +234,7 @@ class CreditBalanceResource
         $user = User::where('id', ($data['user_id']))->first();
 
         $user->userPlan->amount = $data['amount'];
+        $user->userPlan->acting = 1;
 
         $balance = $this->checkBalanceByCoinId($user, $coin);
         $balance['balance_pending'] -= $data->amount;

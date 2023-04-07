@@ -25,6 +25,7 @@ class PlanResource
                 'id',
                 'acting',
                 'plan_id',
+                'coin_id',
                 'token',
                 'amount',
                 'income',
