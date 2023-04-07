@@ -138,16 +138,32 @@ class PlanResource
         $date_to = date('Y-m-' . '01');
 
         $days = $this->dateInterval($date_to, $date_from);
-
         $percent = $data_plan->porcent / $days;
-        $percentPeriodo = $dateInterval * $percent;
-        $income = $plan->amount * $percentPeriodo;
+
+        if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
+            $percentPeriodo = $dateInterval * $percent;
+        } else {
+            $percentPeriodo = $days * $percent;
+        }
+
+        $income = ($percentPeriodo / 100) * $plan->amount;
 
         $status_id = 1;
 
         # Acessor/ Gestor = 0.01;
+        $sponsor_percent = 1;
+
+        if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
+            $percentPeriodo = $dateInterval * $sponsor_percent;
+        } else {
+            $percentPeriodo = $days * $sponsor_percent;
+        }
+        $rent = ($percentPeriodo / 100) * $plan->amount;
+
+        dd($rent);
+
         if ($user->sponsor_id) {
-            $rent = $plan->amount * 0.01;
+
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
             (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 4, $status_id, floatval($rent), floatval(0.000000), $description);
@@ -166,8 +182,9 @@ class PlanResource
 
         $balance->income += $income;
 
-        $plan->income = $plan->income += $income;
-        $user->userPlan->income = $user->userPlan->income += $income;
+        $plan->income += $income;
+        $user->userPlan->income += $income;
+        $user->userPlan->amount += $income;
 
         $balance->save();
         $user->userPlan->save();
