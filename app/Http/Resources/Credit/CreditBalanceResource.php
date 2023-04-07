@@ -8,10 +8,7 @@ use App\Models\User;
 use App\Models\Plan\Plan;
 use App\Models\Coin\Coin;
 use App\Models\Credit\Credit;
-use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Support\Facades\DB;
-use Log;
-use Carbon\Carbon;
 
 class CreditBalanceResource
 {
@@ -26,8 +23,8 @@ class CreditBalanceResource
     public function getGraphicData(User $user, int $coinId = 1, array $filters)
     {
         $coin = (new CoinResource())->findById($coinId);
-        $plans['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
-        $plans['income'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('income');
+        $plan['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
+        $plan['income'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('income');
 
         $credits = Credit::where('user_id', $user->id)
             ->where('type_id', 3)
@@ -45,26 +42,13 @@ class CreditBalanceResource
                 'month' => null
             ];
         } else {
-            $i = 0;
-            foreach ($credits as $credit) {
-                $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
-                $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
-
-                $filters = [
-                    'date_from' => $initialMonth,
-                    'date_to' => $finalMonth
-                ];
-
-                $monthSelected = $this->sumBalanceMonth($user, $filters);
-                $month = $credit['created_at'];
-                $monthSelected['month'] = $month;
-                $monthData[++$i] = $monthSelected;
-            }
+            // dd($credits);
+            $monthData = $this->towerChart($user, $credits);
         }
 
-        $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
+        $balance_total = $plan['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
         if (!$balance_total == 0.0) {
-            $balance_placed = $plans['total'] * 100 / $balance_total;
+            $balance_placed = $plan['total'] * 100 / $balance_total;
             $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
             $balance_income = $creditBalance->income * 100 / $balance_total;
         } else {
@@ -76,7 +60,7 @@ class CreditBalanceResource
         $data = [
             'balance_enable' => $creditBalance->balance_enable,
             'balance_pending' => $creditBalance->balance_pending,
-            'balance_placed' => $plans['total'],
+            'balance_placed' => $plan['total'],
             'balance_rendeem' => $creditBalance->used,
             'balance_income' => $creditBalance->income,
             'pie_chart' => [
@@ -85,14 +69,55 @@ class CreditBalanceResource
                 'income' => $balance_income
             ],
             'chart' => $monthData,
-
         ];
 
         return $data;
     }
 
     /**
-     * Get balance of user logged by CoinID
+     * Get a sum per month
+     *
+     * @param  \App\Models\User $user
+     * @return float
+     */
+    public function towerChart(User $user, $credits)
+    {
+        $i = 0;
+        $monthData = [];
+        foreach ($credits as $credit) {
+            $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+            $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
+
+            $filters = [
+                'date_from' => $initialMonth,
+                'date_to' => $finalMonth
+            ];
+            $monthSelected = $this->sumBalanceMonth($user, $filters);
+            $monthSelected = $this->validateMonth($monthData);
+
+            $monthSelected['month'] = $credit['created_at'];
+            $monthData[++$i] = $monthSelected;
+        }
+
+        return $monthData;
+    }
+
+    /**
+     * Perform the sum of credit and base
+     *
+     * @param  \App\Models\User $user
+     * @param  array $filters
+     * @return float
+     */
+    public function validateMonth(array $monthData)
+    {
+        dd($monthData);
+
+        return true;
+    }
+
+    /**
+     * Perform the sum of credit and base
      *
      * @param  \App\Models\User $user
      * @param  array $filters
