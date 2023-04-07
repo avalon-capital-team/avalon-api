@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Data\DataPlan;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
+use App\Models\Data\DataPercent;
 use DateTime;
 
 
@@ -104,10 +105,8 @@ class PlanResource
     {
 
         $plans = Plan::where('acting', 1)->get();
-
         foreach ($plans as $plan) {
-            $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
-            $this->dispatchIncomes($plan, $dateInterval);
+            $this->dispatchIncomes($plan);
         }
     }
 
@@ -129,40 +128,17 @@ class PlanResource
     }
 
 
-    public function dispatchIncomes(Plan $plan, $dateInterval)
+    public function dispatchIncomes(Plan $plan)
     {
+
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
         $user = User::where('id', $plan->user_id)->first();
-
-        $date_from = date('Y-m-t');
-        $date_to = date('Y-m-' . '01');
-
-        $days = $this->dateInterval($date_to, $date_from);
-        $percent = $data_plan->porcent / $days;
-
-        if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
-            $percentPeriodo = $dateInterval * $percent;
-        } else {
-            $percentPeriodo = $days * $percent;
-        }
-
-        $income = ($percentPeriodo / 100) * $plan->amount;
-
+        $percent = DataPercent::where('tag', 'sponsor')->first();;
         $status_id = 1;
-
-        # Acessor/ Gestor = 0.01;
-        $sponsor_percent = 1;
-
-        if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
-            $percentPeriodo = $dateInterval * $sponsor_percent;
-        } else {
-            $percentPeriodo = $days * $sponsor_percent;
-        }
-        $rent = ($percentPeriodo / 100) * $plan->amount;
-
-        dd($rent);
+        $income = $this->calculePercent($plan, $data_plan);
 
         if ($user->sponsor_id) {
+            $rent = $this->calculePercent($plan, $data_plan, true);
 
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
@@ -189,5 +165,38 @@ class PlanResource
         $balance->save();
         $user->userPlan->save();
         $plan->save();
+    }
+
+    /**
+     * Execute calcule of a percent
+     *
+     * @param   $plan
+     * @param   $data_plan
+     * @return
+     */
+    function calculePercent($plan, $data_plan, $sponsor = null)
+    {
+
+        $date_from = date('Y-m-t');
+        $date_to = date('Y-m-' . '01');
+        $days = $this->dateInterval($date_to, $date_from);
+
+        if ($sponsor) {
+            $percent = 1.0 / $days;
+            // $percent = $sponsor->percent / $days;
+        } else {
+            $percent = $data_plan->porcent / $days;
+        }
+
+        if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
+            $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
+            $percentPeriodo = $dateInterval * $percent;
+        } else {
+            $percentPeriodo = $days * $percent;
+        }
+
+        $value = ($percentPeriodo / 100) * $plan->amount;
+
+        return $value;
     }
 }

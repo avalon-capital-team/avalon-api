@@ -9,6 +9,7 @@ use Database\Seeders\Data\DataGenreSeeder;
 use Database\Seeders\Data\DataPlanSeeder;
 use Database\Seeders\Data\DataOngSeeder;
 use Database\Seeders\Data\DataBankSeeder;
+use Database\Seeders\Data\DataPercentSeeder;
 use Database\Seeders\Data\DataNotificationChannelSeeder;
 use Database\Seeders\Data\DataNotificationTypeSeeder;
 use Database\Seeders\Data\DataPrivacyTypeOptionSeeder;
@@ -62,6 +63,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DataPrivacyTypeSeeder::class);
         $this->call(DataBankSeeder::class);
         $this->call(DataCountrySeeder::class);
+        $this->call(DataPercentSeeder::class);
 
         # Onboarding
         $this->call(OnboardingStepSeeder::class);

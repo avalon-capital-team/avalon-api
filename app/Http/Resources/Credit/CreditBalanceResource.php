@@ -57,11 +57,11 @@ class CreditBalanceResource
         }
 
         $data = [
-            'balance_enable' => floatval($creditBalance->balance_enable),
-            'balance_pending' => floatval($creditBalance->balance_pending),
-            'balance_placed' => floatval($plan['total']),
-            'balance_rendeem' => floatval($creditBalance->used),
-            'balance_income' => floatval($creditBalance->income),
+            'balance_enable' => $creditBalance->balance_enable,
+            'balance_pending' => $creditBalance->balance_pending,
+            'balance_placed' => $plan['total'],
+            'balance_rendeem' => $creditBalance->used,
+            'balance_income' => $creditBalance->income,
             'pie_chart' => [
                 'placed' => $balance_placed,
                 'rendeem' => $balance_rendeem,
