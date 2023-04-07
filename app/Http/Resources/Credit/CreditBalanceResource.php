@@ -62,11 +62,11 @@ class CreditBalanceResource
             }
         }
 
-        $balance_total = $plans['total'] + floatval($creditBalance->income) + floatval(str_replace('-', '', $creditBalance->used));
+        $balance_total = $plans['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
         if (!$balance_total == 0.0) {
             $balance_placed = $plans['total'] * 100 / $balance_total;
             $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
-            $balance_income = floatval($creditBalance->income) * 100 / $balance_total;
+            $balance_income = $creditBalance->income * 100 / $balance_total;
         } else {
             $balance_placed = 0;
             $balance_rendeem = 0;
@@ -74,11 +74,11 @@ class CreditBalanceResource
         }
 
         $data = [
-            'balance_enable' => floatval($creditBalance->balance_enable),
-            'balance_pending' => floatval($creditBalance->balance_pending),
+            'balance_enable' => $creditBalance->balance_enable,
+            'balance_pending' => $creditBalance->balance_pending,
             'balance_placed' => $plans['total'],
-            'balance_rendeem' => floatval($creditBalance->used),
-            'balance_income' => floatval($creditBalance->income),
+            'balance_rendeem' => $creditBalance->used,
+            'balance_income' => $creditBalance->income,
             'pie_chart' => [
                 'placed' => $balance_placed,
                 'rendeem' => $balance_rendeem,
