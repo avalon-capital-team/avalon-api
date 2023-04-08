@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Document\TransferVoucherRequest;
 use App\Http\Resources\User\UserPlanResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
-use App\Models\Order\Order;
-
+use App\Http\Resources\Coin\CoinResource;
 use App\Http\Requests\User\CreatePlanOrderRequest;
 use App\Http\Resources\Plan\PlanResource;
 use Aws\S3\Transfer;
@@ -92,6 +91,7 @@ class UserPlanController extends Controller
     public function createOrUpdate(UserPlanResource $resource, CreatePlanOrderRequest $request)
     {
         try {
+            (new CoinResource())->coinData();
             $plan = $resource->createOrUpdateOrder(auth()->user(), $request);
             DB::commit();
 

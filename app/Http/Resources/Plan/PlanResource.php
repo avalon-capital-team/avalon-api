@@ -41,7 +41,6 @@ class PlanResource
             $plan['converted_amount'] = $plan['amount'] / $coin->price_brl;
         }
 
-
         return $plans;
     }
 
