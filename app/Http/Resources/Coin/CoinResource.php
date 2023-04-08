@@ -67,7 +67,6 @@ class CoinResource
 
             $updata = Coin::where('symbol', $coin['symbol'])->first();
             if (!$updata) {
-                // dd($coin['symbol']);
                 $updata = Coin::create([
                     'name' => $coin['name'],
                     'symbol' => $coin['symbol'],
@@ -85,7 +84,6 @@ class CoinResource
                 $updata->volume_24h = floatval($coin['quote']['USD']['volume_24h']);
                 $updata->volume_change_24h = floatval($coin['quote']['USD']['volume_change_24h']);
                 $updata->percent_change_24h = floatval($coin['quote']['USD']['percent_change_24h']);
-
                 $updata->save();
             }
         }

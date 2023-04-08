@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Coin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Coin\CoinResource;
 use App\Http\Resources\Coin\CoinTrackerResource;
 use Illuminate\Http\Request;
 
@@ -17,10 +18,12 @@ class CoinTrackerController extends Controller
     {
         try {
             $tracker = (new CoinTrackerResource())->getExchanges();
+            $coin = (new CoinResource())->findBySymbol('BTC');
 
             return response()->json([
                 'status'  => true,
-                'tracker' => $tracker
+                'tracker' => $tracker,
+                'coin' => $coin
             ]);
         } catch (\Exception $e) {
             return response()->json([
