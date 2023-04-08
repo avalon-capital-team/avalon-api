@@ -44,6 +44,7 @@ class UserPlanResource
         // }
 
         $coin = Coin::where('id', $validated['coin_id'])->first();
+
         $plan = (new Plan())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount']);
         $plan['converted_amount'] = $validated['amount'] / $coin->price_brl;
         $credit = (new CreditResource())->create($user->id, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], 0.000000, $description);

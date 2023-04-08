@@ -83,9 +83,6 @@ class CreditBalanceResource
     {
         $i = 0;
         foreach ($credits as $credit) {
-
-            $creditBalance = $this->checkBalanceByCoinId($user, $credit['coin_id']);
-
             $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
             $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
 

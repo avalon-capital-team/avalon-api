@@ -91,7 +91,6 @@ class UserPlanController extends Controller
     public function createOrUpdate(UserPlanResource $resource, CreatePlanOrderRequest $request)
     {
         try {
-            (new CoinResource())->coinData();
             $plan = $resource->createOrUpdateOrder(auth()->user(), $request);
             DB::commit();
 
