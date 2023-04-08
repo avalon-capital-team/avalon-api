@@ -38,7 +38,7 @@ class PlanResource
 
         foreach ($plans as $plan) {
             $coin = Coin::where('id', $plan['coin_id'])->first();
-            $plan['convert_amount'] = $plan['amount'] / $coin->price_brl;
+            $plan['converted_amount'] = $plan['amount'] / $coin->price_brl;
         }
 
 
