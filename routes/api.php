@@ -72,9 +72,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('data', [App\Http\Controllers\Api\Account\AccountController::class, 'userData']);
         Route::get('plan', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlan']);
 
-        # TESTE RENTABIL
-        Route::get('rentabil', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
-
         # Plan
         Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrUpdate']);
         #UploadFile
@@ -136,6 +133,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         # Update Device token
         Route::post('device-token/update', [App\Http\Controllers\Api\Settings\SettingsDeviceTokenController::class, 'updateDeviceToken']);
     });
+
+    # TESTE RENTABIL
+    Route::get('rentabil', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
 
     # Notifications
     Route::get('/notifications', [App\Http\Controllers\Api\Notifications\NotificationsController::class, 'list'])->name('api.notifications');

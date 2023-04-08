@@ -28,10 +28,13 @@ class SponsorController extends Controller
     {
         try {
             $list = (new UserResource())->getBySponsorshipId(auth()->user()->id);
-
             $manangers_count = $list->where('type', 'mananger')->count();
             $advisor_count = $list->where('type', 'advisor')->count();
             $users_count = $list->where('type', 'user')->count();
+
+            $advisor_amount = 0;
+            $user_amount = 0;
+            $manange_amount = 0;
 
             foreach ($list as $user) {
                 if ($user['type'] == 'mananger') {
@@ -57,7 +60,7 @@ class SponsorController extends Controller
                 }
             }
 
-            $total = $advisor_amount += $user_amount;
+            $total = $advisor_amount += $user_amount += $manange_amount;
 
             return response()->json([
                 'status' => true,

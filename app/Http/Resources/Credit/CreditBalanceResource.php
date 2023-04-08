@@ -158,7 +158,6 @@ class CreditBalanceResource
      */
     public function getBalanceByCoinIdAndBalanceId(User $user)
     {
-
         return $user->creditBalance()->where('user_id', $user->id)->first();
     }
 

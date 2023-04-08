@@ -134,12 +134,13 @@ class PlanResource
 
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
         $user = User::where('id', $plan->user_id)->first();
-        $percent = DataPercent::where('tag', 'sponsor')->first();;
+        $percent = DataPercent::where('tag', 'sponsor')->first();
+
         $status_id = 1;
         $income = $this->calculePercent($plan, $data_plan);
 
         if ($user->sponsor_id) {
-            $rent = $this->calculePercent($plan, $data_plan, true);
+            $rent = $this->calculePercent($plan, $data_plan, $percent);
 
             $description = 'Ganho de rendimento do user: ' . $user->name;
 
@@ -158,6 +159,7 @@ class PlanResource
         $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user);
 
         $balance->income += $income;
+        $balance->balance_enable += $income;
 
         $plan->income += $income;
         $user->userPlan->income += $income;
@@ -181,10 +183,8 @@ class PlanResource
         $date_from = date('Y-m-t');
         $date_to = date('Y-m-' . '01');
         $days = $this->dateInterval($date_to, $date_from);
-
         if ($sponsor) {
-            $percent = 1.0 / $days;
-            // $percent = $sponsor->percent / $days;
+            $percent = $sponsor->porcent / $days;
         } else {
             $percent = $data_plan->porcent / $days;
         }
