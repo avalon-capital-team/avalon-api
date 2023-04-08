@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Wallet;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Wallet\WithdrawalFiatRequest;
 use App\Http\Resources\Withdrawal\WithdrawalFiatResource;
+use App\Http\Resources\Withdrawal\WithdrawalCryptoResource;
 use Illuminate\Http\Request;
 
 class WithdrawalController extends Controller
@@ -23,12 +24,15 @@ class WithdrawalController extends Controller
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function withdrawl(WithdrawalFiatResource $resource, WithdrawalFiatRequest $request)
+    public function withdrawl(WithdrawalFiatRequest $request)
     {
         try {
             $validated = $request->validated();
 
-            $resource->createWithdrawal(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
+            if ($validated['coin_id'] == '1') {
+                (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
+            }
+            (new WithdrawalCryptoResource())->createWithdrawalCrypto(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
 
             return response()->json([
                 'status' => true,

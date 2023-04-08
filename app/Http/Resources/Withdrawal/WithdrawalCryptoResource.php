@@ -2,14 +2,15 @@
 
 namespace App\Http\Resources\Withdrawal;
 
+use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
 use App\Models\User;
 use App\Models\Coin\Coin;
-use App\Models\Withdrawal\WithdrawalFiat;
-use App\Notifications\Wallet\Withdrawal\WithdrawalFiatNotification;
+use App\Models\Withdrawal\WithdrawalCrypto;
+use App\Notifications\Wallet\Withdrawal\WithdrawalCryptoNotification;
 
-class WithdrawalFiatResource
+class WithdrawalCryptoResource
 {
     /**
      * Create wallet Withdrawal
@@ -18,10 +19,10 @@ class WithdrawalFiatResource
      * @param  string $type
      * @param  float $amount
      * @param  int $coin_id
-     * @return \App\Models\Withdrawal\WithdrawalFiat
+     * @return \App\Models\Withdrawal\WithdrawalCrypto
      * @throws \Exception
      */
-    public function createWithdrawal(User $user, int $coin_id, string $type, float $amount)
+    public function createWithdrawalCrypto(User $user, int $coin_id, string $type, float $amount)
     {
         # Check Balance
         $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user, $coin_id);
@@ -34,10 +35,10 @@ class WithdrawalFiatResource
         }
 
         # Description
-        if ($type == 'bank') {
-            $description = 'Saque para a Conta Bancária';
+        if ($coin_id == '3') {
+            $description = 'Saque de USDT';
         } else {
-            $description = 'Saque para o PIX';
+            $description = 'Saque de BTC';
         }
 
         # Create debit
@@ -50,7 +51,7 @@ class WithdrawalFiatResource
             // $amount = $amount / $coin->price_brl;
 
             # Create Withdrawal
-            $withdrawal = new WithdrawalFiat();
+            $withdrawal = new WithdrawalCrypto();
             $withdrawal->coin_id = $coin_id;
             $withdrawal->user_id = $user->id;
             $withdrawal->debit_id = $debit->id;
@@ -70,7 +71,7 @@ class WithdrawalFiatResource
             // # Send mail
             // if (env('APP_ENV') != 'testing') {
             //     $user->notify(
-            //         new WithdrawalFiatNotification($withdrawal)
+            //         new WithdrawalCryptoNotification($withdrawal)
             //     );
             // }
 
@@ -83,12 +84,12 @@ class WithdrawalFiatResource
     /**
      * Cancel withdrawal & return credit
      *
-     * @param  \App\Models\Withdrawal\WithdrawalFiat $withdrawalFiat
+     * @param  \App\Models\Withdrawal\WithdrawalCrypto $withdrawalFiat
      * @param  string|null $message;
      * @return bool
      * @throws \Exception
      */
-    public function cancelWithdrawal(WithdrawalFiat $withdrawalFiat, string $message = null)
+    public function cancelWithdrawal(WithdrawalCrypto $withdrawalFiat, string $message = null)
     {
         if ($withdrawalFiat->status_id == 3) {
             if ($message) {
@@ -130,10 +131,10 @@ class WithdrawalFiatResource
                     'received'
                 );
 
-                # Send mail
-                $withdrawalFiat->user->notify(
-                    new WithdrawalFiatNotification($withdrawalFiat)
-                );
+                // # Send mail
+                // $withdrawalFiat->user->notify(
+                //     new WithdrawalCryptoNotification($withdrawalFiat)
+                // );
 
                 return true;
             }
@@ -145,12 +146,12 @@ class WithdrawalFiatResource
     /**
      * Cancel withdrawal & return credit
      *
-     * @param  \App\Models\Withdrawal\WithdrawalFiat $withdrawalFiat
+     * @param  \App\Models\Withdrawal\WithdrawalCrypto $withdrawalFiat
      * @param  string|null $payment_confirmation;
      * @return bool
      * @throws \Exception
      */
-    public function approveWithdrawal(WithdrawalFiat $withdrawalFiat, string $payment_confirmation = null)
+    public function approveWithdrawal(WithdrawalCrypto $withdrawalFiat, string $payment_confirmation = null)
     {
         if (in_array($withdrawalFiat->status_id, [3])) {
             #Change Status
@@ -160,18 +161,18 @@ class WithdrawalFiatResource
             $withdrawalFiat->save();
 
             # Send mail
-            // $withdrawalFiat->user->notify(new WithdrawalFiatNotification($withdrawalFiat));
+            // $withdrawalFiat->user->notify(new WithdrawalCryptoNotification($withdrawalFiat));
         }
     }
     /**
      * Get history paginate
      *
      * @param  \App\Models\User $user
-     * @return App\Models\Withdrawal\WithdrawalFiat;
+     * @return App\Models\Withdrawal\WithdrawalCrypto;
      */
     public function getHistoryPaginate(User $user)
     {
-        return WithdrawalFiat::where('user_id', $user->id)
+        return WithdrawalCrypto::where('user_id', $user->id)
             ->orderBy('created_at', 'DESC')
             ->paginate(5);
     }

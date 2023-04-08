@@ -83,6 +83,9 @@ class CreditBalanceResource
     {
         $i = 0;
         foreach ($credits as $credit) {
+
+            $creditBalance = $this->checkBalanceByCoinId($user, $credit['coin_id']);
+
             $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
             $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
 
@@ -101,6 +104,48 @@ class CreditBalanceResource
     }
 
     /**
+     * Get a sum per month
+     *
+     * @param  \App\Models\User $user
+     * @return float
+     */
+    public function reportData(User $user)
+    {
+        $credits = Credit::where('user_id', $user->id)
+            ->where('type_id', 3)
+            ->orderBy('created_at', 'desc')
+            ->select('amount', 'base_amount', 'created_at')
+            ->get();
+
+        if (count($credits) == 0) {
+            $monthData = [
+                'amount' => 0,
+                'rendeem' => 0,
+                'base_amount' => 0,
+                'month' => null
+            ];
+        } else {
+            $i = 0;
+            foreach ($credits as $credit) {
+                $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+                $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
+
+                $filters = [
+                    'date_from' => $initialMonth,
+                    'date_to' => $finalMonth
+                ];
+
+                $monthSelected = $this->sumBalanceMonth($user, $filters);
+
+                $monthSelected['month'] = $credit['created_at'];
+                $monthData[++$i] = $monthSelected;
+            }
+        }
+
+        return $monthData;
+    }
+
+    /**
      * Perform the sum of credit and base
      *
      * @param  \App\Models\User $user
@@ -109,6 +154,11 @@ class CreditBalanceResource
      */
     public function sumBalanceMonth(User $user, array $filters)
     {
+        $credit['rendeem'] = Credit::where('user_id', $user->id)
+            ->where('type_id', 2)
+            ->filterSearch($filters)
+            ->sum('amount');
+
         $credit['amount'] = Credit::where('user_id', $user->id)
             ->where('type_id', 3)
             ->filterSearch($filters)
@@ -118,6 +168,8 @@ class CreditBalanceResource
             ->where('type_id', 3)
             ->filterSearch($filters)
             ->sum('base_amount');
+
+        $credit['rendeem'] = floatval(str_replace('-', '', $credit['rendeem']));
 
         return $credit;
     }
