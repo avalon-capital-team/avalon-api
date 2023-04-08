@@ -241,9 +241,13 @@ class CreditBalanceResource
      * @param  \App\Models\Coin\Coin $coin
      * @return \App\Models\Credit\CreditBalance
      */
-    public function checkBalanceByCoinId(User $user)
+    public function checkBalanceByCoinId(User $user, Coin $coin)
     {
         $balance = CreditBalance::where('user_id', $user->id)->first();
+        if (!$balance) {
+            $user->creditBalance()->create(['coin_id' => $coin->id]);
+            $balance =  CreditBalance::where('user_id', $user->id)->first();
+        }
 
         return $balance;
     }
@@ -289,7 +293,6 @@ class CreditBalanceResource
         return $balance->save();
     }
 
-
     /**
      * @param  \App\Models\User $user
      * @param  int $coin_id
@@ -300,7 +303,7 @@ class CreditBalanceResource
     {
         $coin = (new CoinResource())->findById($coin_id);
 
-        $balance = $this->checkBalanceByCoinId($user);
+        $balance = $this->checkBalanceByCoinId($user, $coin);
         $balance->plan_id = $plan_id;
         $balance->coin_id = $coin_id;
         $balance->balance_pending += $amount;
