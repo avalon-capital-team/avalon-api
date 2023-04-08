@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources\User;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Requests\User\CreatePlanOrderRequest;
 use App\Models\User;
 use App\Models\User\UserPlan;
-use App\Models\Order\Order;
+use App\Models\Coin\Coin;
 use App\Models\Plan\Plan;
 use App\Helpers\FileUploadHelper;
 use App\Http\Resources\Credit\CreditResource;
@@ -44,7 +43,9 @@ class UserPlanResource
         //     throw new \Exception('Não foi possível gerar o plano. Tente novamente mais tarde!');
         // }
 
+        $coin = Coin::where('id', $validated['coin_id'])->first();
         $plan = (new Plan())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount']);
+        $plan['converted_amount'] = $validated['amount'] / $coin->price_brl;
         $credit = (new CreditResource())->create($user->id, $validated['coin_id'], $validated['plan_id'], $type_id, $status_id, $validated['amount'], 0.000000, $description);
 
         $user_plan = $user->userPlan

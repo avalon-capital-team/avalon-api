@@ -5,6 +5,7 @@ namespace App\Http\Resources\Plan;
 use App\Models\Plan\Plan;
 use App\Models\User;
 use App\Models\Data\DataPlan;
+use App\Models\Coin\Coin;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Models\Data\DataPercent;
@@ -21,7 +22,7 @@ class PlanResource
      */
     public function listPlans(int $user_id)
     {
-        return Plan::where('user_id', $user_id)
+        $plans = Plan::where('user_id', $user_id)
             ->select(
                 'id',
                 'acting',
@@ -34,6 +35,14 @@ class PlanResource
                 'activated_at'
             )
             ->get();
+
+        foreach ($plans as $plan) {
+            $coin = Coin::where('id', $plan['coin_id'])->first();
+            $plan['convert_amount'] = $plan['amount'] / $coin->price_brl;
+        }
+
+
+        return $plans;
     }
 
     /**
@@ -104,7 +113,6 @@ class PlanResource
      */
     public function checkIfNeedPayToday()
     {
-
         $plans = Plan::where('acting', 1)->get();
         foreach ($plans as $plan) {
             $this->dispatchIncomes($plan);

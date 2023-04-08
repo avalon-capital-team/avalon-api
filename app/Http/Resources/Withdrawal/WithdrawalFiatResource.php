@@ -5,6 +5,7 @@ namespace App\Http\Resources\Withdrawal;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
 use App\Models\User;
+use App\Models\Coin\Coin;
 use App\Models\Withdrawal\WithdrawalFiat;
 use App\Notifications\Wallet\Withdrawal\WithdrawalFiatNotification;
 
@@ -45,6 +46,11 @@ class WithdrawalFiatResource
         $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->plan_id, 2, 1, floatval('-' . $amount), 0.000000, $description);
 
         if ($debit) {
+
+
+            // $coin = Coin::where('id', $coin_id)->first();
+            // $amount = $amount / $coin->price_brl;
+
             # Create Withdrawal
             $withdrawal = new WithdrawalFiat();
             $withdrawal->coin_id = $coin_id;
