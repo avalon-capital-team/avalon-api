@@ -4,7 +4,7 @@ namespace App\ExternalApis;
 
 use Illuminate\Support\Facades\Config;
 
-class CoinMarketCapApi
+class CoinUsdBrl
 {
     /**
      * Create a new ExternalApis instance.
@@ -13,26 +13,16 @@ class CoinMarketCapApi
      */
     public function __construct()
     {
-        $coinMarketCapConfig = Config::get('external_apis.coin_market_cap_api');
-        $this->api_url = $coinMarketCapConfig['endpoint'];
-        $this->api_key = $coinMarketCapConfig['key'];
+        $coinUsdBrlConfig = Config::get('external_apis.coin_usd_brl');
+        $this->api_url = $coinUsdBrlConfig['endpoint'];
     }
 
     /**
      * @return mixed
      */
-    public function listAllCoinsTracker(string $id)
+    public function listUsdBrl()
     {
-        $endpoint = "/exchange/assets?id=$id";
-        return $this->executeCurl('GET', $endpoint);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function listAllCoins()
-    {
-        $endpoint = "/cryptocurrency/listings/latest";
+        $endpoint = "/USD-BRL";
         return $this->executeCurl('GET', $endpoint);
     }
 
@@ -50,7 +40,6 @@ class CoinMarketCapApi
             CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_HTTPHEADER => [
                 "Content-Type: application/json",
-                "X-CMC_PRO_API_KEY: " . $this->api_key
             ],
         ];
 

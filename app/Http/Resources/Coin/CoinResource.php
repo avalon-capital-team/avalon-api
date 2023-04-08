@@ -4,6 +4,7 @@ namespace App\Http\Resources\Coin;
 
 use App\Models\Coin\Coin;
 use App\ExternalApis\CoinMarketCapApi;
+use App\ExternalApis\CoinUsdBrl;
 
 class CoinResource
 {
@@ -45,8 +46,57 @@ class CoinResource
     public function coinData()
     {
         $coinMarketCapApi = new CoinMarketCapApi();
-        $coin = $coinMarketCapApi->listAllCoins();
+        $coins = $coinMarketCapApi->listAllCoins();
 
-        dd($coin);
+        return $this->saveCoin($coins['data']);
+    }
+
+    /**
+     * @param  array $exchange
+     * @return array
+     */
+    public function saveCoin(array $coins)
+    {
+        $real = Coin::where('symbol', 'BRL')->first();
+        $coinUsdBrlApi = new CoinUsdBrl();
+        $price_usd_brl = $coinUsdBrlApi->listUsdBrl();
+        $real['price_usd'] = $price_usd_brl['USDBRL']['high'];
+        $real->save();
+
+        foreach ($coins as $coin) {
+
+            $updata = Coin::where('symbol', $coin['symbol'])->first();
+            if (!$updata) {
+                // dd($coin['symbol']);
+                $updata = Coin::create([
+                    'name' => $coin['name'],
+                    'symbol' => $coin['symbol'],
+                    'type' => 'coin',
+                    'chain_api' => $coin['slug'],
+                    'price_usd' => floatval($coin['quote']['USD']['price']),
+                    'price_brl' => $this->calculatePriceBrl($coin['quote']['USD']['price'], $real->price_usd),
+                    'volume_24h' => floatval($coin['quote']['USD']['volume_24h']),
+                    'volume_change_24h' => floatval($coin['quote']['USD']['volume_change_24h']),
+                    'percent_change_24h' => floatval($coin['quote']['USD']['percent_change_24h']),
+                ]);
+            } else {
+                $updata->price_usd = floatval($coin['quote']['USD']['price']);
+                $updata->price_brl = $this->calculatePriceBrl($coin['quote']['USD']['price'], $real->price_usd);
+                $updata->volume_24h = floatval($coin['quote']['USD']['volume_24h']);
+                $updata->volume_change_24h = floatval($coin['quote']['USD']['volume_change_24h']);
+                $updata->percent_change_24h = floatval($coin['quote']['USD']['percent_change_24h']);
+
+                $updata->save();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @return array
+     */
+    public function calculatePriceBrl($price_coin, $price_fiat)
+    {
+        return $price_fiat * $price_coin;
     }
 }

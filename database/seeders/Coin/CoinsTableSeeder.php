@@ -36,6 +36,25 @@ class CoinsTableSeeder extends Seeder
                 'active' => true,
             ]);
         }
+        // if (!Coin::where('symbol', 'USD')->first()) {
+        //     Coin::create([
+        //         'name' => 'Dólar',
+        //         'symbol' => 'USD',
+        //         'type' => 'fiat',
+        //         'decimals' => 2,
+        //         'price_usd' => 1,
+        //         'show_wallet' => true
+        //     ]);
+
+        //     DB::table('currencies')->insert([
+        //         'name' => 'Dólar',
+        //         'code' => 'USD',
+        //         'symbol' => '$',
+        //         'format' => '$1,0.00',
+        //         'exchange_rate' => '0',
+        //         'active' => true,
+        //     ]);
+        // }
 
         if (!Coin::where('symbol', 'BTC')->first()) {
             Coin::create([

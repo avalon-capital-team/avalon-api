@@ -141,8 +141,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/notifications', [App\Http\Controllers\Api\Notifications\NotificationsController::class, 'list'])->name('api.notifications');
 });
 
-# Coin Tracker
+# Coin
 Route::group(['prefix' => 'coin'], function () {
+    Route::get('listings-latest', [App\Http\Controllers\Api\Coin\CoinController::class, 'coinListingsLatest']);
+
+    # Coin Tracker
     Route::get('tracker', [App\Http\Controllers\Api\Coin\CoinTrackerController::class, 'coinTracker']);
 });
 

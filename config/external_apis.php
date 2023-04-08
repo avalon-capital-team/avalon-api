@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'coin_usd_brl' => [
+
+        'endpoint' => env('COIN_USD_BRL_API_URL')
+    ],
     'coin_market_cap_api' => [
         'key' => env('COIN_MARKET_CAP_API_KEY'),
         'endpoint' => env('COIN_MARKET_CAP_API_URL')
