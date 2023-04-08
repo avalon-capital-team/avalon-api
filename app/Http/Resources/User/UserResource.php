@@ -48,10 +48,9 @@ class UserResource
      */
     public function getUsersType()
     {
-        $data['manangers'] = User::where('type', 'mananger')->select('name', 'username', 'email')->get();
-        $data['advisors'] = User::where('type', 'advisor')->select('name', 'username', 'email')->get();
+        $users = User::get();
 
-        return $data;
+        return $users;
     }
 
 

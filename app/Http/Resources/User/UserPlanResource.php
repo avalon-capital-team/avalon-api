@@ -8,6 +8,7 @@ use App\Models\User\UserPlan;
 use App\Models\Coin\Coin;
 use App\Models\Plan\Plan;
 use App\Helpers\FileUploadHelper;
+use App\Http\Resources\Coin\CoinResource;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Plan\PlanResource;
 
@@ -56,6 +57,8 @@ class UserPlanResource
                 'plan_id' => ($validated['plan_id']),
                 'coin_id' => ($validated['coin_id']),
             ]);
+
+
 
         if (!$user_plan && !$credit && !$plan) {
             throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!');
