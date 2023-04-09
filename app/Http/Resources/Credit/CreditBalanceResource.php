@@ -241,11 +241,11 @@ class CreditBalanceResource
      * @param  \App\Models\Coin\Coin $coin
      * @return \App\Models\Credit\CreditBalance
      */
-    public function checkBalanceByCoinId(User $user, Coin $coin)
+    public function checkBalanceByCoinId(User $user)
     {
         $balance = CreditBalance::where('user_id', $user->id)->first();
         if (!$balance) {
-            $user->creditBalance()->create(['coin_id' => $coin->id]);
+            $user->creditBalance()->create();
             $balance =  CreditBalance::where('user_id', $user->id)->first();
         }
 

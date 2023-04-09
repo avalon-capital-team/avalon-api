@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     # TESTE RENTABIL
     Route::get('rentabil', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
 
+
     # Notifications
     Route::get('/notifications', [App\Http\Controllers\Api\Notifications\NotificationsController::class, 'list'])->name('api.notifications');
 });

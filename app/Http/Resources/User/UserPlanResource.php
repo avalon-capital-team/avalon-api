@@ -43,7 +43,7 @@ class UserPlanResource
         // if ($validated['plan_id'] != $user->userPlan->plan_id) {
         //     throw new \Exception('Não foi possível gerar o plano. Tente novamente mais tarde!');
         // }
-
+        (new CoinResource())->coinData();
         $coin = Coin::where('id', $validated['coin_id'])->first();
 
         $plan = (new Plan())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Withdrawal;
 
+use App\Http\Resources\Coin\CoinResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
@@ -24,6 +25,8 @@ class WithdrawalCryptoResource
      */
     public function createWithdrawalCrypto(User $user, int $coin_id, string $type, float $amount)
     {
+        (new CoinResource())->coinData();
+
         # Check Balance
         $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user, $coin_id);
 
@@ -45,7 +48,6 @@ class WithdrawalCryptoResource
         $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->plan_id, 2, 1, floatval('-' . $amount), 0.000000, $description);
 
         if ($debit) {
-
 
             // $coin = Coin::where('id', $coin_id)->first();
             // $amount = $amount / $coin->price_brl;

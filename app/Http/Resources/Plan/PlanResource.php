@@ -116,6 +116,7 @@ class PlanResource
         foreach ($plans as $plan) {
             $this->dispatchIncomes($plan);
         }
+        return $plans;
     }
 
     /**
@@ -150,13 +151,14 @@ class PlanResource
             $rent = $this->calculePercent($plan, $data_plan, $percent);
 
             $description = 'Ganho de rendimento do user: ' . $user->name;
-
-            (new CreditResource())->create($user->sponsor_id, $plan->coin_id, 4, $status_id, floatval($rent), floatval(0.000000), $description);
+            (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 4, $status_id, floatval($rent), 0, $description);
             $user_sponsor = User::where('id', $user->sponsor_id)->first();
 
-            $balance_sponsor = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user_sponsor);
+            $balance_sponsor = (new CreditBalanceResource())->checkBalanceByCoinId($user_sponsor);
             $balance_sponsor = $user_sponsor->creditBalance;
+
             $balance_sponsor->income += $income;
+            $balance_sponsor->balance_enable += $income;
             $balance_sponsor->save();
         }
 

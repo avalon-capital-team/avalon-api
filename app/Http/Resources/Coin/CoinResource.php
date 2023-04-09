@@ -64,8 +64,8 @@ class CoinResource
         $real->save();
 
         foreach ($coins as $coin) {
+            $updata =  $this->findBySymbol($coin['symbol']);
 
-            $updata = Coin::where('symbol', $coin['symbol'])->first();
             if (!$updata) {
                 $updata = Coin::create([
                     'name' => $coin['name'],
@@ -87,7 +87,7 @@ class CoinResource
                 $updata->save();
             }
         }
-        return true;
+        return $updata;
     }
 
     /**
