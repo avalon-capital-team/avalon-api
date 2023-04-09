@@ -169,8 +169,8 @@ class PlanResource
 
         $balance->income += $income;
         $balance->balance_enable += $income;
-
         $plan->income += $income;
+        $plan->amount += $income;
         $user->userPlan->income += $income;
         $user->userPlan->amount += $income;
 
