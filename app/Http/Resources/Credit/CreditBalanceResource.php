@@ -110,7 +110,7 @@ class CreditBalanceResource
     {
         $credits = Credit::where('user_id', $user->id)
             ->where('type_id', 3)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->select('amount', 'base_amount', 'created_at')
             ->get();
 

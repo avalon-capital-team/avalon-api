@@ -1,31 +1,22 @@
 <?php
 
-namespace App\Nova\Models\Coin;
+namespace App\Nova\Models\Data;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Badge;
 use Eminiarts\Tabs\Traits\HasTabs;
-use Eminiarts\Tabs\Tabs;
 
-class Coin extends Resource
+class DataPercent extends Resource
 {
-    use HasTabs;
-
-
-
-
     /**
      * The model the resource corresponds to.
      *
-     * @var string
+     * @var class-string<\App\Models\Data\DataPercent>
      */
-    public static $model = \App\Models\Coin\Coin::class;
+    public static $model = \App\Models\Data\DataPercent::class;
 
     /**
      * Get the displayable label of the resource.
@@ -34,7 +25,7 @@ class Coin extends Resource
      */
     public static function label()
     {
-        return __('Moedas');
+        return __('Porcentagem');
     }
 
     /**
@@ -44,7 +35,7 @@ class Coin extends Resource
      */
     public static function singularLabel()
     {
-        return __('Moeda');
+        return __('Porcentagem');
     }
 
     /**
@@ -52,7 +43,7 @@ class Coin extends Resource
      *
      * @var string
      */
-    public static $title = 'symbol';
+    public static $title = 'Porcentagem';
 
     /**
      * The columns that should be searched.
@@ -60,7 +51,7 @@ class Coin extends Resource
      * @var array
      */
     public static $search = [
-        'name', 'symbol'
+        'name'
     ];
 
     /**
@@ -74,24 +65,11 @@ class Coin extends Resource
         return [
             ID::make()->sortable(),
 
-            Badge::make('Tipo', 'type')->map([
-                'coin' => 'warning',
-                'fiat' => 'success'
-            ]),
-
-            Boolean::make('Visisvel', 'show_wallet')
-                ->sortable()
-                ->rules('required', 'string', 'max:254'),
-
             Text::make('Nome', 'name')
                 ->sortable()
                 ->rules('required', 'string', 'max:254'),
 
-            Text::make('Símbolo', 'symbol')
-                ->sortable()
-                ->rules('required', 'string', 'max:254'),
-
-            Text::make('Decimais', 'decimals')
+            Text::make('Porcentagem', 'porcent')
                 ->sortable()
                 ->rules('required', 'string', 'max:254'),
 

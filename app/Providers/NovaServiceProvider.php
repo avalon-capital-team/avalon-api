@@ -45,6 +45,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(\App\Nova\Models\Data\DataPlan::class),
                 ])->icon('briefcase')->collapsable(),
 
+                MenuSection::make('Porcentagem', [
+                    MenuItem::resource(\App\Nova\Models\Data\DataPercent::class),
+                ])->icon('variable')->collapsable(),
+
                 MenuSection::make('Moedas', [
                     MenuItem::resource(\App\Nova\Models\Coin\Coin::class),
                 ])->icon('currency-dollar')->collapsable(),
