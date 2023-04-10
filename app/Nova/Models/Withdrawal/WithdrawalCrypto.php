@@ -18,10 +18,12 @@ use Eminiarts\Tabs\Traits\HasTabs;
 
 class WithdrawalCrypto extends Resource
 {
+    use HasTabs;
+
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Withdrawal\WithdrawalCrypto>
+     * @var string
      */
     public static $model = \App\Models\Withdrawal\WithdrawalCrypto::class;
 
@@ -81,53 +83,30 @@ class WithdrawalCrypto extends Resource
                     return currency_format($value, $this->resource->coin->symbol);
                 }),
 
-            Badge::make('Tipo', 'type', function () {
-                return $this->type === 'crypto' ? 'USDT' : 'BTC';
-            })->map([
-                'BTC' => 'warning',
-                'USDT' => 'info'
-            ])->hideFromDetail(),
+            Text::make('Endereço da Wallet', 'data->address')->onlyOnDetail(),
 
-            // Text::make('Chave', 'data->key')->onlyOnDetail(),
+            Text::make('Rede da Wallet', 'data->network')->onlyOnDetail(),
 
-            // Text::make('Tipo da chave', 'data->key_type')->onlyOnDetail(),
+            Badge::make('Status', 'status_id')
+                ->map([
+                    1 => 'danger',
+                    2 => 'success',
+                    3 => 'warning',
+                ])
+                ->label(function ($value) {
+                    return $this->resource->status->name;
+                })
+                ->sortable(),
 
-            // Text::make('Account Type', 'data->type')->onlyOnDetail(),
+            DateTime::make('Criado em', 'created_at'),
 
-            // Text::make('Nome do banco', 'data->bank_name')->onlyOnDetail(),
+            DateTime::make('Aprovado em', 'approved_at')->hideFromIndex(),
 
-            // Text::make('Código do banco', 'data->bank_code')->onlyOnDetail(),
+            Text::make('Motivo da rejeição', 'reject_motive')->hideFromIndex(),
 
-            // Text::make('Agência', 'data->agency')->onlyOnDetail(),
+            DateTime::make('Rejeitado em', 'rejected_at')->hideFromIndex(),
 
-            // Text::make('Dígito da agencia', 'data->agency_digit')->onlyOnDetail(),
-
-            // Text::make('Conta', 'data->account')->onlyOnDetail(),
-
-            // Badge::make('Status', 'status_id')
-            //     ->map([
-            //         1 => 'danger',
-            //         2 => 'success',
-            //         3 => 'warning',
-            //     ])
-            //     ->label(function ($value) {
-            //         return $this->resource->status->name;
-            //     })
-            //     ->sortable(),
-
-
-            // DateTime::make('Criado em', 'created_at'),
-
-            // Text::make('Confirmação do pagamento', 'payment_confirmation')
-            //     ->onlyOnDetail(),
-
-            // DateTime::make('Aprovado em', 'approved_at')->hideFromIndex(),
-
-            // Text::make('Motivo da rejeição', 'reject_motive')->hideFromIndex(),
-
-            // DateTime::make('Rejeitado em', 'rejected_at')->hideFromIndex(),
-
-            // AuditableLog::make(),
+            AuditableLog::make(),
 
         ];
     }
@@ -140,7 +119,12 @@ class WithdrawalCrypto extends Resource
      */
     public function cards(NovaRequest $request)
     {
-        return [];
+        return [
+            (new \App\Nova\Metrics\Withdrawal\WithdrawalCrypto\WithdrawalCryptoApproved())->width('1/4'),
+            (new \App\Nova\Metrics\Withdrawal\WithdrawalCrypto\WithdrawalCryptoPending())->width('1/4'),
+            (new \App\Nova\Metrics\Withdrawal\WithdrawalCrypto\WithdrawalCryptoCancelled())->width('1/4'),
+            (new \App\Nova\Metrics\Withdrawal\WithdrawalCrypto\WithdrawalCryptoPartitionByStatus())->width('1/4'),
+        ];
     }
 
     /**
@@ -173,6 +157,37 @@ class WithdrawalCrypto extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new ApproveWithdrawal(\App\Models\Withdrawal\WithdrawalCrypto::get()),
+            new RejectWithdrawal(\App\Models\Withdrawal\WithdrawalCrypto::get()),
+        ];
+    }
+    /**
+     * Authorize to create
+     */
+    public static function authorizedToCreate(Request $request)
+    {
+        return false;
+    }
+    /**
+     * Authorize to delete
+     */
+    public function authorizedToDelete(Request $request)
+    {
+        return false;
+    }
+    /**
+     * Authorize to delete
+     */
+    public function authorizedToUpdate(Request $request)
+    {
+        return false;
+    }
+    /**
+     * Authorize to replicate
+     */
+    public function authorizedToReplicate(Request $request)
+    {
+        return false;
     }
 }

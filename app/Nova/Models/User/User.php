@@ -2,13 +2,10 @@
 
 namespace App\Nova\Models\User;
 
-use App\Nova\Actions\ChangeStatusModel;
 use App\Nova\Actions\User\ChangeUserType;
 use App\Nova\Metrics\CountModel;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\Image;
-use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
@@ -16,11 +13,9 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
 use Eminiarts\Tabs\Tabs;
 use Eminiarts\Tabs\Traits\HasTabs;
-use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Badge;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Select;
 
 class User extends Resource
@@ -91,14 +86,14 @@ class User extends Resource
                 } else if ($this->type == 'mananger') {
                     return 'Gestor';
                 } else  if ($this->type == 'advisor') {
-                    return 'Acessor';
+                    return 'Assessor';
                 } else {
                     return 'Admin';
                 }
             })->map([
                 'Usuário' => 'success',
                 'Gestor' => 'warning',
-                'Acessor' => 'info',
+                'Assessor' => 'info',
                 'Admin' => 'danger'
             ]),
 
@@ -156,11 +151,11 @@ class User extends Resource
                         return $this->type == 'admin';
                     }),
 
-                HasOne::make('Segurança', 'security', 'App\Nova\Models\User\UserSecurity')
-                    ->exceptOnForms()
-                    ->hideFromDetail(function () {
-                        return $this->type == 'admin';
-                    }),
+                // HasOne::make('Segurança', 'security', 'App\Nova\Models\User\UserSecurity')
+                //     ->exceptOnForms()
+                //     ->hideFromDetail(function () {
+                //         return $this->type == 'admin';
+                //     }),
             ]),
         ];
     }

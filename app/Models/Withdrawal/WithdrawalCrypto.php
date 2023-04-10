@@ -4,6 +4,9 @@ namespace App\Models\Withdrawal;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Coin\Coin;
+use App\Models\Credit\Credit;
+use App\Models\User;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use OwenIt\Auditing\Auditable;
 
@@ -29,11 +32,10 @@ class WithdrawalCrypto extends Model implements AuditableContract
         'user_id',
         'debit_id',
         'status_id',
-        'destination',
+        'type',
+        'reject_motive',
         'amount',
-        'fee',
-        'paid_at',
-        'hash'
+        'payment_confirmation'
     ];
 
     /**
@@ -42,7 +44,9 @@ class WithdrawalCrypto extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'paid_at' => 'datetime'
+        'approved_at' => 'datetime',
+        'rejected_at' => 'datetime',
+        'data' => 'array'
     ];
 
     /**

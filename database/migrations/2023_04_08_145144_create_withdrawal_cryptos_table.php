@@ -20,6 +20,8 @@ return new class extends Migration
             $table->unsignedInteger('debit_id')->nullable();
             $table->unsignedInteger('status_id')->nullable();
             $table->decimal('amount', 15, 6);
+            $table->string('type')->nullable();
+            $table->json('data')->nullable();
             $table->dateTime('paid_at')->nullable();
             $table->string('hash')->nullable();
             $table->string('destination')->nullable();
