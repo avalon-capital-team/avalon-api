@@ -78,12 +78,28 @@ class CoinResource
                     'volume_change_24h' => floatval($coin['quote']['USD']['volume_change_24h']),
                     'percent_change_24h' => floatval($coin['quote']['USD']['percent_change_24h']),
                 ]);
+
+                if ($coin['symbol'] = 'BTC') {
+                    $updata->show_wallet = true;
+                    $updata->save();
+                }
+                if ($coin['symbol'] = 'USDT') {
+                    $updata->show_wallet = true;
+                    $updata->save();
+                }
             } else {
                 $updata->price_usd = floatval($coin['quote']['USD']['price']);
                 $updata->price_brl = $this->calculatePriceBrl($coin['quote']['USD']['price'], $real->price_usd);
                 $updata->volume_24h = floatval($coin['quote']['USD']['volume_24h']);
                 $updata->volume_change_24h = floatval($coin['quote']['USD']['volume_change_24h']);
                 $updata->percent_change_24h = floatval($coin['quote']['USD']['percent_change_24h']);
+
+                if ($coin['symbol'] = 'BTC') {
+                    $updata->show_wallet = true;
+                }
+                if ($coin['symbol'] = 'USDT') {
+                    $updata->show_wallet = true;
+                }
                 $updata->save();
             }
         }

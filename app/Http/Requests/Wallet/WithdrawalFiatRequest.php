@@ -28,8 +28,8 @@ class WithdrawalFiatRequest extends FormRequest
         return [
             'amount' => ['required', 'numeric', 'min:25', new CheckLimitWithdrawalRule()],
             'coin_id' => ['required'],
-            'type' => ['required', 'string', 'in:bank,pix'],
-            'code' => ['required', 'min:6', new CheckVerificationCodeRule('withdrawal_fiat')]
+            'type' => ['required', 'string', 'in:bank,pix,crypto'],
+            'code' => ['required', 'min:6', new CheckVerificationCodeRule('withdrawal')]
         ];
     }
 

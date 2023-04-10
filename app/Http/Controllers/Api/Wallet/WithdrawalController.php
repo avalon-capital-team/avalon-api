@@ -28,7 +28,6 @@ class WithdrawalController extends Controller
     {
         try {
             $validated = $request->validated();
-
             if ($validated['coin_id'] == '1') {
                 (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
             }

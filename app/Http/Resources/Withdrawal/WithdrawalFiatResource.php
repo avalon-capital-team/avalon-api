@@ -39,19 +39,13 @@ class WithdrawalFiatResource
             $description = 'Saque para o PIX';
         }
 
+
         # Create debit
-        $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->plan_id, 2, 1, floatval('-' . $amount), 0.000000, $description);
+        $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->id, 2, 1, floatval('-' . $amount), $user->userPlan->amount, $description);
 
         if ($debit) {
             # Create Withdrawal
-            $withdrawal = new WithdrawalFiat();
-            $withdrawal->coin_id = $coin_id;
-            $withdrawal->user_id = $user->id;
-            $withdrawal->debit_id = $debit->id;
-            $withdrawal->status_id = 3;
-            $withdrawal->type = $type;
-            $withdrawal->data = $user->financial()->where('type', $type)->first()->getData();
-            $withdrawal->save();
+            $this->withdrawalFiat($coin_id, $user, $debit, $amount, 3, $type);
 
             # Update withdrawal field in balance
             (new CreditBalanceResource())->updateField(
@@ -72,6 +66,21 @@ class WithdrawalFiatResource
         }
 
         throw new \Exception(__('Não foi possível criar a solicitação de Saque.'));
+    }
+
+    public function withdrawalFiat($coin_id, $user, $debit, $amount, $status_id, $type)
+    {
+        $withdrawal = WithdrawalFiat::create([
+            'coin_id' => $coin_id,
+            'user_id' => $user->id,
+            'debit_id' => $debit->id,
+            'amount' => $amount,
+            'status_id' => $status_id,
+            'type' => $type,
+            'data' => $user->financial()->where('type', $type)->first()->getData()
+        ]);
+
+        return $withdrawal;
     }
 
     /**

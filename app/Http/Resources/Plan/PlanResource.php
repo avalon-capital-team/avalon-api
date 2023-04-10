@@ -9,6 +9,7 @@ use App\Models\Coin\Coin;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Models\Data\DataPercent;
+use App\Nova\Models\Coin\Coin as CoinCoin;
 use DateTime;
 
 
@@ -141,6 +142,7 @@ class PlanResource
     {
 
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
+        $coin = Coin::where('id', $plan->coin_id)->first();
         $user = User::where('id', $plan->user_id)->first();
         $percent = DataPercent::where('tag', 'sponsor')->first();
 
@@ -154,7 +156,7 @@ class PlanResource
             (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 4, $status_id, floatval($rent), 0, $description);
             $user_sponsor = User::where('id', $user->sponsor_id)->first();
 
-            $balance_sponsor = (new CreditBalanceResource())->checkBalanceByCoinId($user_sponsor);
+            $balance_sponsor = (new CreditBalanceResource())->checkBalanceByCoinId($user_sponsor, $coin);
             $balance_sponsor = $user_sponsor->creditBalance;
 
             $balance_sponsor->income += $income;
@@ -165,7 +167,7 @@ class PlanResource
         $description = 'Rendimento mensal';
         (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($plan->amount),  $description);
 
-        $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user);
+        $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
 
         $balance->income += $income;
         $balance->balance_enable += $income;

@@ -205,9 +205,9 @@ class CreditBalanceResource
      * @param  int $balanceId
      * @return \App\Models\Credit\CreditBalance
      */
-    public function getBalanceByCoinIdAndBalanceId(User $user)
+    public function getBalanceByCoinIdAndBalanceId(User $user, $coin_id)
     {
-        return $user->creditBalance()->where('user_id', $user->id)->first();
+        return $user->creditBalance()->where('user_id', $user->id)->where('coin_id', $coin_id)->first();
     }
 
     /**
@@ -241,12 +241,12 @@ class CreditBalanceResource
      * @param  \App\Models\Coin\Coin $coin
      * @return \App\Models\Credit\CreditBalance
      */
-    public function checkBalanceByCoinId(User $user)
+    public function checkBalanceByCoinId(User $user, Coin $coin)
     {
-        $balance = CreditBalance::where('user_id', $user->id)->first();
+        $balance = CreditBalance::where('user_id', $user->id)->where('coin_id', $coin->id)->first();
         if (!$balance) {
-            $user->creditBalance()->create();
-            $balance =  CreditBalance::where('user_id', $user->id)->first();
+            $user->creditBalance()->create(['coin_id' => $coin->id, 'show_wallet' => 1]);
+            $balance =  CreditBalance::where('user_id', $user->id)->where('coin_id', $coin->id)->first();
         }
 
         return $balance;

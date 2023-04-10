@@ -35,6 +35,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
                 MenuSection::make('Saques', [
                     MenuItem::resource(\App\Nova\Models\Withdrawal\WithdrawalFiat::class),
+                    MenuItem::resource(\App\Nova\Models\Withdrawal\WithdrawalCrypto::class),
                 ])->icon('upload')->collapsable(),
 
                 MenuSection::make('Extratos', [
