@@ -52,6 +52,6 @@ class WithdrawalFiatPending extends Value
      */
     public function name()
     {
-        return 'Saques Pendente';
+        return 'Saques Pendente BRL';
     }
 }

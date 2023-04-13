@@ -9,6 +9,20 @@ use Laravel\Nova\Metrics\Value;
 class UserCount extends Value
 {
     /**
+     * Variables.
+     */
+    protected $type;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct($type)
+    {
+        $this->type = $type;
+    }
+    /**
      * Calculate the value of the metric.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
@@ -16,7 +30,7 @@ class UserCount extends Value
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->count($request, User::where('type', 'user'));
+        return $this->count($request, User::where('type', $this->type));
     }
 
     /**
