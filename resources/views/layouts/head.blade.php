@@ -14,8 +14,11 @@
 
 <title> {{{$title}}} @section('title')@show</title>
 
-
-<link rel="icon" href="images/favicon.png" sizes="32x32" />
+<!-- <link rel="icon" sizes="16x16" href="/images/favicon.png"> -->
+<!-- <link rel="icon" href="images/favicon.png" sizes="32x32" /> -->
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
 
 <link rel="stylesheet" href="{{ mix('css/all.css') }}">
 
