@@ -1,13 +1,31 @@
 <?php
 
-namespace App\Nova\Metrics\Order;
+namespace App\Nova\Metrics\Plan;
 
-use App\Models\Order\Order;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
+use App\Models\Coin\Coin;
+use App\Models\Plan\Plan;
 
-class TotalSaleAll extends Value
+class PlanRent extends Value
 {
+    /**
+     * Variables.
+     */
+    protected $coin_id;
+    protected $coin;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct($coin_id)
+    {
+        $this->coin_id = $coin_id;
+        $this->coin = Coin::find($coin_id);
+    }
+
     /**
      * Get the displayable name of the metric
      *
@@ -15,7 +33,7 @@ class TotalSaleAll extends Value
      */
     public function name()
     {
-        return 'Total dos Aportes';
+        return 'Rendimento total em: ' . $this->coin->symbol;
     }
 
     /**
@@ -26,7 +44,7 @@ class TotalSaleAll extends Value
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->sum($request, Order::class, 'total')->prefix('R$')->format('0,0.00');
+        return $this->sum($request, Plan::where('coin_id', $this->coin_id), 'amount')->format('0.00');
     }
 
     /**
@@ -37,13 +55,13 @@ class TotalSaleAll extends Value
     public function ranges()
     {
         return [
-            30 => __('30 Dias'),
-            60 => __('60 Dias'),
-            365 => __('365 Dias'),
-            'TODAY' => __('Hoje'),
-            'MTD' => __('Neste mês'),
-            'QTD' => __('Semestre'),
-            'YTD' => __('Ano'),
+            30 => __('30 Days'),
+            60 => __('60 Days'),
+            365 => __('365 Days'),
+            'TODAY' => __('Today'),
+            'MTD' => __('Month To Date'),
+            'QTD' => __('Quarter To Date'),
+            'YTD' => __('Year To Date'),
         ];
     }
 
