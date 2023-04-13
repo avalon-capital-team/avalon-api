@@ -52,6 +52,6 @@ class WithdrawalCryptoPending extends Value
      */
     public function name()
     {
-        return 'Saques Pendente em Crypto';
+        return 'Saques Pendente';
     }
 }
