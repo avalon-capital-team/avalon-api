@@ -30,6 +30,7 @@ class PlanResource
                 'plan_id',
                 'coin_id',
                 'payment_voucher_url',
+                'payment_method_id',
                 'token',
                 'amount',
                 'income',
