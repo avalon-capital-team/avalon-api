@@ -160,6 +160,9 @@ Route::group(['prefix' => 'graphic'], function () {
 # Helpers
 Route::group(['prefix' => 'helpers'], function () {
 
+    # Coins
+    Route::get('coins', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllCoins']);
+
     # Banks
     Route::get('banks', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllBanks']);
 

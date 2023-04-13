@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 8);
             $table->decimal('income', 15, 8);
             $table->boolean('acting')->default(false);
+            $table->boolean('withdrawal_report')->default(false);
             $table->string('payment_voucher_url')->nullable();
             $table->dateTime('activated_at')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();

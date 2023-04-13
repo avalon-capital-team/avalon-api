@@ -20,11 +20,7 @@
                             <tr style="font-family:Helvetica,Arial,sans-serif;padding:0;text-align:left;vertical-align:top">
                                 <td class="miro__col-header-logo" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#23262e;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:400;hyphens:auto;line-height:1.43;margin:0;padding:0;padding-top:32px;text-align:left;vertical-align:top;width:50%;word-wrap:break-word">
                                     <a href="/" target="_blank" style="Margin:0;color:#000;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.43;margin:0;padding:0;text-align:left;text-decoration:none">
-                                        <img src="{{asset('images/icon.png')}}" style="-ms-interpolation-mode:bicubic;border:none;clear:both;display:block;font-family:Helvetica,Arial,sans-serif;height:30px;max-height:100%;max-width:100%;outline:0;text-decoration:none;width:auto">
-                                    </a>
-                                </td>
-                                <td class="miro__col-header-btn" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#23262e;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:400;hyphens:auto;line-height:1.43;margin:0;padding:0;padding-top:26px;text-align:right;vertical-align:top;width:50%;word-wrap:break-word">
-                                    <a href="{{config('app.url_frontend')}}" class="miro-btn" target="_blank" style="Margin:0;background-color:#fff;border:1px solid #23262e;border-radius:4px;box-sizing:border-box;color:#23262e!important;cursor:pointer;display:inline-block;font-family:Helvetica,Arial,sans-serif;font-size:16px!important;font-stretch:normal;font-style:normal;font-weight:400;height:48px;letter-spacing:normal;line-height:48px!important;margin:0;padding:0;text-align:center;text-decoration:none;white-space:nowrap;width:128px"><span style="font-family:Helvetica,Arial,sans-serif">Acessar</span>
+                                        <img src="{{asset('images/logo.png')}}" style="-ms-interpolation-mode:bicubic;border:none;clear:both;display:block;font-family:Helvetica,Arial,sans-serif;height:30px;max-height:100%;max-width:100%;outline:0;text-decoration:none;width:auto">
                                     </a>
                                 </td>
                             </tr>

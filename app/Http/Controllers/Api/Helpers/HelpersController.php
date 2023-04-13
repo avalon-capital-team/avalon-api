@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Helpers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Coin\CoinResource;
 use App\Http\Resources\Data\DataCountryResource;
 use App\Http\Resources\Data\DataGenreResource;
 use App\Http\Resources\Data\DataPlanResource;
@@ -12,6 +13,17 @@ use App\Http\Resources\Data\DataPrivacyTypeResource;
 
 class HelpersController extends Controller
 {
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllCoins()
+    {
+        return response()->json([
+            'status'  => true,
+            'plans' => (new CoinResource())->getCoins()->toArray()
+        ]);
+    }
+
     /**
      * @return \Illuminate\Http\JsonResponse
      */

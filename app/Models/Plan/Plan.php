@@ -36,6 +36,7 @@ class Plan extends Model implements AuditableContract
         'amount',
         'income',
         'acting',
+        'withdrawal_report',
         'payment_voucher_url',
     ];
 
@@ -55,11 +56,14 @@ class Plan extends Model implements AuditableContract
      * createOrder
      *
      * @param  App\Models\User $user
+     * @param  int $user_plan_id
+     * @param  int $plan_id
      * @param  int $coin_id
-     * @param  int $payment_method
+     * @param  float $amount
+     * @param  bool $withdrawal_report
      * @return \App\Models\Plan\Plan || boolean;
      */
-    public function createPlan(User $user, int $user_plan_id, int $plan_id, int $coin_id, float $amount,)
+    public function createPlan(User $user, int $user_plan_id, int $plan_id, int $coin_id, float $amount, bool $withdrawal_report = false)
     {
         $plan = Plan::create([
             'user_id' => $user->id,
@@ -69,6 +73,7 @@ class Plan extends Model implements AuditableContract
             'amount' => $amount,
             'income' => 0.000000,
             'acting' => 0,
+            'withdrawal_report' => $withdrawal_report,
         ]);
 
         return $plan;

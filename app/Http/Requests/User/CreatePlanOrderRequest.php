@@ -30,7 +30,8 @@ class CreatePlanOrderRequest extends FormRequest
             'plan_id' => ['required', 'exists:data_plans,id'],
             'coin_id' => ['required', 'exists:coins,id'],
             'payment_method' => ['exists:payment_methods,id'],
-            'amount' => ['required', 'string']
+            'amount' => ['required', 'string'],
+            'withdrawal_report' => ['required']
         ];
     }
 
@@ -45,7 +46,8 @@ class CreatePlanOrderRequest extends FormRequest
             'plan_id.required' => __('Selecione o plano que deseja contratar.'),
             'coin_id.required' => __('Selecione o tipo da moeda que deseja pagar.'),
             'payment_method.required' => __('Selecione o método que deseja depositar.'),
-            'amount.required' => __('Nessesário preencher o valor da orden')
+            'amount.required' => __('Nessesário preencher o valor da orden'),
+            'withdrawal_report.required' => __('Nessesário setar saque mensal')
         ];
     }
 }

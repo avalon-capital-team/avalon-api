@@ -27,7 +27,7 @@ class ApprovePaymentVoucher extends Action
     {
         foreach ($models as $model) {
             $model->acting = 1;
-            (new CreditBalanceResource())->updateBalance($model);
+            (new CreditBalanceResource())->approveBalance($model);
             $model->activated_at = Carbon::now();
             $model->save();
             $this->markAsFinished($model);

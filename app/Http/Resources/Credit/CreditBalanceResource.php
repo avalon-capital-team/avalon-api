@@ -276,7 +276,7 @@ class CreditBalanceResource
      * @param  arrey $data
      * @return bool
      */
-    public function updateBalance($data)
+    public function approveBalance($data)
     {
         $coin = (new CoinResource())->findById($data['coin_id']);
         $user = User::where('id', ($data['user_id']))->first();
