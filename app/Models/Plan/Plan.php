@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\User\UserPlan;
 use App\Models\Coin\Coin;
 use App\Models\Data\DataPlan;
+use App\Nova\Models\System\PaymentMethod;
 
 class Plan extends Model implements AuditableContract
 {
@@ -38,6 +39,7 @@ class Plan extends Model implements AuditableContract
         'acting',
         'withdrawal_report',
         'payment_voucher_url',
+        'payment_method_id',
     ];
 
     public static function boot()
@@ -61,9 +63,10 @@ class Plan extends Model implements AuditableContract
      * @param  int $coin_id
      * @param  float $amount
      * @param  bool $withdrawal_report
-     * @return \App\Models\Plan\Plan || boolean;
+     * @param  int $payment_method
+     * @return \App\Models\Plan\Plan;
      */
-    public function createPlan(User $user, int $user_plan_id, int $plan_id, int $coin_id, float $amount, bool $withdrawal_report = false)
+    public function createPlan(User $user, int $user_plan_id, int $plan_id, int $coin_id, float $amount, bool $withdrawal_report = false, int $payment_method)
     {
         $plan = Plan::create([
             'user_id' => $user->id,
@@ -74,6 +77,7 @@ class Plan extends Model implements AuditableContract
             'income' => 0.000000,
             'acting' => 0,
             'withdrawal_report' => $withdrawal_report,
+            'payment_method_id' => $payment_method
         ]);
 
         return $plan;
@@ -97,6 +101,16 @@ class Plan extends Model implements AuditableContract
     public function coin()
     {
         return $this->belongsTo(Coin::class, 'coin_id');
+    }
+
+    /**
+     * Get the plan detains
+     *
+     * @return \App\Models\Data\DataPlan
+     */
+    public function payment_method()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
     }
 
     /**
