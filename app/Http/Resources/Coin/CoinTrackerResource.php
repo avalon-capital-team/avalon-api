@@ -32,6 +32,18 @@ class CoinTrackerResource
         $bitget = $this->coinTracking('513');
         $this->saveCoinTracking($bitget['data'], 'Bitget');
 
+        $bitget = $this->coinTracking('302');
+        $this->saveCoinTracking($bitget['data'], 'Gate.io');
+
+        $bitget = $this->coinTracking('102');
+        $this->saveCoinTracking($bitget['data'], 'Huobi');
+
+        $bitget = $this->coinTracking('1149');
+        $this->saveCoinTracking($bitget['data'], 'Crypto.com');
+
+        $bitget = $this->coinTracking('544');
+        $this->saveCoinTracking($bitget['data'], 'Mexc');
+
 
         return true;
     }

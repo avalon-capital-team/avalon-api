@@ -83,9 +83,7 @@ class Plan extends Resource
      */
     public function cards(NovaRequest $request)
     {
-        return [
-            new \App\Nova\Metrics\Plan\PlanCount(),
-        ];
+        return [];
     }
 
     /**

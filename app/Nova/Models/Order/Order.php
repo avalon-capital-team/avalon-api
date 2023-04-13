@@ -90,27 +90,6 @@ class Order extends Resource
                 ->displayUsing(function ($total) {
                     return currency_format($total, $this->resource->coin->symbol);
                 }),
-
-            // Badge::make('Status', 'status_id')
-            //     ->map([
-            //         1 => 'warning',
-            //         2 => 'info',
-            //         3 => 'danger',
-            //         4 => 'danger',
-            //         5 => 'danger',
-            //         6 => 'success',
-            //     ])
-            //     ->label(function ($value) {
-            //         return $this->resource->status->name;
-            //     })
-            //     ->sortable(),
-
-
-            // Tabs::make('Relations', [
-            //     HasMany::make('Histórico', 'orderHistory', 'App\Nova\Models\Order\OrderHistory'),
-            //     HasMany::make('Resumo do Total', 'orderTotal', 'App\Nova\Models\Order\OrderTotal'),
-            //     AuditableLog::make(),
-            // ]),
         ];
     }
 
@@ -122,9 +101,7 @@ class Order extends Resource
      */
     public function cards(NovaRequest $request)
     {
-        return [
-            new \App\Nova\Metrics\Order\TotalSaleAll(),
-        ];
+        return [];
     }
 
     /**
