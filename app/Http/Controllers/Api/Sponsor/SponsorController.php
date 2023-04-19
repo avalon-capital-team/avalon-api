@@ -99,7 +99,7 @@ class SponsorController extends Controller
             }
 
             if (!$user) {
-                throw new \Exception('Não foi possível adicionar o cliente como gestor. Tente novamente mais tarde!');
+                throw new \Exception('Não foi possível adicionar o cliente como gestor. Tente novamente mais tarde!', 403);
             }
 
             return response()->json([

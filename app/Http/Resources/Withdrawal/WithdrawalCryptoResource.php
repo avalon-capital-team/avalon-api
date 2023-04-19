@@ -31,15 +31,15 @@ class WithdrawalCryptoResource
         $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user, $coin_id);
 
         if (!$balance) {
-            throw new \Exception(__('Carteira não encontrada.'));
+            throw new \Exception('Carteira não encontrada.', 403);
         }
 
         if ($balance->income < $amount) {
-            throw new \Exception(__('Você não tem saldo de rendimento suficiente.'));
+            throw new \Exception('Você não tem saldo de rendimento suficiente.', 403);
         }
 
         if ($balance->balance_enable < $amount) {
-            throw new \Exception(__('Você não tem saldo suficiente.'));
+            throw new \Exception('Você não tem saldo suficiente.', 403);
         }
 
         # Description
@@ -74,7 +74,7 @@ class WithdrawalCryptoResource
             return true;
         }
 
-        throw new \Exception(__('Não foi possível criar a solicitação de Saque.'));
+        throw new \Exception('Não foi possível criar a solicitação de Saque.', 403);
     }
 
     public function withdrawalCrypto($coin_id, $user, $debit, $amount, $status_id, $type)

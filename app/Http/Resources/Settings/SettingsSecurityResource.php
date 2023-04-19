@@ -70,12 +70,12 @@ class SettingsSecurityResource
         $validated = $request->validated();
 
         if ($request->user()->security->google_2fa) {
-            throw new \Exception(__('Você já tem o 2FA ativo, não pode ativa novamente, apenas após desativar.'), 403);
+            throw new \Exception('Você já tem o 2FA ativo, não pode ativa novamente, apenas após desativar.', 403);
         }
 
         $valid = Google2FA::verifyKey($validated['secret'], $validated['code_twoauth']);
         if (!$valid) {
-            throw new \Exception(__('Código 2FA informado esta incorreto.'));
+            throw new \Exception('Código 2FA informado esta incorreto.', 403);
         }
 
         return $request->user()->security->update([
@@ -94,12 +94,12 @@ class SettingsSecurityResource
         $validated = $request->validated();
 
         if (!$request->user()->security->google_2fa) {
-            throw new \Exception(__('Você não tem o 2FA ativo para poder desativar.'), 403);
+            throw new \Exception('Você não tem o 2FA ativo para poder desativar.', 403);
         }
 
         $valid = Google2FA::verifyKey($request->user()->security->google_2fa, $validated['code_twoauth']);
         if (!$valid) {
-            throw new \Exception(__('Código 2FA informado esta incorreto.'));
+            throw new \Exception('Código 2FA informado esta incorreto.', 403);
         }
 
         return $request->user()->security->update([

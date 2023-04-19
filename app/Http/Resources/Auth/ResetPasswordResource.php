@@ -20,11 +20,11 @@ class ResetPasswordResource
         $passwordResetToken = (new PasswordResetTokenResource())->findByToken($validated['token']);
 
         if (!$passwordResetToken) {
-            throw new \Exception(__('Token de recuperação não encontrado'), 404);
+            throw new \Exception('Token de recuperação não encontrado', 404);
         }
 
         if (!$passwordResetToken->canUse()) {
-            throw new \Exception(__('Token de recuperação expirado'), 403);
+            throw new \Exception('Token de recuperação expirado', 403);
         }
 
         $user = (new UserResource())->findByEmail($passwordResetToken->email);

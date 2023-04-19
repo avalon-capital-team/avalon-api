@@ -99,7 +99,7 @@ class UserResource
         ]);
 
         if (!$user) {
-            throw new \Exception('Não foi possível se registrar. Tente novamente!');
+            throw new \Exception('Não foi possível se registrar. Tente novamente!', 403);
         }
 
         $user->notify(new RegisterNotification($user->id));
@@ -119,13 +119,13 @@ class UserResource
     {
         $sponsor = $this->findByUsername($username);
         if (!$sponsor) {
-            throw new \Exception('Username do indicador nao existe. Tente novamente!');
+            throw new \Exception('Username do indicador nao existe. Tente novamente!', 403);
         }
 
         $user->sponsor_id = $sponsor->id;
         $user->save();
         if (!$user) {
-            throw new \Exception('Não foi possível cadastrar o indicador. Tente novamente!');
+            throw new \Exception('Não foi possível cadastrar o indicador. Tente novamente!', 403);
         }
 
 

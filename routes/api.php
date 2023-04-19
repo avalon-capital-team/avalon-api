@@ -157,6 +157,11 @@ Route::group(['prefix' => 'graphic'], function () {
     Route::get('get-data', [App\Http\Controllers\Api\Graphic\GraphicDataController::class, 'getGraphic']);
 });
 
+# Wallet
+Route::group(['prefix' => 'wallet'], function () {
+    Route::post('create-deposit', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'deposit']);
+});
+
 # Helpers
 Route::group(['prefix' => 'helpers'], function () {
 

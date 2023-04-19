@@ -68,7 +68,7 @@ class Plan extends Model implements AuditableContract
      */
     public function createPlan(User $user, int $user_plan_id, int $plan_id, int $coin_id, float $amount, bool $withdrawal_report = false, int $payment_method)
     {
-        $plan = Plan::create([
+        return Plan::create([
             'user_id' => $user->id,
             'user_plan_id' => $user_plan_id,
             'plan_id' => $plan_id,
@@ -79,8 +79,6 @@ class Plan extends Model implements AuditableContract
             'withdrawal_report' => $withdrawal_report,
             'payment_method_id' => $payment_method
         ]);
-
-        return $plan;
     }
 
     /**

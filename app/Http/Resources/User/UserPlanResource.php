@@ -40,7 +40,12 @@ class UserPlanResource
         $status_id = 2;
         $description = 'Ordem do plano criada com sucesso';
 
-        (new CoinResource())->coinData();
+        if ($validated['coin_id'] != 1) {
+            (new CoinResource())->coinData();
+        } else {
+            (new CoinResource())->getPriceUSD();
+        }
+
         $coin = Coin::where('id', $validated['coin_id'])->first();
 
         $plan = (new Plan())->createPlan($user, $user->userPlan->id, $validated['plan_id'], $validated['coin_id'], $validated['amount'], $validated['withdrawal_report'], $validated['payment_method']);
@@ -59,7 +64,7 @@ class UserPlanResource
 
 
         if (!$user_plan && !$credit && !$plan) {
-            throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!');
+            throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!', 403);
         }
 
         return $plan;
@@ -84,13 +89,13 @@ class UserPlanResource
         } else if ($plan['coin_id'] == 3) {
             $plan->payment_voucher_url = 'https://etherscan.io/tx/' . $data['transfer_hash'];
         } else {
-            throw new \Exception('Não foi possível enviar seu comprovante!');
+            throw new \Exception('Não foi possível enviar seu comprovante!', 403);
         }
 
         if ($plan->save()) {
             return true;
         }
 
-        throw new \Exception('Não foi possível enviar seu comprovante!');
+        throw new \Exception('Não foi possível enviar seu comprovante!', 403);
     }
 }

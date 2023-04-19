@@ -53,11 +53,11 @@ class UserComplianceResource
 
         if ($document) {
             if ($document->status_id == 4) {
-                throw new \Exception('Você já enviou os documentos, estão aguardando a validação.');
+                throw new \Exception('Você já enviou os documentos, estão aguardando a validação.', 403);
             }
 
             if ($document->status_id == 2) {
-                throw new \Exception('Você já enviou os documento e estão ok!');
+                throw new \Exception('Você já enviou os documento e estão ok!', 403);
             }
         }
         $document->user_id = $user->id;
@@ -70,7 +70,7 @@ class UserComplianceResource
             return true;
         }
 
-        throw new \Exception('Não foi possível enviar seus documentos!');
+        throw new \Exception('Não foi possível enviar seus documentos!', 403);
     }
 
     /**
@@ -83,11 +83,11 @@ class UserComplianceResource
     public function getComplianceForm(User $user)
     {
         if ($user->settings->compliance) {
-            throw new \Exception('Os documentos já foram validados.');
+            throw new \Exception('Os documentos já foram validados.', 403);
         }
 
         if ($user->compliance->where('status_id', 1)->first()) {
-            throw new \Exception('Já existe uma validação em andamento.');
+            throw new \Exception('Já existe uma validação em andamento.', 403);
         }
 
         $type = ($user->document_type == 'CPF') ? 'Person' : 'Company';
@@ -107,11 +107,11 @@ class UserComplianceResource
     {
 
         if (!$user->birth_date) {
-            throw new \Exception('Para continuar você precisa informar sua data de aniversário em Meus Dados.');
+            throw new \Exception('Para continuar você precisa informar sua data de aniversário em Meus Dados.', 403);
         }
 
         if (!$user->name) {
-            throw new \Exception('Para continuar você precisa informar seu nome completo em Meus Dados.');
+            throw new \Exception('Para continuar você precisa informar seu nome completo em Meus Dados.', 403);
         }
     }
 
@@ -164,15 +164,15 @@ class UserComplianceResource
     public function startComplianceCompany(User $user, array $files)
     {
         if (!$user->data->business_activity_id) {
-            throw new \Exception('Para continuar você precisa informar so ramo de atividade em Meus Dados.');
+            throw new \Exception('Para continuar você precisa informar so ramo de atividade em Meus Dados.', 403);
         }
 
         if (!$user->responsible) {
-            throw new \Exception('Para continuar você precisa informar os dados do responsável em Meus Dados.');
+            throw new \Exception('Para continuar você precisa informar os dados do responsável em Meus Dados.', 403);
         }
 
         if (!$user->address) {
-            throw new \Exception('Para continuar você precisa informar o endereço em Meus Endereço.');
+            throw new \Exception('Para continuar você precisa informar o endereço em Meus Endereço.', 403);
         }
 
         $data = [
@@ -186,7 +186,7 @@ class UserComplianceResource
         ];
 
         if (!$user->responsible->splitName()['lastname']) {
-            throw new \Exception('O nome do representante esta incompleto. Informe o sobrenome.');
+            throw new \Exception('O nome do representante esta incompleto. Informe o sobrenome.', 403);
         }
 
         $data['responsible'] = [

@@ -37,6 +37,6 @@ class ForgotPasswordResource
             return "Instruções enviadas para $user->email";
         }
 
-        throw new \Exception('Ocorreu um erro. Tente novamente!');
+        throw new \Exception('Ocorreu um erro. Tente novamente!', 403);
     }
 }
