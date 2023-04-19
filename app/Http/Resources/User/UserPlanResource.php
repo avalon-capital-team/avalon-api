@@ -41,9 +41,9 @@ class UserPlanResource
         $description = 'Ordem do plano criada com sucesso';
 
         if ($validated['coin_id'] != 1) {
-            (new CoinResource())->coinData();
+            // (new CoinResource())->coinData();
         } else {
-            // (new CoinResource())->getPriceUSD();
+            (new CoinResource())->getPriceUSD();
         }
 
         $coin = Coin::where('id', $validated['coin_id'])->first();
