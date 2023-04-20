@@ -10,6 +10,8 @@ use App\Http\Resources\Data\DataPlanResource;
 use App\Http\Resources\Data\DataBankResource;
 use App\Http\Resources\Data\DataPrivacyTypeOptionResource;
 use App\Http\Resources\Data\DataPrivacyTypeResource;
+use App\Http\Resources\Deposit\DepositFiatResource;
+use App\Models\Deposit\DepositFiat;
 
 class HelpersController extends Controller
 {
@@ -98,6 +100,20 @@ class HelpersController extends Controller
         return response()->json([
             'status'  => true,
             'genres' => (new DataGenreResource())->getAll()->toArray()
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function approve()
+    {
+        $deposit = DepositFiat::where('id', 1)->first();
+
+        (new DepositFiatResource())->approveDeposit($deposit);
+        return response()->json([
+            'status'  => true,
+            'message' => 'Aprovado'
         ]);
     }
 }

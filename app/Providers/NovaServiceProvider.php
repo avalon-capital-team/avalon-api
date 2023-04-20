@@ -38,6 +38,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(\App\Nova\Models\Withdrawal\WithdrawalCrypto::class),
                 ])->icon('upload')->collapsable(),
 
+                MenuSection::make('Depósitos', [
+                    MenuItem::resource(\App\Nova\Models\Deposit\DepositFiat::class),
+                ])->icon('download')->collapsable(),
+
                 MenuSection::make('Extratos', [
                     MenuItem::resource(\App\Nova\Models\Credit\Credit::class),
                 ])->icon('cash')->collapsable(),

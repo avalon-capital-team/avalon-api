@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Deposit;
 
+use App\Helpers\FileUploadHelper;
 use App\Models\Deposit\DepositFiat;
 use App\Models\User;
 use App\Http\Resources\Coin\CoinResource;
@@ -20,7 +21,7 @@ class DepositFiatResource
      * @return \App\Models\Deposit\DepositFiat
      * @throws \Exception
      */
-    public function createDeposit(User $user, float $amount, string $payment_code)
+    public function create(User $user, float $amount, string $payment_code)
     {
         $coin = (new CoinResource())->findBySymbol('BRL');
 
@@ -78,18 +79,24 @@ class DepositFiatResource
      * Store receipt
      *
      * @param  \App\Models\Deposit\DepositFiat $deposit
-     * @param  string $receipt_url
+     * @param  string $file
      * @return \App\Models\Deposit\DepositFiat
      * @throws \Exception
      */
-    public function storeReceipt(DepositFiat $deposit, string $receipt_url)
+    public function storeReceipt(User $user, int $deposit_id, string $file)
     {
+        $deposit = DepositFiat::where('id', $deposit_id)->where('user_id', $user->id)->first();
+
         if ($deposit->status_id == 1) {
             $deposit->status_id = 2;
-            $deposit->receipt_file = $receipt_url;
+            $deposit->receipt_file = (new FileUploadHelper())->storeFile($file, 'users/deposits');
             $deposit->save();
 
             return $deposit;
+        }
+
+        if ($deposit->status_id == 2) {
+            throw new \Exception('O comprovante da intenção de deposito ja foi enviado e esta em analise!', 403);
         }
 
         throw new \Exception('Não é possível enviar comprovante desta intenção de deposito!', 403);
@@ -114,41 +121,43 @@ class DepositFiatResource
      */
     public function approveDeposit(DepositFiat $deposit)
     {
-        if (in_array($deposit->status_id, [1, 2])) {
-            # Calculate fees
-            $feeData =  1.3;
 
-            $description = 'Depósito (' . $deposit->token . ') realizado';
-            $amount = $feeData;
+        # Calculate fees
+        $feeData =  1.3;
 
-            if ($feeData > 0) {
-                $description = $description . ' ' . $feeData;
-            }
+        $description = 'Depósito (' . $deposit->token . ') realizado';
+        $amount = $feeData;
 
-            # Create Credit
-            (new CreditResource())->create(
-                $deposit->user,
-                $deposit->coin,
-                1,
-                1,
-                floatval($amount),
-                $description,
-            );
+        // if ($feeData > 0) {
+        //     $description = $description . ' ' . $feeData;
+        // }
 
-            # Change status to approved
-            $deposit->approved_at = date('Y-m-d H:i:s');
-            $deposit->approved_by = (auth()->user()) ? auth()->user()->id : null;
-            $deposit->status_id = 4;
-            $deposit->save();
+        # Create Credit
+        (new CreditResource())->create(
+            $deposit->user->id,
+            $deposit->coin->id,
+            0,
+            5,
+            2,
+            floatval($deposit->amount),
+            0,
+            $description,
+        );
 
-            # Store Fee
-            // if ($feeData['fee'] > 0) {
-            //     (new FeeHistoryResource())->storeFee($feeData, $deposit, $deposit->coin);
-            // }
+        # Change status to approved
+        $deposit->approved_at = date('Y-m-d H:i:s');
+        $deposit->approved_by = (auth()->user()) ? auth()->user()->id : null;
+        $deposit->status_id = 4;
+        $deposit->save();
 
-            # Send mail
-            // $deposit->user->notify(new DepositFiatNotification($deposit));
-        }
+        # Store Fee
+        // if ($feeData['fee'] > 0) {
+        //     (new FeeHistoryResource())->storeFee($feeData, $deposit, $deposit->coin);
+        // }
+
+        # Send mail
+        // $deposit->user->notify(new DepositFiatNotification($deposit));
+
     }
 
     /**

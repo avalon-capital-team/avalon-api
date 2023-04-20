@@ -42,6 +42,10 @@ class Main extends Dashboard
             (new \App\Nova\Metrics\Plan\PlanRent(1))->width('1/3'),
             (new \App\Nova\Metrics\Plan\PlanRent(2))->width('1/3'),
             (new \App\Nova\Metrics\Plan\PlanRent(3))->width('1/3'),
+            (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatReceiptSent())->width('1/4'),
+            (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatApproved())->width('1/4'),
+            (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatTotal())->width('1/4'),
+            (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatPartitionByStatus())->width('1/4'),
         ];
     }
 }

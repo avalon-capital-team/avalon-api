@@ -136,6 +136,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('device-token/update', [App\Http\Controllers\Api\Settings\SettingsDeviceTokenController::class, 'updateDeviceToken']);
     });
 
+    # Wallet
+    Route::group(['prefix' => 'wallet'], function () {
+        Route::post('create-deposit', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'deposit']);
+
+        Route::post('deposit/upload-file', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'uploadFile']);
+    });
+
     # TESTE RENTABIL
     Route::get('rentabil', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
 
@@ -157,13 +164,10 @@ Route::group(['prefix' => 'graphic'], function () {
     Route::get('get-data', [App\Http\Controllers\Api\Graphic\GraphicDataController::class, 'getGraphic']);
 });
 
-# Wallet
-Route::group(['prefix' => 'wallet'], function () {
-    Route::post('create-deposit', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'deposit']);
-});
-
 # Helpers
 Route::group(['prefix' => 'helpers'], function () {
+
+    Route::get('approve', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'approve']);
 
     # Coins
     Route::get('coins', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllCoins']);

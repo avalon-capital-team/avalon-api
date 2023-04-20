@@ -2,7 +2,6 @@
 
 namespace App\Models\Deposit;
 
-use App\Http\Resources\Coin\CoinResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Coin\Coin;
@@ -63,30 +62,30 @@ class DepositFiat extends Model implements AuditableContract
         self::creating(function ($model) {
             do {
                 $token = substr(md5(uniqid(1, true)), 0, 8);
-            } while (DepositFiat::where('token', $token)->exists());
+            } while (self::where('token', $token)->exists());
 
             $model->token = $token;
         });
     }
 
     /**
-     * Get user
+     * Get the Coin
      *
-     * @return App\Models\User
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Get the plan detains
-     *
-     * @return \App\Models\Data\DataPlan
+     * @return \App\Models\Coin\Coin
      */
     public function coin()
     {
-        return $this->belongsTo(Coin::class, 'coin_id');
+        return $this->hasOne(Coin::class, 'id', 'coin_id');
+    }
+
+    /**
+     * Get the User
+     *
+     * @return \App\Models\User
+     */
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     /**

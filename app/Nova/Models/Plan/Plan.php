@@ -118,7 +118,7 @@ class Plan extends Resource
     {
         return [
             new ApprovePaymentVoucher(\App\Models\Plan\Plan::get()),
-            new RejectPaymentVoucher(\App\Models\User\UserPlan::get()),
+            new RejectPaymentVoucher(\App\Models\Plan\Plan::get()),
         ];
     }
 

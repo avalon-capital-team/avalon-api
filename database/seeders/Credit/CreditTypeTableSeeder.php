@@ -42,6 +42,13 @@ class CreditTypeTableSeeder extends Seeder
                 'code' => 'rent_sponsor',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
+            ),
+            array(
+                'id'    => 5,
+                'name'  => 'Aporte',
+                'code' => 'placed',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             )
         );
 

@@ -18,6 +18,7 @@ use Database\Seeders\Onboarding\OnboardingStepSeeder;
 use Database\Seeders\User\UserComplianceStatusSeeder;
 use Database\Seeders\User\UserSeeder;
 use Database\Seeders\User\UserStatusSeeder;
+use Database\Seeders\Deposit\DepositStatusTableSeeder;
 use Database\Seeders\Coin\CoinsTableSeeder;
 use Database\Seeders\Credit\CreditTypeTableSeeder;
 use Database\Seeders\Credit\CreditStatusTableSeeder;
@@ -52,6 +53,9 @@ class DatabaseSeeder extends Seeder
 
         # Withdrawal
         $this->call(WithdrawalStatusTableSeeder::class);
+
+        # Deposit
+        $this->call(DepositStatusTableSeeder::class);
 
         # Data
         $this->call(DataGenreSeeder::class);

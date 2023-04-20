@@ -25,7 +25,28 @@ class DepositFiatController extends Controller
     public function deposit(Request $request)
     {
         try {
-            $data = (new DepositFiatResource())->createDeposit(auth()->user(), $request->amount, $request->payment_code);
+            $data = (new DepositFiatResource())->create(auth()->user(), $request->amount, $request->payment_code);
+            return response()->json([
+                'status' => true,
+                'message' => 'O indicador realizado com sucesso',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => $e->getMessage()
+            ], $e->getCode() ?? 400);
+        }
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadFile(Request $request)
+    {
+        try {
+            $data = (new DepositFiatResource())->storeReceipt(auth()->user(), $request->deposit_id, $request->file);
             return response()->json([
                 'status' => true,
                 'message' => 'O indicador realizado com sucesso',
