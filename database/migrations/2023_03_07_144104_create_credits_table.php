@@ -23,13 +23,12 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->unsignedInteger('type_id')->nullable();
             $table->unsignedInteger('status_id')->nullable();
-            $table->unsignedInteger('plan_id')->nullable();
+            $table->integer('plan_id')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->foreign('type_id')->references('id')->on('credits_type')->nullOnDelete();
             $table->foreign('status_id')->references('id')->on('credits_status')->nullOnDelete();
             $table->foreign('coin_id')->references('id')->on('coins')->nullOnDelete();
-            $table->foreign('plan_id')->references('id')->on('data_plans')->nullOnDelete();
         });
     }
 

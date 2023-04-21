@@ -30,12 +30,14 @@ class CreditBalance extends Model implements AuditableContract
         'user_id',
         'coin_id',
         'balance_enable',
+        'balance_placed',
         'balance_pending',
         'balance_canceled',
         'sales',
         'deposited',
         'used',
         'received',
+        'income',
         'withdrawal'
     ];
 

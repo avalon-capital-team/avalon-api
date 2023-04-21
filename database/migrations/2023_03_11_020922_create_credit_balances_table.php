@@ -17,8 +17,9 @@ return new class() extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('coin_id')->nullable();
-            $table->unsignedInteger('plan_id')->nullable();
+            $table->integer('plan_id')->nullable();
             $table->decimal('balance_enable', 15, 6)->default(0);
+            $table->decimal('balance_placed', 15, 6)->default(0);
             $table->decimal('balance_pending', 15, 6)->default(0);
             $table->decimal('balance_canceled', 15, 6)->default(0);
             $table->decimal('deposited', 15, 6)->default(0);
@@ -29,7 +30,6 @@ return new class() extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->foreign('coin_id')->references('id')->on('coins')->nullOnDelete();
-            $table->foreign('plan_id')->references('id')->on('data_plans')->nullOnDelete();
         });
     }
 

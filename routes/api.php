@@ -138,8 +138,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     # Wallet
     Route::group(['prefix' => 'wallet'], function () {
-        Route::post('create-deposit', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'deposit']);
+        Route::post('balance', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'balance']);
 
+        # Deposit
+        Route::post('create-deposit', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'deposit']);
         Route::post('deposit/upload-file', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'uploadFile']);
     });
 

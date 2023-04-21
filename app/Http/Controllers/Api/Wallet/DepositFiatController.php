@@ -28,7 +28,6 @@ class DepositFiatController extends Controller
             $data = (new DepositFiatResource())->create(auth()->user(), $request->amount, $request->payment_code);
             return response()->json([
                 'status' => true,
-                'message' => 'O indicador realizado com sucesso',
                 'data' => $data
             ], 200);
         } catch (\Exception $e) {
@@ -49,7 +48,6 @@ class DepositFiatController extends Controller
             $data = (new DepositFiatResource())->storeReceipt(auth()->user(), $request->deposit_id, $request->file);
             return response()->json([
                 'status' => true,
-                'message' => 'O indicador realizado com sucesso',
                 'data' => $data
             ], 200);
         } catch (\Exception $e) {

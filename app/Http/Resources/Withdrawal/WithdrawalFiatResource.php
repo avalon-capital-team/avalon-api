@@ -29,10 +29,6 @@ class WithdrawalFiatResource
             throw new \Exception('Carteira não encontrada.', 403);
         }
 
-        if ($balance->income < $amount) {
-            throw new \Exception('Você não tem saldo de rendimento suficiente.', 403);
-        }
-
         if ($balance->balance_enable < $amount) {
             throw new \Exception('Você não tem saldo suficiente.', 403);
         }

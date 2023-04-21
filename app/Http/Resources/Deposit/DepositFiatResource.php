@@ -6,7 +6,9 @@ use App\Helpers\FileUploadHelper;
 use App\Models\Deposit\DepositFiat;
 use App\Models\User;
 use App\Http\Resources\Coin\CoinResource;
+use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
+use App\Models\Credit\CreditBalance;
 use App\Models\System\PaymentMethod\PaymentMethod;
 use App\Notifications\Wallet\Deposit\DepositFiatNotification;
 
@@ -121,43 +123,48 @@ class DepositFiatResource
      */
     public function approveDeposit(DepositFiat $deposit)
     {
+        if (in_array($deposit->status_id, [1, 2])) {
+            # Calculate fees
+            $feeData =  1.3;
 
-        # Calculate fees
-        $feeData =  1.3;
+            $description = 'Depósito (' . $deposit->token . ') realizado';
+            $amount = $feeData;
 
-        $description = 'Depósito (' . $deposit->token . ') realizado';
-        $amount = $feeData;
+            // if ($feeData > 0) {
+            //     $description = $description . ' ' . $feeData;
+            // }
 
-        // if ($feeData > 0) {
-        //     $description = $description . ' ' . $feeData;
-        // }
+            # Create Credit
+            (new CreditResource())->create(
+                $deposit->user->id,
+                $deposit->coin->id,
+                0,
+                5,
+                2,
+                floatval($deposit->amount),
+                0,
+                $description,
+            );
 
-        # Create Credit
-        (new CreditResource())->create(
-            $deposit->user->id,
-            $deposit->coin->id,
-            0,
-            5,
-            2,
-            floatval($deposit->amount),
-            0,
-            $description,
-        );
+            $creditBalance = CreditBalance::where('user_id', $deposit->user->id)->where('coin_id', $deposit->coin->id)->first();
 
-        # Change status to approved
-        $deposit->approved_at = date('Y-m-d H:i:s');
-        $deposit->approved_by = (auth()->user()) ? auth()->user()->id : null;
-        $deposit->status_id = 4;
-        $deposit->save();
+            (new CreditBalanceResource())->moveBalanceToEnable($creditBalance, $deposit->amount);
 
-        # Store Fee
-        // if ($feeData['fee'] > 0) {
-        //     (new FeeHistoryResource())->storeFee($feeData, $deposit, $deposit->coin);
-        // }
+            # Change status to approved
+            $deposit->approved_at = date('Y-m-d H:i:s');
+            $deposit->approved_by = (auth()->user()) ? auth()->user()->id : null;
+            $deposit->status_id = 4;
+            $deposit->save();
 
-        # Send mail
-        // $deposit->user->notify(new DepositFiatNotification($deposit));
+            # Store Fee
+            // if ($feeData['fee'] > 0) {
+            //     (new FeeHistoryResource())->storeFee($feeData, $deposit, $deposit->coin);
+            // }
 
+            # Send mail
+            // $deposit->user->notify(new DepositFiatNotification($deposit));
+
+        }
     }
 
     /**

@@ -40,7 +40,6 @@ class Credit extends Model implements AuditableContract
         'amount',
         'base_amount',
         'description',
-        'order_id',
         'type_id',
         'status_id',
         'plan_id'
@@ -127,26 +126,6 @@ class Credit extends Model implements AuditableContract
     public function status()
     {
         return $this->hasOne(CreditStatus::class, 'id', 'status_id');
-    }
-
-    /**
-     * Get Order of Credit
-     *
-     * @return \App\Models\Order\Order
-     */
-    public function order()
-    {
-        return $this->hasOne(Order::class, 'id', 'order_id');
-    }
-
-    /**
-     * Get Order of Credit
-     *
-     * @return \App\Models\Order\Order
-     */
-    public function dataPlan()
-    {
-        return $this->hasOne(DataPlan::class, 'id', 'plan_id');
     }
 
     /**

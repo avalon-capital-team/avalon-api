@@ -57,7 +57,7 @@ class CreditBalanceResource
         }
 
         $data = [
-            'balance_enable' => $creditBalance->balance_enable,
+            'balance_enable' => $creditBalance->balance_placed,
             'balance_pending' => $creditBalance->balance_pending,
             'balance_placed' => $plan['total'],
             'balance_rendeem' => $creditBalance->used,
@@ -182,7 +182,7 @@ class CreditBalanceResource
     {
         $coin = (new CoinResource())->findById($coinId);
         $creditBalance = $this->checkBalanceByCoinId($user, $coin);
-        return ($creditBalance) ? $creditBalance->balance_enable : 0;
+        return ($creditBalance) ? $creditBalance->balance_placed : 0;
     }
 
     /**
@@ -286,7 +286,7 @@ class CreditBalanceResource
 
         $balance = $this->checkBalanceByCoinId($user, $coin);
         $balance['balance_pending'] -= $data->amount;
-        $balance['balance_enable'] += $data->amount;
+        $balance['balance_placed'] += $data->amount;
 
         $user->userPlan->save();
 
@@ -361,11 +361,11 @@ class CreditBalanceResource
 
         $data['balance'] = CreditBalance::where('user_id', $user->id)
             ->where('coin_id', $coinBrl->id)
-            ->sum('balance_enable');
+            ->sum('balance_placed');
 
         $data['average'] = CreditBalance::where('user_id', $user->id)
             ->join('coins', 'coins.id', '=', 'credits_balance.coin_id')
-            ->sum(DB::raw('credits_balance.balance_enable * coins.price_brl'));
+            ->sum(DB::raw('credits_balance.balance_placed * coins.price_brl'));
 
         return $data;
     }

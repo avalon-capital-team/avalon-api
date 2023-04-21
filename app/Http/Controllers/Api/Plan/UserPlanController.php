@@ -59,6 +59,7 @@ class UserPlanController extends Controller
             } else {
                 $balance = [
                     'balance_enable' => '0.000000',
+                    'balance_placed' => '0.000000',
                     'balance_pending' => '0.000000',
                     'balance_canceled' => '0.000000',
                     'deposited' => '0.000000',
