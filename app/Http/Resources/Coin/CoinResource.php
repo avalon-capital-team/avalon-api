@@ -6,6 +6,7 @@ use App\Models\Coin\Coin;
 use App\ExternalApis\CoinMarketCapApi;
 use App\ExternalApis\CoinUsdBrl;
 use App\Http\Resources\Credit\CreditBalanceResource;
+use App\Http\Resources\Credit\CreditResource;
 use App\Models\User;
 
 class CoinResource
@@ -135,22 +136,36 @@ class CoinResource
             $balance_from = (new CreditBalanceResource())->checkBalanceByCoinId($user, $from);
             $balance_from->balance_enable -= $value;
             $balance_from->save();
-            $value = $this->calculatePriceCoin($value, $to->price_brl);
 
-
-            $balance_to = (new CreditBalanceResource())->checkBalanceByCoinId($user, $to);
-            $balance_to->balance_enable += $value;
-            $balance_to->save();
+            $convert = $this->calculatePriceCoin($value, $to->price_brl);
+            $description = 'Converção no valor: R$' . $value . 'para' . $to->name . ': ' . $convert;
+            (new CreditResource())->create(
+                $user->id,
+                $to->id,
+                0,
+                6,
+                1,
+                floatval($convert),
+                0.000000,
+                $description
+            );
         } else {
             $balance_from = (new CreditBalanceResource())->checkBalanceByCoinId($user, $from);
             $balance_from->balance_enable -= $value;
             $balance_from->save();
-            $value = $this->calculatePriceFiat($value, $from->price_brl);
 
-
-            $balance_to = (new CreditBalanceResource())->checkBalanceByCoinId($user, $to);
-            $balance_to->balance_enable += $value;
-            $balance_to->save();
+            $convert = $this->calculatePriceCoin($value, $to->price_brl);
+            $description = 'Converção no valor: R$' . $value . 'para' . $to->name . ': ' . $convert;
+            (new CreditResource())->create(
+                $user->id,
+                $to->id,
+                0,
+                6,
+                1,
+                floatval($convert),
+                0.000000,
+                $description
+            );
         }
 
 

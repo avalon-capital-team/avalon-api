@@ -49,6 +49,13 @@ class CreditTypeTableSeeder extends Seeder
                 'code' => 'placed',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
+            ),
+            array(
+                'id'    => 6,
+                'name'  => 'COnversão',
+                'code' => 'convert',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             )
         );
 
