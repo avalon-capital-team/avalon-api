@@ -5,6 +5,8 @@ namespace App\Http\Resources\Coin;
 use App\Models\Coin\Coin;
 use App\ExternalApis\CoinMarketCapApi;
 use App\ExternalApis\CoinUsdBrl;
+use App\Http\Resources\Credit\CreditBalanceResource;
+use App\Models\User;
 
 class CoinResource
 {
@@ -86,7 +88,7 @@ class CoinResource
                     'type' => 'coin',
                     'chain_api' => $coin['slug'],
                     'price_usd' => floatval($coin['quote']['USD']['price']),
-                    'price_brl' => $this->calculatePriceBrl($coin['quote']['USD']['price'], $real['price_usd']),
+                    'price_brl' => $this->calculatePriceFiat($coin['quote']['USD']['price'], $real['price_usd']),
                     'volume_24h' => floatval($coin['quote']['USD']['volume_24h']),
                     'volume_change_24h' => floatval($coin['quote']['USD']['volume_change_24h']),
                     'percent_change_24h' => floatval($coin['quote']['USD']['percent_change_24h']),
@@ -105,7 +107,7 @@ class CoinResource
                 $updata->save();
             } else {
                 $updata->price_usd = floatval($coin['quote']['USD']['price']);
-                $updata->price_brl = $this->calculatePriceBrl($coin['quote']['USD']['price'], $real['price_usd']);
+                $updata->price_brl = $this->calculatePriceFiat($coin['quote']['USD']['price'], $real['price_usd']);
                 $updata->volume_24h = floatval($coin['quote']['USD']['volume_24h']);
                 $updata->volume_change_24h = floatval($coin['quote']['USD']['volume_change_24h']);
                 $updata->percent_change_24h = floatval($coin['quote']['USD']['percent_change_24h']);
@@ -125,10 +127,49 @@ class CoinResource
     }
 
     /**
-     * @return array
+     * @return float
      */
-    public function calculatePriceBrl($price_coin, $price_fiat)
+    public function convertCoin(User $user, Coin $from, Coin $to, $value)
+    {
+        if ($from->id == 1) {
+            $balance_from = (new CreditBalanceResource())->checkBalanceByCoinId($user, $from);
+            $balance_from->balance_enable -= $value;
+            $balance_from->save();
+            $value = $this->calculatePriceCoin($value, $to->price_brl);
+
+
+            $balance_to = (new CreditBalanceResource())->checkBalanceByCoinId($user, $to);
+            $balance_to->balance_enable += $value;
+            $balance_to->save();
+        } else {
+            $balance_from = (new CreditBalanceResource())->checkBalanceByCoinId($user, $from);
+            $balance_from->balance_enable -= $value;
+            $balance_from->save();
+            $value = $this->calculatePriceFiat($value, $from->price_brl);
+
+
+            $balance_to = (new CreditBalanceResource())->checkBalanceByCoinId($user, $to);
+            $balance_to->balance_enable += $value;
+            $balance_to->save();
+        }
+
+
+        return $value;
+    }
+
+    /**
+     * @return float
+     */
+    public function calculatePriceFiat($price_coin, $price_fiat)
     {
         return $price_fiat * $price_coin;
+    }
+
+    /**
+     * @return float
+     */
+    public function calculatePriceCoin($price_fiat, $price_coin)
+    {
+        return $price_fiat / $price_coin;
     }
 }

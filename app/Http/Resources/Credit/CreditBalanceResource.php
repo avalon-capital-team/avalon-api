@@ -205,6 +205,19 @@ class CreditBalanceResource
      * @param  int $balanceId
      * @return \App\Models\Credit\CreditBalance
      */
+    public function getBalances(User $user)
+    {
+        return $user->creditBalance()->where('user_id', $user->id)->get();
+    }
+
+    /**
+     * Get balance of user with Balance Id and Coin Id
+     *
+     * @param  \App\Models\User $user
+     * @param  int $coinId
+     * @param  int $balanceId
+     * @return \App\Models\Credit\CreditBalance
+     */
     public function getBalanceByCoinIdAndBalanceId(User $user, $coin_id)
     {
         return $user->creditBalance()->where('user_id', $user->id)->where('coin_id', $coin_id)->first();

@@ -138,7 +138,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     # Wallet
     Route::group(['prefix' => 'wallet'], function () {
-        Route::post('balance', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'balance']);
+        Route::get('balance', [\App\Http\Controllers\Api\Wallet\CoinConvertController::class, 'balance']);
+        Route::post('convert-coin', [\App\Http\Controllers\Api\Wallet\CoinConvertController::class, 'convertCoin']);
 
         # Deposit
         Route::post('create-deposit', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'deposit']);
