@@ -33,6 +33,7 @@ class CoinConvertController extends Controller
             if (count($data) != 0) {
                 foreach ($data as $balance) {
                     $balance['coin_id'] = (new CoinResource())->findById($balance['coin_id']);
+                    $balance['balance_enable_convert'] = number_format((new CoinResource())->calculatePriceFiat($balance['balance_enable'], $balance['coin_id']['price_brl']), 2);
                 }
             }
 
