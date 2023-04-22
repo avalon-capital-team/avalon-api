@@ -7,6 +7,8 @@ use App\ExternalApis\CoinMarketCapApi;
 use App\ExternalApis\CoinUsdBrl;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
+use App\Models\Credit\Credit;
+use App\Models\Credit\CreditBalance;
 use App\Models\User;
 
 class CoinResource
@@ -133,12 +135,23 @@ class CoinResource
     public function convertCoin(User $user, Coin $from, Coin $to, $value)
     {
         if ($from->id == 1) {
-            $balance_from = (new CreditBalanceResource())->checkBalanceByCoinId($user, $from);
-            $balance_from->balance_enable -= $value;
-            $balance_from->save();
+            $description = 'Valor convertido para ' . $to->name . ': ' . $value;
+            (new CreditResource())->create(
+                $user->id,
+                $from->id,
+                0,
+                6,
+                1,
+                floatval('-' . $value),
+                0.000000,
+                $description
+            );
+            $creditBalanceFrom = CreditBalance::where('user_id', $user->id)->where('coin_id', $from->id)->first();
+            (new CreditBalanceResource())->moveBalanceToEnable($creditBalanceFrom, '-' . $value);
+
 
             $convert = $this->calculatePriceCoin($value, $to->price_brl);
-            $description = 'Converção no valor: R$' . $value . 'para' . $to->name . ': ' . $convert;
+            $description = 'Converção no valor: R$' . $value . ' para ' . $to->name . ': ' . number_format($convert, 6);
             (new CreditResource())->create(
                 $user->id,
                 $to->id,
@@ -149,13 +162,25 @@ class CoinResource
                 0.000000,
                 $description
             );
+            $creditBalanceTo = CreditBalance::where('user_id', $user->id)->where('coin_id', $to->id)->first();
+            (new CreditBalanceResource())->moveBalanceToEnable($creditBalanceTo, $convert);
         } else {
-            $balance_from = (new CreditBalanceResource())->checkBalanceByCoinId($user, $from);
-            $balance_from->balance_enable -= $value;
-            $balance_from->save();
+            $description = 'Valor convertido para ' . $to->name . ': ' . $value;
+            (new CreditResource())->create(
+                $user->id,
+                $to->id,
+                0,
+                6,
+                1,
+                floatval('-' . $value),
+                0.000000,
+                $description
+            );
+            $creditBalanceFrom = CreditBalance::where('user_id', $user->id)->where('coin_id', $from->id)->first();
+            (new CreditBalanceResource())->moveBalanceToEnable($creditBalanceFrom, '-' . $value);
 
-            $convert = $this->calculatePriceCoin($value, $to->price_brl);
-            $description = 'Converção no valor: R$' . $value . 'para' . $to->name . ': ' . $convert;
+            $convert = $this->calculatePriceFiat($value, $from->price_brl);
+            $description = 'Converção no valor: R$' . $value . ' para ' . $to->name . ': ' . number_format($convert, 2);
             (new CreditResource())->create(
                 $user->id,
                 $to->id,
@@ -166,10 +191,12 @@ class CoinResource
                 0.000000,
                 $description
             );
+            $creditBalanceTo = CreditBalance::where('user_id', $user->id)->where('coin_id', $to->id)->first();
+            (new CreditBalanceResource())->moveBalanceToEnable($creditBalanceTo, $convert);
         }
 
 
-        return $value;
+        return $convert;
     }
 
     /**

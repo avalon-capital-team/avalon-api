@@ -277,7 +277,7 @@ class CreditBalanceResource
         $user->userPlan->amount -= $data['amount'];
 
         $balance = $this->checkBalanceByCoinId($user, $coin);
-        $balance['balance_enable'] -= $data->amount;
+        $balance['balance_placed'] -= $data->amount;
         $balance['balance_pending'] += $data->amount;
 
         $user->userPlan->save();
@@ -315,17 +315,10 @@ class CreditBalanceResource
     public function createOrUpdateBalance(User $user, int $coin_id, float $amount, int $plan_id)
     {
         $coin = (new CoinResource())->findById($coin_id);
-
         $balance = $this->checkBalanceByCoinId($user, $coin);
         $balance->plan_id = $plan_id;
         $balance->coin_id = $coin_id;
         $balance->balance_pending += $amount;
-
-        if ($amount > 0) {
-            $balance->deposited += $amount;
-        } else {
-            $balance->used += $amount;
-        }
 
         return $balance->save();
     }

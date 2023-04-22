@@ -135,19 +135,18 @@ class DepositFiatResource
             // }
 
             # Create Credit
-            (new CreditResource())->create(
+            $credit = (new CreditResource())->create(
                 $deposit->user->id,
                 $deposit->coin->id,
                 0,
                 5,
-                2,
+                1,
                 floatval($deposit->amount),
                 0,
                 $description,
             );
 
             $creditBalance = CreditBalance::where('user_id', $deposit->user->id)->where('coin_id', $deposit->coin->id)->first();
-
             (new CreditBalanceResource())->moveBalanceToEnable($creditBalance, $deposit->amount);
 
             # Change status to approved

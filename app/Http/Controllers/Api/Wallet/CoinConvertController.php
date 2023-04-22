@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Coin\CoinResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Models\Coin\Coin;
+use App\Nova\Models\Coin\Coin as CoinCoin;
 use Illuminate\Http\Request;
 
 class CoinConvertController extends Controller
@@ -28,6 +29,13 @@ class CoinConvertController extends Controller
     {
         try {
             $data = (new CreditBalanceResource())->getBalances(auth()->user());
+
+            if (count($data) != 0) {
+                foreach ($data as $balance) {
+                    $balance['coin_id'] = (new CoinResource())->findById($balance['coin_id']);
+                }
+            }
+
             return response()->json([
                 'status' => true,
                 'data' => $data
