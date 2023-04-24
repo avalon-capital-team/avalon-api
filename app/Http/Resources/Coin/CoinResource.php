@@ -149,8 +149,8 @@ class CoinResource
             $creditBalanceFrom = CreditBalance::where('user_id', $user->id)->where('coin_id', $from->id)->first();
             (new CreditBalanceResource())->moveBalanceToEnable($creditBalanceFrom, '-' . $value);
 
-
-            $convert = $this->calculatePriceCoin($value, $to->price_brl);
+            $additional = $to->price_brl * 0.015;
+            $convert = number_format($this->calculatePriceCoin($value, $to->price_brl + $additional), 6);
             $description = 'Converção no valor: R$' . $value . ' para ' . $to->name . ': ' . number_format($convert, 6);
             (new CreditResource())->create(
                 $user->id,

@@ -28,6 +28,7 @@ class ExtractController extends Controller
         if ($request) {
             $filters = [
                 'uuid' => $request['uuid'],
+                'type_id' => $request['type_id'],
                 'coin_id' => $request['coin_id'],
                 'date_from' => $request['date_from'],
                 'date_to' => $request['date_to'],
@@ -36,6 +37,7 @@ class ExtractController extends Controller
         } else {
             $filters = [
                 'uuid' => '',
+                'type_id' => '',
                 'coin_id' => '',
                 'date_from' => '',
                 'date_to' => '',

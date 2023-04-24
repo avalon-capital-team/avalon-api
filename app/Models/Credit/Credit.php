@@ -70,6 +70,10 @@ class Credit extends Model implements AuditableContract
             $query->where('uuid', 'LIKE', '%' . $filters['uuid'] . '%');
         }
 
+        if (isset($filters['type_id']) && $filters['type_id']) {
+            $query->where('type_id', 'LIKE', '%' . $filters['type_id'] . '%');
+        }
+
         if (isset($filters['description']) && $filters['description']) {
             $query->where('description', 'LIKE', '%' . $filters['description'] . '%');
         }
