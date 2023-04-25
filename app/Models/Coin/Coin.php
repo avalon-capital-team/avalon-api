@@ -49,7 +49,9 @@ class Coin extends Model
     {
         parent::boot();
         self::created(function ($model) {
-            CreateCreditBalance::dispatch()->delay(Carbon::now()->addSeconds(rand(10, 20)));
+            if ($model->show_wallet == 1) {
+                CreateCreditBalance::dispatch()->delay(Carbon::now()->addSeconds(rand(10, 20)));
+            }
         });
     }
 
