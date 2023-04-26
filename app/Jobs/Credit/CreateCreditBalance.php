@@ -37,11 +37,15 @@ class CreateCreditBalance implements ShouldQueue
         $users = User::get();
         $coins = Coin::get();
         foreach ($users as $user) {
-            foreach ($coins as $coin) {
-                if (!$user->creditBalance()->where('coin_id', $coin->id)->first()) {
-                    $user->creditBalance()->create([
-                        'coin_id' => $coin->id
-                    ]);
+            if ($user->id != 1) {
+                foreach ($coins as $coin) {
+                    if ($coin->show_wallet == true) {
+                        if (!$user->creditBalance()->where('coin_id', $coin->id)->first()) {
+                            $user->creditBalance()->create([
+                                'coin_id' => $coin->id
+                            ]);
+                        }
+                    }
                 }
             }
         }
