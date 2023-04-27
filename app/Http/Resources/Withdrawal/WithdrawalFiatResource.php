@@ -41,11 +41,10 @@ class WithdrawalFiatResource
             $description = 'Saque para o PIX';
         }
 
-
         # Create debit
         $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->id, 2, 1, floatval('-' . $amount), $user->userPlan->amount, $description);
 
-        $coin = Coin::where('coin_id', $coin_id)->fist();
+        $coin = Coin::where('coin_id', $coin_id)->first();
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
         (new CreditBalanceResource())->moveBalanceToEnable($balance, floatval('-' . $amount));
 
