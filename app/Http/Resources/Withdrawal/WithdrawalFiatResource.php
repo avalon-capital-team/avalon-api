@@ -5,6 +5,7 @@ namespace App\Http\Resources\Withdrawal;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
 use App\Models\Coin\Coin;
+use App\Models\Plan\Plan;
 use App\Models\User;
 use App\Models\Withdrawal\WithdrawalFiat;
 use App\Notifications\Wallet\Withdrawal\WithdrawalFiatNotification;
@@ -159,6 +160,7 @@ class WithdrawalFiatResource
     public function approveWithdrawal(WithdrawalFiat $withdrawalFiat, string $payment_confirmation = null)
     {
         if (in_array($withdrawalFiat->status_id, [3])) {
+
             #Change Status
             $withdrawalFiat->status_id = 2;
             $withdrawalFiat->payment_confirmation = $payment_confirmation;

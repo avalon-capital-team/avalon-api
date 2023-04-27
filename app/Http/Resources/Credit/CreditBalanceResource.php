@@ -23,8 +23,6 @@ class CreditBalanceResource
     public function getGraphicData(User $user, int $coinId = 1, array $filters)
     {
         $coin = (new CoinResource())->findById($coinId);
-        $plan['total'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('amount');
-        $plan['income'] = Plan::where('user_id', $user->id)->where('acting', 1)->sum('income');
 
         $credits = Credit::where('user_id', $user->id)
             ->where('type_id', 3)
@@ -45,10 +43,10 @@ class CreditBalanceResource
             $monthData = $this->towerChart($user, $credits);
         }
 
-        $balance_total = $plan['total'] + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->used));
+        $balance_total = $creditBalance->balance_placed + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->withdrawal));
         if (!$balance_total == 0.0) {
-            $balance_placed = $plan['total'] * 100 / $balance_total;
-            $balance_rendeem = floatval(str_replace('-', '', $creditBalance->used)) * 100 / $balance_total;
+            $balance_placed = $creditBalance->balance_placed * 100 / $balance_total;
+            $balance_rendeem = floatval(str_replace('-', '', $creditBalance->withdrawal)) * 100 / $balance_total;
             $balance_income = $creditBalance->income * 100 / $balance_total;
         } else {
             $balance_placed = 0;
@@ -59,8 +57,8 @@ class CreditBalanceResource
         $data = [
             'balance_enable' => $creditBalance->balance_placed,
             'balance_pending' => $creditBalance->balance_pending,
-            'balance_placed' => $plan['total'],
-            'balance_rendeem' => $creditBalance->used,
+            'balance_placed' => $creditBalance->balance_placed,
+            'balance_rendeem' => $creditBalance->withdrawal,
             'balance_income' => $creditBalance->income,
             'pie_chart' => [
                 'placed' => $balance_placed,
@@ -244,6 +242,18 @@ class CreditBalanceResource
     {
         $creditBalance->balance_pending -= $amount;
         $creditBalance->balance_enable += $amount;
+        $creditBalance->save();
+    }
+
+    /**
+     * Move Balance to pending
+     *
+     * @param \App\Models\Credit\CreditBalance $credit
+     */
+    public function moveBalanceToPlaced(CreditBalance $creditBalance, float $amount)
+    {
+        $creditBalance->balance_pending -= $amount;
+        $creditBalance->balance_placed += $amount;
         $creditBalance->save();
     }
 

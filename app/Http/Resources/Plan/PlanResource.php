@@ -168,14 +168,17 @@ class PlanResource
         (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($plan->amount),  $description);
 
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
-        (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
         $balance->income += $income;
 
+        if ($plan->withdrawal_report == 1) {
+            (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
+        } else {
+            (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
+        }
+
         $user->userPlan->income += $income;
-        $user->userPlan->amount += $income;
 
         $plan->income += $income;
-        $plan->amount += $income;
 
         $balance->save();
         $user->userPlan->save();
