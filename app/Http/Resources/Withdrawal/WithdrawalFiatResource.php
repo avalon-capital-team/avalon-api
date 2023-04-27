@@ -46,6 +46,7 @@ class WithdrawalFiatResource
 
         $coin = Coin::where('coin_id', $coin_id)->first();
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
+        dd($balance);
         (new CreditBalanceResource())->moveBalanceToEnable($balance, floatval('-' . $amount));
 
         if ($debit) {
