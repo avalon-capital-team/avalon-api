@@ -49,6 +49,8 @@ class Plan extends Resource
 
             Boolean::make('Ativo', 'acting'),
 
+            DateTime::make('Ativo em', 'activated_at'),
+
             BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
             Currency::make('Valor', 'amount')
@@ -64,8 +66,6 @@ class Plan extends Resource
                 })
                 ->creationRules('required', 'numeric', 'not_in:0')
                 ->updateRules('nullable', 'numeric', 'not_in:0'),
-
-            // DateTime::make('Ativo em', 'activated_at'),
 
             Image::make('Comprovante de deposito', 'payment_voucher_url')->disk('digitalocean')->resolveUsing(function () {
                 if ($this->payment_voucher_url) {
