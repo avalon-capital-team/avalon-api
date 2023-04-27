@@ -33,7 +33,6 @@ class WithdrawalFiatResource
             throw new \Exception('Você não tem saldo suficiente.', 403);
         }
 
-
         # Description
         if ($type == 'bank') {
             $description = 'Saque para a Conta Bancária';
@@ -72,7 +71,7 @@ class WithdrawalFiatResource
 
     public function withdrawalFiat($coin_id, $user, $debit, $amount, $status_id, $type)
     {
-        $withdrawal = WithdrawalFiat::create([
+        return WithdrawalFiat::create([
             'coin_id' => $coin_id,
             'user_id' => $user->id,
             'debit_id' => $debit->id,
@@ -81,8 +80,6 @@ class WithdrawalFiatResource
             'type' => $type,
             'data' => $user->financial()->where('type', $type)->first()->getData()
         ]);
-
-        return $withdrawal;
     }
 
     /**

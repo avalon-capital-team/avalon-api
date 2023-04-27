@@ -30,8 +30,9 @@ class WithdrawalController extends Controller
             $validated = $request->validated();
             if ($validated['coin_id'] == '1') {
                 (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
+            } else {
+                (new WithdrawalCryptoResource())->createWithdrawalCrypto(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
             }
-            (new WithdrawalCryptoResource())->createWithdrawalCrypto(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
 
             return response()->json([
                 'status' => true,

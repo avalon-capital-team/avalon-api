@@ -294,7 +294,7 @@ class CreditBalanceResource
         $coin = (new CoinResource())->findById($data['coin_id']);
         $user = User::where('id', ($data['user_id']))->first();
 
-        $user->userPlan->amount = $data['amount'];
+        $user->userPlan->amount += $data['amount'];
         $user->userPlan->acting = 1;
 
         $balance = $this->checkBalanceByCoinId($user, $coin);

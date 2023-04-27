@@ -158,10 +158,9 @@ class PlanResource
             $user_sponsor = User::where('id', $user->sponsor_id)->first();
 
             $balance_sponsor = (new CreditBalanceResource())->checkBalanceByCoinId($user_sponsor, $coin);
-            $balance_sponsor = $user_sponsor->creditBalance;
+            (new CreditBalanceResource())->moveBalanceToEnable($balance_sponsor, $rent);
 
-            $balance_sponsor->income += $income;
-            $balance_sponsor->balance_enable += $income;
+            $balance_sponsor->income += $rent;
             $balance_sponsor->save();
         }
 
@@ -169,9 +168,8 @@ class PlanResource
         (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($plan->amount),  $description);
 
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
-
+        (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
         $balance->income += $income;
-        $balance->balance_enable += $income;
 
         $user->userPlan->income += $income;
         $user->userPlan->amount += $income;
@@ -193,7 +191,6 @@ class PlanResource
      */
     function calculePercent($plan, $data_plan, $sponsor = null)
     {
-
         $date_from = date('Y-m-t');
         $date_to = date('Y-m-' . '01');
         $days = $this->dateInterval($date_to, $date_from);
