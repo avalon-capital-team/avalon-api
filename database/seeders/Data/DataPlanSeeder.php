@@ -31,7 +31,7 @@ class DataPlanSeeder extends Seeder
         DataPlan::create([
             'name' => 'Black',
             'rescue' => '365',
-            'porcent' => '0.1',
+            'porcent' => '3.5',
         ]);
 
         DataPlan::create([
@@ -43,7 +43,7 @@ class DataPlanSeeder extends Seeder
         DataPlan::create([
             'name' => 'VIP',
             'rescue' => '365',
-            'porcent' => '0.1',
+            'porcent' => '5.0',
             'type' => false,
         ]);
     }

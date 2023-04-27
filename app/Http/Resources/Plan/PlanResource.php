@@ -163,9 +163,9 @@ class PlanResource
             $balance_sponsor->income += $rent;
             $balance_sponsor->save();
         }
-
+        $base_amount = $plan->amount + $plan->income;
         $description = 'Rendimento mensal';
-        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($plan->amount),  $description);
+        (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($base_amount),  $description);
 
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
         $balance->income += $income;
