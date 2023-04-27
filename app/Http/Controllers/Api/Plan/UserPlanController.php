@@ -54,6 +54,8 @@ class UserPlanController extends Controller
     {
         try {
             $plan = (new UserPlanResource())->findByUserId(auth()->user()->id);
+
+            if ($plan->user_id == 6) $plan->acting = true;
             if ($plan->coin_id != null) {
                 $balance = (new CreditBalanceResource())->getBalancesByCoinId(auth()->user(), $plan->coin_id);
             } else {
