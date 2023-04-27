@@ -99,12 +99,10 @@ class User extends Resource
             ]),
 
             Text::make('Nome', 'name')
-                ->sortable()
-                ->rules('required', 'max:255'),
+                ->sortable(),
 
             Text::make('Nome de usuário', 'username')
-                ->sortable()
-                ->rules('required', 'max:255'),
+                ->sortable(),
 
 
             Select::make('Tipo do documento', 'document_type')->options([
@@ -113,8 +111,7 @@ class User extends Resource
             ])->displayUsingLabels()->hideFromIndex(),
 
             Text::make(__('Documento'), 'document')
-                ->sortable()
-                ->rules('required', 'max:255')->hideFromIndex(),
+                ->sortable()->hideFromIndex(),
 
             Text::make('Telefone', 'phone')
                 ->sortable()
