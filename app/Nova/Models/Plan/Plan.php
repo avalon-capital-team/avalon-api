@@ -49,7 +49,7 @@ class Plan extends Resource
 
             Boolean::make('Ativo', 'acting'),
 
-            DateTime::make('Aprovado em', 'activated_at')->hideFromIndex(),
+            // DateTime::make('Aprovado em', 'activated_at')->hideFromIndex(),
 
             BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
