@@ -209,8 +209,9 @@ class PlanResource
         } else {
             $percentPeriodo = $days * $percent;
         }
+        $amount = $plan->amount + $plan->income;
 
-        $value = ($percentPeriodo / 100) * $plan->amount;
+        $value = ($percentPeriodo / 100) * $amount;
 
         return $value;
     }
