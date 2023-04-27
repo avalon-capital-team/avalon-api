@@ -4,6 +4,7 @@ namespace App\Http\Resources\Withdrawal;
 
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
+use App\Models\Coin\Coin;
 use App\Models\User;
 use App\Models\Withdrawal\WithdrawalFiat;
 use App\Notifications\Wallet\Withdrawal\WithdrawalFiatNotification;
@@ -43,6 +44,10 @@ class WithdrawalFiatResource
 
         # Create debit
         $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->id, 2, 1, floatval('-' . $amount), $user->userPlan->amount, $description);
+
+        $coin = Coin::where('coin_id', $coin_id)->fist();
+        $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
+        (new CreditBalanceResource())->moveBalanceToEnable($balance, floatval('-' . $amount));
 
         if ($debit) {
             # Create Withdrawal
