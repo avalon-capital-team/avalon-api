@@ -163,6 +163,13 @@ class PlanResource
             $balance_sponsor->income += $rent;
             $balance_sponsor->save();
         }
+
+        if ($plan->withdrawal_report == 1) {
+            $base_amount = $plan->amount;
+        } else {
+            $base_amount = $plan->amount + $plan->income;
+        }
+
         $base_amount = $plan->amount + $plan->income;
         $description = 'Rendimento mensal';
         (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($base_amount),  $description);
@@ -209,7 +216,12 @@ class PlanResource
         } else {
             $percentPeriodo = $days * $percent;
         }
-        $amount = $plan->amount + $plan->income;
+
+        if ($plan->withdrawal_report == 1) {
+            $amount = $plan->amount;
+        } else {
+            $amount = $plan->amount + $plan->income;
+        }
 
         $value = ($percentPeriodo / 100) * $amount;
 

@@ -26,6 +26,10 @@ class WithdrawalController extends Controller
      */
     public function withdrawl(WithdrawalFiatRequest $request)
     {
+        return response()->json([
+            'status' => true,
+            'message' => 'Em manutenção, em breve disponível.'
+        ], 200);
         try {
             $validated = $request->validated();
             if ($validated['coin_id'] == '1') {

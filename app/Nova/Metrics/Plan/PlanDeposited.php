@@ -44,7 +44,7 @@ class PlanDeposited extends Value
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->sum($request, Plan::where('coin_id', $this->coin_id), 'amount')->format('0.00');
+        return $this->sum($request, Plan::where('coin_id', $this->coin_id)->where('acting', 1), 'amount')->format('0.00');
     }
 
     /**
