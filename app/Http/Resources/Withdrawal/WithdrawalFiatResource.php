@@ -133,7 +133,7 @@ class WithdrawalFiatResource
                     $withdrawalFiat->user,
                     $withdrawalFiat->coin->id,
                     $withdrawalFiat->debit->amount,
-                    'received'
+                    'balance_enable'
                 );
 
                 # Send mail
