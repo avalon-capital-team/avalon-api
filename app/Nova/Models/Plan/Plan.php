@@ -49,8 +49,6 @@ class Plan extends Resource
 
             Boolean::make('Ativo', 'acting'),
 
-            DateTime::make('Ativo em', 'activated_at'),
-
             BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
             Currency::make('Valor', 'amount')
