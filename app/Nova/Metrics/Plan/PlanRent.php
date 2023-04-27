@@ -6,6 +6,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
 use App\Models\Coin\Coin;
 use App\Models\Plan\Plan;
+use App\Models\User\UserPlan;
 
 class PlanRent extends Value
 {
@@ -44,7 +45,7 @@ class PlanRent extends Value
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->sum($request, Plan::where('coin_id', $this->coin_id), 'income')->format('0.00');
+        return $this->sum($request, UserPlan::where('coin_id', $this->coin_id)->where('acting', 1), 'income')->format('0.00');
     }
 
     /**
