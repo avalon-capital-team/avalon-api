@@ -67,7 +67,7 @@ class UserPlan extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make('Usuário', 'username', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
+            BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
 
             BelongsTo::make('Plano', 'dataPlan', 'App\Nova\Models\Data\DataPlan'),
 
