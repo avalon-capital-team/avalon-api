@@ -199,11 +199,11 @@ class PlanResource
             $balance_sponsor->save();
         }
 
-        if ($plan->withdrawal_report == 1) {
-            $base_amount = $plan->amount;
-        } else {
-            $base_amount = $plan->amount + $plan->income;
-        }
+        // if ($plan->withdrawal_report == 1) {
+        //     $base_amount = $plan->amount;
+        // } else {
+        $base_amount = $plan->amount + $plan->income;
+        // }
 
         $base_amount = $plan->amount + $plan->income;
         $description = 'Rendimento mensal';
@@ -252,11 +252,11 @@ class PlanResource
             $percentPeriodo = $days * $percent;
         }
 
-        if ($plan->withdrawal_report == 1) {
-            $amount = $plan->amount;
-        } else {
-            $amount = $plan->amount + $plan->income;
-        }
+        // if ($plan->withdrawal_report == 1) {
+        //     $amount = $plan->amount;
+        // } else {
+        $amount = $plan->amount + $plan->income;
+        // }
 
         $value = ($percentPeriodo / 100) * $amount;
 
