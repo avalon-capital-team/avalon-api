@@ -54,8 +54,10 @@ class CreditBalanceResource
             $balance_income = 0;
         }
 
+        $sum = $creditBalance->balance_placed - $creditBalance->income;
+
         $data = [
-            'balance_enable' => $creditBalance->balance_placed - $creditBalance->income,
+            'balance_enable' => $sum,
             'balance_pending' => $creditBalance->balance_pending,
             'balance_placed' => $creditBalance->balance_placed,
             'balance_rendeem' => $creditBalance->withdrawal,
