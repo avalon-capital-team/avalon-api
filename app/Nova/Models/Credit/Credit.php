@@ -97,14 +97,7 @@ class Credit extends Resource
                 ->creationRules('required', 'numeric', 'not_in:0')
                 ->updateRules('nullable', 'numeric', 'not_in:0'),
 
-            Currency::make('Valor', 'amount')
-                ->displayUsing(function ($value) {
-                    return currency_format($value, $this->resource->coin->symbol);
-                })
-                ->creationRules('required', 'numeric', 'not_in:0')
-                ->updateRules('nullable', 'numeric', 'not_in:0'),
-
-            Currency::make('Valor', 'amount')
+            Currency::make('Valor base', 'base_amount')
                 ->displayUsing(function ($value) {
                     return currency_format($value, $this->resource->coin->symbol);
                 })
