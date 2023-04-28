@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Http\Resources\Coin\CoinResource;
+use App\Jobs\Credit\CreateCreditBalance;
 use Illuminate\Console\Command;
+use Carbon\Carbon;
 
 class GetCoinsList extends Command
 {
@@ -28,6 +30,7 @@ class GetCoinsList extends Command
      */
     public function handle()
     {
+        CreateCreditBalance::dispatch()->delay(Carbon::now()->addSeconds(rand(10, 20)));
         (new CoinResource())->coinData();
     }
 }
