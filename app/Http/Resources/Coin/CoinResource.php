@@ -134,6 +134,10 @@ class CoinResource
      */
     public function convertCoin(User $user, Coin $from, Coin $to, $value)
     {
+        if ($user->creditBalance->balance_enable < $value) {
+            throw new \Exception('Você não tem saldo suficiente.', 403);
+        }
+
         if ($from->id == 1) {
             $description = 'Valor convertido para ' . $to->name . ': ' . $value;
             (new CreditResource())->create(
