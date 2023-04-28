@@ -55,7 +55,7 @@ class CreditBalanceResource
         }
 
         $data = [
-            'balance_enable' => $creditBalance->balance_placed,
+            'balance_enable' => $creditBalance->balance_placed - $creditBalance->income,
             'balance_pending' => $creditBalance->balance_pending,
             'balance_placed' => $creditBalance->balance_placed,
             'balance_rendeem' => $creditBalance->withdrawal,
