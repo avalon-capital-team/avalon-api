@@ -128,25 +128,31 @@ class PlanResource
      * @param  string $date_to
      * @return string
      */
-    function withdrawalPlan(User $user, $plan_id, $amount)
+    function withdrawalPlan(User $user, $amount)
     {
-        $plan = Plan::where('id', $plan_id)->where('user_id', $user->id)->first();
-        $coin = Coin::where('id', $plan->coin_id)->first();
+        $plans = Plan::where('user_id', $user->id)->get();
+        $user_plan = $user->userPlan;
 
-        if ($amount > $plan->income) {
+        if ($amount > $user_plan->income) {
             throw new \Exception('Não foi possível liberar o valor. Tente novamente mais tarde!', 403);
         }
 
-        // $fee = $amount * 0.03;
-        // $amount = $amount - $fee;
+        foreach ($plans as $plan) {
+            $data['percet'] = $plan->income / $user_plan->income;
+            $data['amount'] = $data['percet'] * $amount;
+            $data['plan'] = $plan->income;
+            $data['userplan'] = $user_plan->income;
 
+            $plan->income -= $data['amount'];
+            $plan->save();
+        }
         $user->userPlan->income -= $amount;
-        $plan->income -= $amount;
+        $user->userPlan->save();
 
+        $coin = Coin::where('id', $user->userPlan->coin_id)->first();
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
         (new CreditBalanceResource())->moveBalanceToIncome($balance, $amount);
         (new CreditBalanceResource())->moveBalanceToEnable($balance, $amount);
-
         return true;
     }
 

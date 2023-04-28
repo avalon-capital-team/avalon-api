@@ -83,7 +83,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         # Plans Report
         Route::get('plan/reports', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getReports']);
         #Withdrawal
-        Route::get('plan/withdrawal', [App\Http\Controllers\Api\Plan\Wallet\WithdrawalController::class, 'withdrawlPlan']);
+        Route::get('plan/withdrawal', [App\Http\Controllers\Api\Wallet\WithdrawalController::class, 'withdrawlPlan']);
     });
 
     # Manange/Accessor

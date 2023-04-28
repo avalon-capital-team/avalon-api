@@ -29,8 +29,8 @@ class WithdrawalController extends Controller
     public function withdrawlPlan(Request $request)
     {
         try {
-            (new PlanResource())->withdrawalPlan(auth()->user(), $request->plan_id, $request->amount);
-
+            (new PlanResource())->withdrawalPlan(auth()->user(), $request->amount);
+            (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $request->coin_id, $request->type, $request->amount);
             return response()->json([
                 'status' => true,
                 'message' => 'A solicitação de saque foi realizada com sucesso.'
@@ -55,6 +55,9 @@ class WithdrawalController extends Controller
         ], 200);
         try {
             $validated = $request->validated();
+
+            (new PlanResource())->withdrawalPlan(auth()->user(), $validated['amount']);
+
             if ($validated['coin_id'] == '1') {
                 (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
             } else {
