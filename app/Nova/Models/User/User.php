@@ -98,7 +98,7 @@ class User extends Resource
                 'Admin' => 'danger'
             ]),
 
-            Text::make('Nome', 'name')
+            Text::make(__('Nome'), 'name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 

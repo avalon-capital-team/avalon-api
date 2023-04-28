@@ -84,14 +84,17 @@ class CoinResource
             $updata =  $this->findBySymbol($coin['symbol']);
             $real = $this->getPriceUSD();
 
+            $value = floatval($coin['quote']['USD']['price']) * 0.013;
+            $value = floatval($coin['quote']['USD']['price']) + $value;
+
             if (!$updata) {
                 $updata = Coin::create([
                     'name' => $coin['name'],
                     'symbol' => $coin['symbol'],
                     'type' => 'coin',
                     'chain_api' => $coin['slug'],
-                    'price_usd' => floatval($coin['quote']['USD']['price']),
-                    'price_brl' => $this->calculatePriceFiat($coin['quote']['USD']['price'], $real['price_usd']),
+                    'price_usd' => floatval($value),
+                    'price_brl' => $this->calculatePriceFiat($value, $real['price_usd']),
                     'volume_24h' => floatval($coin['quote']['USD']['volume_24h']),
                     'volume_change_24h' => floatval($coin['quote']['USD']['volume_change_24h']),
                     'percent_change_24h' => floatval($coin['quote']['USD']['percent_change_24h']),
@@ -109,8 +112,8 @@ class CoinResource
                 }
                 $updata->save();
             } else {
-                $updata->price_usd = floatval($coin['quote']['USD']['price']);
-                $updata->price_brl = $this->calculatePriceFiat($coin['quote']['USD']['price'], $real['price_usd']);
+                $updata->price_usd = floatval($value);
+                $updata->price_brl = $this->calculatePriceFiat($value, $real['price_usd']);
                 $updata->volume_24h = floatval($coin['quote']['USD']['volume_24h']);
                 $updata->volume_change_24h = floatval($coin['quote']['USD']['volume_change_24h']);
                 $updata->percent_change_24h = floatval($coin['quote']['USD']['percent_change_24h']);
@@ -154,7 +157,7 @@ class CoinResource
             (new CreditBalanceResource())->moveBalanceToEnable($creditBalanceFrom, '-' . $value);
 
             $additional = $to->price_brl * 0.015;
-            $convert = number_format($this->calculatePriceCoin($value, $to->price_brl + $additional), 6);
+            $convert = number_format($this->calculatePriceCoin($value, $to->price_brl), 6);
             $description = 'Converção no valor: R$' . $value . ' para ' . $to->name . ': ' . number_format($convert, 6);
             (new CreditResource())->create(
                 $user->id,
