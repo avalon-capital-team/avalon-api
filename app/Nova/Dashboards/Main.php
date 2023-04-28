@@ -31,9 +31,6 @@ class Main extends Dashboard
     public function cards()
     {
         return [
-            (new CountModel(\App\Models\User::where('type', 'user'), 'Total de usuários'))->width('1/3')->icon('user-group'),
-            (new CountModel(\App\Models\User::where('type', 'manange'), 'Total de gestores'))->width('1/3')->icon('user-group'),
-            (new CountModel(\App\Models\User::where('type', 'advisor'), 'Total de assessores'))->width('1/3')->icon('user-group'),
             (new \App\Nova\Metrics\Withdrawal\WithdrawalFiat\WithdrawalFiatPending())->width('1/2'),
             (new \App\Nova\Metrics\Withdrawal\WithdrawalCrypto\WithdrawalCryptoPending())->width('1/2'),
             (new \App\Nova\Metrics\Plan\PlanDeposited(1))->width('1/3'),
@@ -46,6 +43,9 @@ class Main extends Dashboard
             (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatApproved())->width('1/4'),
             (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatTotal())->width('1/4'),
             (new \App\Nova\Metrics\Deposit\DepositFiat\DepositFiatPartitionByStatus())->width('1/4'),
+            (new CountModel(\App\Models\User::where('type', 'user'), 'Total de usuários'))->width('1/3')->icon('user-group'),
+            (new CountModel(\App\Models\User::where('type', 'manange'), 'Total de gestores'))->width('1/3')->icon('user-group'),
+            (new CountModel(\App\Models\User::where('type', 'advisor'), 'Total de assessores'))->width('1/3')->icon('user-group'),
         ];
     }
 }
