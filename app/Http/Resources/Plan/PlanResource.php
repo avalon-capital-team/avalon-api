@@ -128,6 +128,35 @@ class PlanResource
      * @param  string $date_to
      * @return string
      */
+    function withdrawalPlan(User $user, $plan_id, $amount)
+    {
+        $plan = Plan::where('id', $plan_id)->where('user_id', $user->id)->first();
+        $coin = Coin::where('id', $plan->coin_id)->first();
+
+        if ($amount > $plan->income) {
+            throw new \Exception('Não foi possível liberar o valor. Tente novamente mais tarde!', 403);
+        }
+
+        // $fee = $amount * 0.03;
+        // $amount = $amount - $fee;
+
+        $user->userPlan->income -= $amount;
+        $plan->income -= $amount;
+
+        $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
+        (new CreditBalanceResource())->moveBalanceToIncome($balance, $amount);
+        (new CreditBalanceResource())->moveBalanceToEnable($balance, $amount);
+
+        return true;
+    }
+
+    /**
+     * Check a days installments
+     *
+     * @param  string $date_from
+     * @param  string $date_to
+     * @return string
+     */
     function dateInterval($date_from, $date_to)
     {
         $date_from = new DateTime($date_from);

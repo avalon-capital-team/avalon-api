@@ -258,6 +258,18 @@ class CreditBalanceResource
     }
 
     /**
+     * Move Balance to pending
+     *
+     * @param \App\Models\Credit\CreditBalance $credit
+     */
+    public function moveBalanceToIncome(CreditBalance $creditBalance, float $amount)
+    {
+        $creditBalance->balance_placed -= $amount;
+        $creditBalance->balance_pending += $amount;
+        $creditBalance->save();
+    }
+
+    /**
      * Check balance of user by CoinID
      *
      * @param  \App\Models\User $user

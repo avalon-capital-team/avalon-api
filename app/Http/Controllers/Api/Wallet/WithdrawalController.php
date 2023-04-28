@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Wallet;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Wallet\WithdrawalFiatRequest;
+use App\Http\Resources\Credit\CreditBalanceResource;
+use App\Http\Resources\Plan\PlanResource;
 use App\Http\Resources\Withdrawal\WithdrawalFiatResource;
 use App\Http\Resources\Withdrawal\WithdrawalCryptoResource;
 use Illuminate\Http\Request;
@@ -18,6 +20,27 @@ class WithdrawalController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function withdrawlPlan(Request $request)
+    {
+        try {
+            (new PlanResource())->withdrawalPlan(auth()->user(), $request->plan_id, $request->amount);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'A solicitação de saque foi realizada com sucesso.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => $e->getMessage()
+            ], $e->getCode() ?? 400);
+        }
     }
 
     /**
