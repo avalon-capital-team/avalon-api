@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Jobs\Credit\CreateCreditBalance;
 use App\Models\Data\DataGenre;
 use App\Models\User\UserAddress;
 use App\Models\User\UserCompliance;
@@ -17,6 +18,7 @@ use App\Models\User\UserTokenDevice;
 use App\Models\User\UserPlan;
 use App\Models\User\UserWithdrawalInfo;
 use App\Models\Credit\CreditBalance;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -50,6 +52,16 @@ class User extends Authenticatable
         'verification_code'
     ];
 
+    /**
+     * boot of mode
+     */
+    public static function boot()
+    {
+        parent::boot();
+        self::created(function ($model) {
+            CreateCreditBalance::dispatch()->delay(Carbon::now()->addSeconds(rand(10, 20)));
+        });
+    }
 
 
     /**
