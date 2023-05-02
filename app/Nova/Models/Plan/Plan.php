@@ -127,7 +127,7 @@ class Plan extends Resource
      */
     public static function authorizedToCreate(Request $request)
     {
-        return false;
+        return true;
     }
     /**
      * Authorize to delete
