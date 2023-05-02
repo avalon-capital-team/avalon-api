@@ -4,7 +4,7 @@ Backend Project (API)
 
 The Avalon Capital project consists of a social network.
 
--   [API Documentation]()
+-   [API Documentation](https://documenter.getpostman.com/view/9111037/2s93CHuaK1)
 
 ## Features
 
@@ -25,12 +25,16 @@ The Avalon Capital project consists of a social network.
     -   [x] Privacy
     -   [x] Password
     -   [x] Access logs
- -   [x] Planos
+-   [x] Planos
     -   [x] Criar Plano
     -   [x] Novo Aporte
--    [x] Wallet
+-   [x] Wallet
     -   [x] Listagem de crypto moedas
     -   [x] Conversao de ativos
+-   [x] Gestores
+    -   [x] Lista de seus clientes
+-   [x] Assessores
+    -   [x] Lista de seus clientes
 
 ## Library
 
@@ -45,4 +49,3 @@ The Avalon Capital project consists of a social network.
     -   [league/flysystem-aws-s3-v3](https://github.com/league/flysystem-aws-s3-v3)
     -   [pusher/pusher-php-server](https://github.com/pusher/pusher-php-server)
     -   [ramsey/uuid](https://github.com/ramsey/uuid)
-
