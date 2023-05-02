@@ -180,23 +180,25 @@ class PlanResource
         $data_plan = DataPlan::where('id', $plan->plan_id)->first();
         $coin = Coin::where('id', $plan->coin_id)->first();
         $user = User::where('id', $plan->user_id)->first();
-        $percent = DataPercent::where('tag', 'sponsor')->first();
 
         $status_id = 1;
         $income = $this->calculePercent($plan, $data_plan);
 
         if ($user->sponsor_id) {
-            $rent = $this->calculePercent($plan, $data_plan, $percent);
+            $sponsor = User::where('id', $user->sponsor_id)->first();
 
-            $description = 'Ganho de rendimento do user: ' . $user->name;
-            (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 4, $status_id, floatval($rent), 0, $description);
-            $user_sponsor = User::where('id', $user->sponsor_id)->first();
+            if ($sponsor->type == 'manange' || $sponsor->type == 'advisor') {
+                $percent = DataPercent::where('tag', $sponsor->type)->first();
+                $rent = $this->calculePercent($plan, $data_plan, $percent);
 
-            $balance_sponsor = (new CreditBalanceResource())->checkBalanceByCoinId($user_sponsor, $coin);
-            (new CreditBalanceResource())->moveBalanceToEnable($balance_sponsor, $rent);
+                $description = 'Ganho de rendimento do user: ' . $user->name;
+                (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 4, $status_id, floatval($rent), 0, $description);
 
-            $balance_sponsor->income += $rent;
-            $balance_sponsor->save();
+                $balance_sponsor = (new CreditBalanceResource())->checkBalanceByCoinId($sponsor, $coin);
+                (new CreditBalanceResource())->moveBalanceToEnable($balance_sponsor, $rent);
+                $balance_sponsor->income += $rent;
+                $balance_sponsor->save();
+            }
         }
 
         // if ($plan->withdrawal_report == 1) {
@@ -212,11 +214,11 @@ class PlanResource
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
         $balance->income += $income;
 
-        if ($plan->withdrawal_report == 1) {
-            (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
-        } else {
-            (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
-        }
+        // if ($plan->withdrawal_report == 1) {
+        //     (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
+        // } else {
+        (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
+        // }
 
         $user->userPlan->income += $income;
 
