@@ -13,10 +13,10 @@ The Avalon Capital project consists of a social network.
     -   [x] Password Recover
     -   [x] Create new Password
     -   [x] Register
--   [] Onboarding
-    -   [] Profile
--   [] Profile
-    -   [] Data
+-   [x] Onboarding
+    -   [x] Ongs
+    -   [x] Dados Pessoais
+    -   [x] Documentos
 -   [x] Settings
     -   [x] General
     -   [x] Notifications
@@ -25,6 +25,12 @@ The Avalon Capital project consists of a social network.
     -   [x] Privacy
     -   [x] Password
     -   [x] Access logs
+ -   [x] Planos
+    -   [x] Criar Plano
+    -   [x] Novo Aporte
+-    [x] Wallet
+    -   [x] Listagem de crypto moedas
+    -   [x] Conversao de ativos
 
 ## Library
 
@@ -40,7 +46,3 @@ The Avalon Capital project consists of a social network.
     -   [pusher/pusher-php-server](https://github.com/pusher/pusher-php-server)
     -   [ramsey/uuid](https://github.com/ramsey/uuid)
 
-## Links
-
--   [Briefing (Google Drive)]()
--   [Briefing - Admin (Google Drive)]()
