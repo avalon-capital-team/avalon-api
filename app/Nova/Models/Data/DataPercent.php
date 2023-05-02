@@ -124,14 +124,14 @@ class DataPercent extends Resource
      */
     public static function authorizedToCreate(Request $request)
     {
-        return false;
+        return true;
     }
     /**
      * Authorize to delete
      */
     public function authorizedToDelete(Request $request)
     {
-        return false;
+        return true;
     }
     /**
      * Authorize to delete
