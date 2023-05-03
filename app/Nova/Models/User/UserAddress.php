@@ -41,7 +41,7 @@ class UserAddress extends Resource
      */
     public static function label()
     {
-        return __('Novos acessores');
+        return __('Novos assessores');
     }
 
     /**
