@@ -158,6 +158,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 # Coin
 Route::group(['prefix' => 'coin'], function () {
+    Route::get('listings', [App\Http\Controllers\Api\Coin\CoinController::class, 'coinListings']);
+
+    # Get API Listings Latest
     Route::get('listings-latest', [App\Http\Controllers\Api\Coin\CoinController::class, 'coinListingsLatest']);
 
     # Coin Tracker

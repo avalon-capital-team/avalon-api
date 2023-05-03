@@ -13,6 +13,28 @@ class CoinController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illiminate\Http\Json
      */
+    public function coinListings()
+    {
+        try {
+            $coins = (new CoinResource())->getCoins();
+
+            return response()->json([
+                'status'  => true,
+                'coins' => $coins
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], $e->getCode() ?? 400);
+        }
+    }
+
+    /**
+     * Get coins in coinmarketcap
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illiminate\Http\Json
+     */
     public function coinListingsLatest()
     {
         try {
