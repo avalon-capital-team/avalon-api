@@ -58,7 +58,7 @@ class User extends Resource
      */
     public function title()
     {
-        return $this->name;
+        return $this->username;
     }
 
     /**
@@ -98,9 +98,9 @@ class User extends Resource
                 'Admin' => 'danger'
             ]),
 
-            Text::make(__('Nome'), 'name')
+            Text::make('Nome', 'name')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->rules('required', 'string', 'max:255'),
 
             Text::make('Nome de usuário', 'username')
                 ->sortable()
@@ -118,7 +118,7 @@ class User extends Resource
 
             Text::make('Telefone', 'phone')
                 ->sortable()
-                ->rules('required', 'phone', 'max:254'),
+                ->rules('required', 'max:254'),
 
             Text::make('Id do indicador', 'sponsor_id')
                 ->sortable(),
@@ -136,12 +136,6 @@ class User extends Resource
                 ->updateRules('nullable', Rules\Password::defaults()),
 
             Tabs::make('Relations', [
-                HasOne::make('Compliance', 'compliance', 'App\Nova\Models\User\UserCompliance')
-                    ->exceptOnForms()
-                    ->hideFromDetail(function () {
-                        return $this->type == 'admin';
-                    }),
-
                 HasOne::make('Plano', 'userPlan', 'App\Nova\Models\User\UserPlan')
                     ->exceptOnForms()
                     ->hideFromDetail(function () {
@@ -153,12 +147,6 @@ class User extends Resource
                     ->hideFromDetail(function () {
                         return $this->type == 'admin';
                     }),
-
-                // HasOne::make('Segurança', 'security', 'App\Nova\Models\User\UserSecurity')
-                //     ->exceptOnForms()
-                //     ->hideFromDetail(function () {
-                //         return $this->type == 'admin';
-                //     }),
             ]),
         ];
     }

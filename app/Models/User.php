@@ -84,24 +84,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Split full name of user
-     *
-     * @return array
-     */
-    public function splitName()
-    {
-        $list = list($firstName, $lastName) = array_pad(explode(
-            ' ',
-            trim($this->name)
-        ), 2, null);
-
-        return [
-            'firstname' => trim(str_replace($list[(count($list) - 1)], "", $this->name)),
-            'lastname' => $list[(count($list) - 1)]
-        ];
-    }
-
-    /**
      * @return array
      */
     public function routeNotificationForOneSignal()
