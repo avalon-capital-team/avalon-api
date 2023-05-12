@@ -150,7 +150,7 @@ class PaymentMethod extends Resource
      */
     public function authorizedToDelete(Request $request)
     {
-        return false;
+        return true;
     }
     /**
      * Authorize to delete
