@@ -53,7 +53,7 @@ class Plan extends Resource
 
             BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
-            BelongsTo::make('UserPlan', 'userPlan', 'App\Nova\Models\User\UserPlan'),
+            BelongsTo::make('UserPlan', 'user', 'App\Nova\Models\User\User'),
 
             BelongsTo::make('Plano', 'dataPlan', 'App\Nova\Models\Data\DataPlan'),
 
