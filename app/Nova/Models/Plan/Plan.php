@@ -53,6 +53,10 @@ class Plan extends Resource
 
             BelongsTo::make('Moeda', 'coin', 'App\Nova\Models\Coin\Coin'),
 
+            BelongsTo::make('UserPlan', 'userPlan', 'App\Nova\Models\User\UserPlan'),
+
+            BelongsTo::make('Plano', 'dataPlan', 'App\Nova\Models\Data\DataPlan'),
+
             Currency::make('Valor', 'amount')
                 ->displayUsing(function ($value) {
                     return currency_format($value, 'brl');
