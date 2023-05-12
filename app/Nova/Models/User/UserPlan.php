@@ -45,7 +45,7 @@ class UserPlan extends Resource
      */
     public static function label()
     {
-        return __('Planos');
+        return __('Aportes');
     }
 
     /**
@@ -55,7 +55,7 @@ class UserPlan extends Resource
      */
     public static function singularLabel()
     {
-        return __('Plano');
+        return __('Aporte');
     }
 
     /**
