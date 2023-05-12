@@ -25,8 +25,8 @@ The Avalon Capital project consists of a social network.
     -   [x] Privacy
     -   [x] Password
     -   [x] Access logs
--   [x] Planos
-    -   [x] Criar Plano
+-   [x] Aporte
+    -   [x] Criar Aporte
     -   [x] Novo Aporte
 -   [x] Wallet
     -   [x] Listagem de crypto moedas

@@ -136,7 +136,7 @@ class User extends Resource
                 ->updateRules('nullable', Rules\Password::defaults()),
 
             Tabs::make('Relations', [
-                HasOne::make('Plano', 'userPlan', 'App\Nova\Models\User\UserPlan')
+                HasOne::make('Aporte', 'userPlan', 'App\Nova\Models\User\UserPlan')
                     ->exceptOnForms()
                     ->hideFromDetail(function () {
                         return $this->type == 'admin';
