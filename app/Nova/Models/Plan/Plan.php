@@ -64,8 +64,8 @@ class Plan extends Resource
                 ->displayUsing(function ($value) {
                     return currency_format($value, 'brl');
                 })
-                ->creationRules('required', 'numeric', 'not_in:0')
-                ->updateRules('nullable', 'numeric', 'not_in:0'),
+                ->creationRules('nullable', 'numeric')
+                ->updateRules('nullable', 'numeric'),
 
             Image::make('Comprovante de deposito', 'payment_voucher_url')->disk('digitalocean')->resolveUsing(function () {
                 if ($this->payment_voucher_url) {
