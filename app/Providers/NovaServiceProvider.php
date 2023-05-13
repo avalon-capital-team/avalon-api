@@ -46,7 +46,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(\App\Nova\Models\Credit\Credit::class),
                 ])->icon('cash')->collapsable(),
 
-                MenuSection::make('Aportes', [
+                MenuSection::make('Planos', [
                     MenuItem::resource(\App\Nova\Models\Data\DataPlan::class),
                 ])->icon('briefcase')->collapsable(),
 
