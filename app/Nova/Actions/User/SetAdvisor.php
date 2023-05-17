@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Nova\Actions;
+namespace App\Nova\Actions\User;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -10,7 +10,7 @@ use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class ChangeStatusModel extends Action
+class SetAdvisor extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -58,10 +58,10 @@ class ChangeStatusModel extends Action
     public function fields(NovaRequest $request)
     {
         return [
-            Select::make('Gestor', 'status')->options(function () {
+            Select::make('Assessor', 'status')->options(function () {
                 $array = [];
                 foreach ($this->model_status as $status) {
-                    if ($status->type == 'mananger') {
+                    if ($status->type == 'advisor') {
                         $array[$status->id] = $status->name;
                     }
                 }
