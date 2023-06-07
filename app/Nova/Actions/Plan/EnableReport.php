@@ -2,12 +2,14 @@
 
 namespace App\Nova\Actions\Plan;
 
+use App\Http\Resources\Plan\PlanResource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class EnableReport extends Action
@@ -23,10 +25,14 @@ class EnableReport extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        foreach ($models as $model) {
-            $model->withdrawal_report = true;
-            $model->save();
-            $this->markAsFinished($model);
+      foreach ($models as $model) {
+        try {
+              (new PlanResource())->withdralReport($model->user_id, $fields->type);
+              $model->save();
+              $this->markAsFinished($model);
+          } catch (\Exception $e) {
+              $this->markAsFailed($model, $e);
+          }
         }
     }
 
@@ -38,7 +44,12 @@ class EnableReport extends Action
      */
     public function fields(NovaRequest $request)
     {
-        return [];
+      return [
+        Select::make('Tipo', 'type')->options([
+            true => 'Ativar',
+            false => 'Desativar',
+        ]),
+    ];
     }
 
     /**
@@ -46,5 +57,5 @@ class EnableReport extends Action
      *
      * @var string
      */
-    public $name = 'Ativar Reaporte';
+    public $name = 'Reaporte automatico';
 }

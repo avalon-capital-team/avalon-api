@@ -139,18 +139,10 @@ class UserPlanController extends Controller
   public function WithdrawalReport(Request $request)
   {
     try {
-      if((new PlanResource())->WithdralReport(auth()->user(), $request->value) == false){
         return response()->json([
-          'status'  => (new PlanResource())->WithdralReport(auth()->user(), $request->value),
-          'message' => __('Não foi possivel atualizar o reaporte automático.')
-        ]);
-      } else{
-        return response()->json([
-          'status'  => (new PlanResource())->WithdralReport(auth()->user(), $request->value),
+          'status'  => (new PlanResource())->withdralReport(auth()->user()->id, $request->value),
           'message' => __('Atualização do reaporte automático realizada com sucesso.')
         ]);
-      }
-
     } catch (\Exception $e) {
       DB::rollBack();
 

@@ -2,6 +2,7 @@
 
 namespace App\Nova\Models\User;
 
+use App\Nova\Actions\Plan\EnableReport;
 use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Resource;
@@ -134,8 +135,7 @@ class UserPlan extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            // new ApprovePaymentVoucher(\App\Models\User\UserPlan::get()),
-            // new RejectPaymentVoucher(\App\Models\User\UserPlan::get()),
+          // new EnableReport(\App\Models\User\UserPlan::get()),
         ];
     }
 

@@ -181,9 +181,24 @@ class PlanResource
    * @param  bool $value
    * @return string
    */
-  function WithdralReport(User $user, bool $value)
+  function getAutomaticReport(User $user)
   {
-    $plans = Plan::where('user_id', $user->id)->where('acting', 1)->get();
+    $auto_report = Plan::where('user_id', $user->id)->where('acting', 1)->select('withdrawal_report')->first();
+
+    if($auto_report->withdrawal_report == 0) return false;
+    return true;
+  }
+
+  /**
+   * Check a days installments
+   *
+   * User
+   * @param  bool $value
+   * @return string
+   */
+  function withdralReport( $user_id, bool $value)
+  {
+    $plans = Plan::where('user_id', $user_id)->where('acting', 1)->get();
     if (count($plans) == 0) {
       return false;
     }else{
@@ -194,7 +209,6 @@ class PlanResource
     }
     return true;
   }
-
 
   public function dispatchIncomes(Plan $plan)
   {
@@ -223,24 +237,23 @@ class PlanResource
       }
     }
 
-    // if ($plan->withdrawal_report == 1) {
-    //     $base_amount = $plan->amount;
-    // } else {
-    $base_amount = $plan->amount + $plan->income;
-    // }
+    if ($plan->withdrawal_report == 0) {
+          $base_amount = $plan->amount;
+      } else {
+        $base_amount = $plan->amount + $plan->income;
+    }
 
-    $base_amount = $plan->amount + $plan->income;
     $description = 'Rendimento mensal';
     (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($base_amount),  $description);
 
     $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
     $balance->income += $income;
 
-    // if ($plan->withdrawal_report == 1) {
-    //     (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
-    // } else {
-    (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
-    // }
+    if ($plan->withdrawal_report == 0) {
+          (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
+      } else {
+        (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
+    }
 
     $user->userPlan->income += $income;
 
@@ -276,11 +289,11 @@ class PlanResource
       $percentPeriodo = $days * $percent;
     }
 
-    // if ($plan->withdrawal_report == 1) {
-    //     $amount = $plan->amount;
-    // } else {
+    if ($plan->withdrawal_report == 0) {
+        $amount = $plan->amount;
+    } else {
     $amount = $plan->amount + $plan->income;
-    // }
+    }
 
     $value = ($percentPeriodo / 100) * $amount;
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\Plan\PlanResource;
 use App\Http\Resources\User\UserOnboardingResource;
 use App\Http\Resources\User\UserProfileResource;
 use App\Http\Resources\Settings\SettingsSecurityResource;
@@ -51,9 +52,10 @@ class LoginController extends Controller
                 'onboarding' => [
                     'step' => (new UserOnboardingResource())->getActualStep($user)
                 ],
-                'twoFa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
                 'compliance' => (new UserComplianceResource())->findByComplianceStatus($user),
                 'user' => (new UserProfileResource())->profileDetail(auth()->user()),
+                'automatic_report' => (new PlanResource())->getAutomaticReport(auth()->user()),
+                'twoFa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
