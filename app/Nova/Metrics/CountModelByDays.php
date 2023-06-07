@@ -54,6 +54,8 @@ class CountModelByDays extends Trend
     public function ranges()
     {
         return [
+          'ALL' => __('Todo o tempo'),
+          'TODAY' => __('Hoje'),
             30 => __('30 Dias'),
             60 => __('60 Dias'),
             365 => __('365 Dias'),
