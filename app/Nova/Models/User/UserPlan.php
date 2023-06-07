@@ -135,7 +135,7 @@ class UserPlan extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-          // new EnableReport(\App\Models\User\UserPlan::get()),
+          new EnableReport(\App\Models\User\UserPlan::get()),
         ];
     }
 
