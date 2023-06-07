@@ -147,8 +147,8 @@ class Plan extends Resource
         return [
             new ApprovePaymentVoucher(\App\Models\Plan\Plan::get()),
             new RejectPaymentVoucher(\App\Models\Plan\Plan::get()),
-            new EnableReport(\App\Models\Plan\Plan::get()),
-            new DesableReport(\App\Models\Plan\Plan::get()),
+            // new EnableReport(\App\Models\Plan\Plan::get()),
+            // new DesableReport(\App\Models\Plan\Plan::get()),
         ];
     }
 
