@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Nova\Actions\User\Voucher;
+namespace App\Nova\Actions\Plan;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,9 +9,8 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use App\Http\Resources\Credit\CreditBalanceResource;
 
-class RejectPaymentVoucher extends Action
+class DesableReport extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -24,12 +23,11 @@ class RejectPaymentVoucher extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        foreach ($models as $model) {
-            $model->acting = 0;
-            (new CreditBalanceResource())->inativePlan($model);
-            $model->save();
-            $this->markAsFinished($model);
-        }
+      foreach ($models as $model) {
+        $model->withdrawal_report = false;
+        $model->save();
+        $this->markAsFinished($model);
+    }
     }
 
     /**
@@ -48,5 +46,5 @@ class RejectPaymentVoucher extends Action
      *
      * @var string
      */
-    public $name = 'Desativar plano';
+    public $name = 'Desativar Reaporte';
 }

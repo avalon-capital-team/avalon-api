@@ -136,6 +136,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         # Update Device token
         Route::post('device-token/update', [App\Http\Controllers\Api\Settings\SettingsDeviceTokenController::class, 'updateDeviceToken']);
+
+        # Withdrawal report
+        Route::post('plan/withdraw-report', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'WithdrawalReport']);
     });
 
     # Wallet

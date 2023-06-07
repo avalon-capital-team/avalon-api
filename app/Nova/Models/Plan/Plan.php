@@ -2,6 +2,8 @@
 
 namespace App\Nova\Models\Plan;
 
+use App\Nova\Actions\Plan\DesableReport;
+use App\Nova\Actions\Plan\EnableReport;
 use App\Nova\Actions\User\Voucher\ApprovePaymentVoucher;
 use App\Nova\Actions\User\Voucher\RejectPaymentVoucher;
 use App\Nova\Resource;
@@ -77,6 +79,8 @@ class Plan extends Resource
 
             BelongsTo::make('Plano', 'dataPlan', 'App\Nova\Models\Data\DataPlan'),
 
+            Boolean::make('Reaporte Automatico', 'withdrawal_report'),
+
             Currency::make('Valor', 'amount')
                 ->displayUsing(function ($value) {
                     return currency_format($value, 'brl');
@@ -143,6 +147,8 @@ class Plan extends Resource
         return [
             new ApprovePaymentVoucher(\App\Models\Plan\Plan::get()),
             new RejectPaymentVoucher(\App\Models\Plan\Plan::get()),
+            new EnableReport(\App\Models\Plan\Plan::get()),
+            new DesableReport(\App\Models\Plan\Plan::get()),
         ];
     }
 

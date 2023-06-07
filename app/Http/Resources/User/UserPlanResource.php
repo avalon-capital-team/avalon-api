@@ -76,7 +76,6 @@ class UserPlanResource
      */
     public function upDate(User $user, $data)
     {
-
         $plan = (new PlanResource())->getPlan($user->id, $data['plan_id']);
 
         if ($plan['coin_id'] == 1) {

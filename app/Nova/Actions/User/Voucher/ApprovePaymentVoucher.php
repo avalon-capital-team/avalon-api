@@ -44,4 +44,11 @@ class ApprovePaymentVoucher extends Action
     {
         return [];
     }
+
+    /**
+     * The displayable name of the action.
+     *
+     * @var string
+     */
+    public $name = 'Ativar Plano';
 }
