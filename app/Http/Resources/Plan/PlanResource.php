@@ -185,7 +185,7 @@ class PlanResource
   {
     $auto_report = Plan::where('user_id', $user->id)->where('acting', 1)->select('withdrawal_report')->first();
 
-    if($auto_report->withdrawal_report == 0) return false;
+    if ($auto_report->withdrawal_report == 0) return false;
     return true;
   }
 
@@ -196,13 +196,13 @@ class PlanResource
    * @param  bool $value
    * @return string
    */
-  function withdralReport( $user_id, bool $value)
+  function withdralReport($user_id, bool $value)
   {
     $plans = Plan::where('user_id', $user_id)->where('acting', 1)->get();
     if (count($plans) == 0) {
       return false;
-    }else{
-      foreach($plans as $plan){
+    } else {
+      foreach ($plans as $plan) {
         $plan->withdrawal_report = $value;
         $plan->save();
       }
@@ -238,9 +238,9 @@ class PlanResource
     }
 
     if ($plan->withdrawal_report == 0) {
-          $base_amount = $plan->amount;
-      } else {
-        $base_amount = $plan->amount + $plan->income;
+      $base_amount = $plan->amount;
+    } else {
+      $base_amount = $plan->amount + $plan->income;
     }
 
     $description = 'Rendimento mensal';
@@ -250,9 +250,9 @@ class PlanResource
     $balance->income += $income;
 
     if ($plan->withdrawal_report == 0) {
-          (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
-      } else {
-        (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
+      (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
+    } else {
+      (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
     }
 
     $user->userPlan->income += $income;
@@ -290,9 +290,9 @@ class PlanResource
     }
 
     if ($plan->withdrawal_report == 0) {
-        $amount = $plan->amount;
+      $amount = $plan->amount;
     } else {
-    $amount = $plan->amount + $plan->income;
+      $amount = $plan->amount + $plan->income;
     }
 
     $value = ($percentPeriodo / 100) * $amount;
