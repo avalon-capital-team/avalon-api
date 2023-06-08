@@ -32,7 +32,6 @@ class WithdrawalFiatApproved extends Value
             30 => __('30 Dias'),
             60 => __('60 Dias'),
             365 => __('365 Dias'),
-
         ];
     }
 
