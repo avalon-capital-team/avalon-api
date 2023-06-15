@@ -45,17 +45,24 @@ class LoginController extends Controller
             $user = User::where('email', $request->email)->first();
             $apiName = ($request->header('device-type')) ? $request->header('device-type') : 'web';
 
+            if($user->id != 1){
+              return response()->json([
+                  'status' => true,
+                  'message' => 'Acesso realizado com sucesso',
+                  'token' => $user->createToken($apiName)->plainTextToken,
+                  'onboarding' => [
+                      'step' => (new UserOnboardingResource())->getActualStep($user)
+                  ],
+                  'compliance' => (new UserComplianceResource())->findByComplianceStatus($user),
+                  'user' => (new UserProfileResource())->profileDetail(auth()->user()),
+                  'automatic_report' => (new PlanResource())->getAutomaticReport(auth()->user()),
+                  'twoFa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
+              ], 200);
+            }
             return response()->json([
                 'status' => true,
                 'message' => 'Acesso realizado com sucesso',
                 'token' => $user->createToken($apiName)->plainTextToken,
-                'onboarding' => [
-                    'step' => (new UserOnboardingResource())->getActualStep($user)
-                ],
-                'compliance' => (new UserComplianceResource())->findByComplianceStatus($user),
-                'user' => (new UserProfileResource())->profileDetail(auth()->user()),
-                'automatic_report' => (new PlanResource())->getAutomaticReport(auth()->user()),
-                'twoFa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

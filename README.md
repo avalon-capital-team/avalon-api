@@ -36,6 +36,66 @@ The Avalon Capital project consists of a social network.
 -   [x] Assessores
     -   [x] Lista de seus clientes
 
+## Admin API
+-   [x] Auth
+    -   [x] Login
+    -   [x] Password Recover
+    -   [x] Create new Password
+-   [] Dashboard
+    -   [x] Total dos clientes
+    -   [x] Total dos gestores
+    -   [x] Total dos assessores
+    -   [x] Valor total aportado
+    -   [x] Valor total aportado reinvestido
+    -   [x] Valor total aportado nao reinvestido
+    -   [x] Valor total rendido
+    -   [x] Valor total rendido reinvestido
+    -   [x] Valor total rendido nao reinvestido
+    -   [x] Valor total de saque
+    -   [] Valor total de deposito
+-   [] Usuários
+    -   [] Lista dos usuários (filtro "clientes, gestores, assessores")
+    -   [] Usuário
+        -   [] Dados do usuário
+        -   [] Dados do compliance
+        -   [] Dados do endereço
+        -   [] Dados do 2FA
+        -   [] Dados dos aportes
+        -   [] Dados da carteira
+        -   [] Mudar tipo do usuário
+        -   [] Aprovar usuário
+        -   [] Rejeitar usuário
+        -   [] Deletar usuário
+        -   [] Setar um gestor ou assessor
+        -   [] Criar aporte
+        -   [] Aprovar/rejeitar aporte
+        -   [] Ativar/desativar reaporte
+        -   [] Reaportar
+        -   [] Deletar aporte
+-   [] Saques
+    -   [] Lista de saques (filtro "pendente, aprovado, rejeitado")
+    -   [] Dados do saque
+    -   [] Deletar saque
+-   [] Depósitos
+    -   [] Lista de depósitos (filtro "pendente, aprovado, rejeitado")
+    -   [] Dados do depósito
+    -   [] Deletar depósito
+-   [] Extrato
+    -   [] Lista de extrato (filtro "moeda, tipo, usuario")
+    -   [] Dados do extrato
+-   [] Planos
+    -   [] Lista dos planos
+    -   [] Deletar plano
+-   [] Porcentagem
+    -   [] Lista das porcentagens
+    -   [] Deletar porcentagem
+-   [] Moedas
+    -   [] Lista das moedas
+    -   [] Dados da moeda
+    -   [] Deletar moeda
+
+
+
 ## Library
 
 -   Framework: **Laravel 9.X**

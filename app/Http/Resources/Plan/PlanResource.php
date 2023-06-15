@@ -184,6 +184,7 @@ class PlanResource
   function getAutomaticReport(User $user)
   {
     $auto_report = Plan::where('user_id', $user->id)->where('acting', 1)->select('withdrawal_report')->first();
+
     if (!$auto_report) return false;
     if ($auto_report->withdrawal_report == 0) return false;
     return true;

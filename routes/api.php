@@ -18,185 +18,186 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 # API Auth
 Route::group(['prefix' => 'auth'], function () {
-    # Login
-    Route::post('signin', [App\Http\Controllers\Api\Auth\LoginController::class, 'login']);
+  # Login
+  Route::post('signin', [App\Http\Controllers\Api\Auth\LoginController::class, 'login']);
 
-    # Forgot Password
-    Route::post('forgot-password', [App\Http\Controllers\Api\Auth\ForgotPasswordController::class, 'recoverPassword']);
+  # Forgot Password
+  Route::post('forgot-password', [App\Http\Controllers\Api\Auth\ForgotPasswordController::class, 'recoverPassword']);
 
-    # Reset Password
-    Route::post('reset-password', [App\Http\Controllers\Api\Auth\ResetPasswordController::class, 'updatePasswordRecovery']);
+  # Reset Password
+  Route::post('reset-password', [App\Http\Controllers\Api\Auth\ResetPasswordController::class, 'updatePasswordRecovery']);
 
-    # Register
-    Route::post('signup', [App\Http\Controllers\Api\Auth\RegisterController::class, 'register']);
+  # Register
+  Route::post('signup', [App\Http\Controllers\Api\Auth\RegisterController::class, 'register']);
 
-    # Resend Code
-    Route::get('resend-code', [App\Http\Controllers\Api\Auth\VerifyController::class, 'resendCode']);
+  # Resend Code
+  Route::get('resend-code', [App\Http\Controllers\Api\Auth\VerifyController::class, 'resendCode']);
 });
 
 # API Logged
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
-    # Verify Code
-    Route::group(['prefix' => 'onboarding'], function () {
-        Route::post('verify-code', [App\Http\Controllers\Api\Auth\VerifyController::class, 'verifyCode']);
-    });
+  # Verify Code
+  Route::group(['prefix' => 'onboarding'], function () {
+    Route::post('verify-code', [App\Http\Controllers\Api\Auth\VerifyController::class, 'verifyCode']);
+  });
 
-    # Onboarding
-    Route::group(['prefix' => 'onboarding'], function () {
-        Route::get('actual-step', [App\Http\Controllers\Api\Onboarding\OnboardingController::class, 'getActualStep']);
-        Route::get('all-steps', [App\Http\Controllers\Api\Onboarding\OnboardingController::class, 'getAllSteps']);
+  # Onboarding
+  Route::group(['prefix' => 'onboarding'], function () {
+    Route::get('actual-step', [App\Http\Controllers\Api\Onboarding\OnboardingController::class, 'getActualStep']);
+    Route::get('all-steps', [App\Http\Controllers\Api\Onboarding\OnboardingController::class, 'getAllSteps']);
 
-        # Step One
-        Route::post('update-step-one', [App\Http\Controllers\Api\Onboarding\OnboardingStepOneController::class, 'updateStep']);
+    # Step One
+    Route::post('update-step-one', [App\Http\Controllers\Api\Onboarding\OnboardingStepOneController::class, 'updateStep']);
 
-        # Step Two
-        Route::post('update-step-two', [App\Http\Controllers\Api\Onboarding\OnboardingStepTwoController::class, 'updateStep']);
+    # Step Two
+    Route::post('update-step-two', [App\Http\Controllers\Api\Onboarding\OnboardingStepTwoController::class, 'updateStep']);
 
-        # Step Three
-        Route::post('update-step-three', [App\Http\Controllers\Api\Onboarding\OnboardingStepThreeController::class, 'updateStep']);
-    });
+    # Step Three
+    Route::post('update-step-three', [App\Http\Controllers\Api\Onboarding\OnboardingStepThreeController::class, 'updateStep']);
+  });
+
+  # Compliance
+  Route::group(['prefix' => 'compliance'], function () {
+    Route::get('user-compliance-status', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'userComplianceStatus']);
+
+    # Send Documents
+    Route::post('start-compleance-person', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'startPersonCompliance']);
+    Route::post('store-or-update', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'upPersonCompliance']);
+  });
+
+  # User
+  Route::group(['prefix' => 'user'], function () {
+    # User
+    Route::get('data', [App\Http\Controllers\Api\Account\AccountController::class, 'userData']);
+    Route::get('plan', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlan']);
+
+    # Plan
+    Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrUpdate']);
+    # UploadFile
+    Route::post('plan/upload-voucher', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'uploadeVoucher']);
+    # Extract
+    Route::get('plan/extract', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getExtract']);
+    # Plans
+    Route::get('plan/get-plans', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlans']);
+    # Plans Report
+    Route::get('plan/reports', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getReports']);
+    #Withdrawal
+    Route::get('plan/withdrawal', [App\Http\Controllers\Api\Wallet\WithdrawalController::class, 'withdrawlPlan']);
+  });
+
+  # Manange/Accessor
+  Route::group(['prefix' => 'mananger'], function () {
+    Route::get('list', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getIndicateList']);
+
+    # List of Managers and Adivisors
+    Route::get('users', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getUsersTypes']);
+
+    # Set Indicate
+    Route::post('set-indicator', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'setIndicate']);
+
+    # Set User Mananger
+    Route::post('set-mananger', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'setMananger']);
+  });
+
+  # Withdrawl
+  Route::group(['prefix' => 'withdrawal'], function () {
+    # Request
+    Route::post('request', [App\Http\Controllers\Api\Wallet\WithdrawalController::class, 'withdrawl']);
+  });
+
+  # Settings
+  Route::group(['prefix' => 'settings'], function () {
+    # General
+    Route::get('general', [App\Http\Controllers\Api\Settings\SettingsGeneralController::class, 'data']);
+    Route::post('general/update', [App\Http\Controllers\Api\Settings\SettingsGeneralController::class, 'update']);
+
+    # Profile
+    Route::post('profile/update', [App\Http\Controllers\Api\Settings\SettingsProfileController::class, 'update']);
 
     # Compliance
-    Route::group(['prefix' => 'compliance'], function () {
-        Route::get('user-compliance-status', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'userComplianceStatus']);
+    Route::get('compliance', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'data']);
+    Route::post('compliance/update', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'update']);
 
-        # Send Documents
-        Route::post('start-compleance-person', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'startPersonCompliance']);
-        Route::post('store-or-update', [App\Http\Controllers\Api\Compliance\UserComplianceController::class, 'upPersonCompliance']);
-    });
+    # Financial
+    Route::get('financial', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'data']);
+    Route::post('finacial/update-pix', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updatePix']);
+    Route::post('finacial/update-bank', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updateBank']);
+    Route::post('finacial/update-crypto', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updateCrypto']);
 
-    # User
-    Route::group(['prefix' => 'user'], function () {
-        # User
-        Route::get('data', [App\Http\Controllers\Api\Account\AccountController::class, 'userData']);
-        Route::get('plan', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlan']);
+    # Security
+    Route::post('security/update-password', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'updatePassword']);
+    Route::get('security/2fa', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'data2fa']);
+    Route::post('security/2fa/enable', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'enable2fa']);
+    Route::post('security/2fa/disable', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'disable2fa']);
 
-        # Plan
-        Route::post('order/generate', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'createOrUpdate']);
-        # UploadFile
-        Route::post('plan/upload-voucher', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'uploadeVoucher']);
-        # Extract
-        Route::get('plan/extract', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getExtract']);
-        # Plans
-        Route::get('plan/get-plans', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'getUserPlans']);
-        # Plans Report
-        Route::get('plan/reports', [App\Http\Controllers\Api\Plan\ExtractController::class, 'getReports']);
-        #Withdrawal
-        Route::get('plan/withdrawal', [App\Http\Controllers\Api\Wallet\WithdrawalController::class, 'withdrawlPlan']);
-    });
+    # Access Logs
+    Route::get('access-logs', [App\Http\Controllers\Api\Settings\SettingsAccessLogsController::class, 'data']);
 
-    # Manange/Accessor
-    Route::group(['prefix' => 'mananger'], function () {
-        Route::get('list', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getIndicateList']);
+    # Update Device token
+    Route::post('device-token/update', [App\Http\Controllers\Api\Settings\SettingsDeviceTokenController::class, 'updateDeviceToken']);
 
-        # List of Managers and Adivisors
-        Route::get('users', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'getUsersTypes']);
+    # Withdrawal report
+    Route::post('plan/withdraw-report', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'WithdrawalReport']);
+  });
 
-        # Set Indicate
-        Route::post('set-indicator', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'setIndicate']);
+  # Wallet
+  Route::group(['prefix' => 'wallet'], function () {
+    Route::get('balance', [\App\Http\Controllers\Api\Wallet\CoinConvertController::class, 'balance']);
+    Route::post('convert-coin', [\App\Http\Controllers\Api\Wallet\CoinConvertController::class, 'convertCoin']);
 
-        # Set User Mananger
-        Route::post('set-mananger', [App\Http\Controllers\Api\Sponsor\SponsorController::class, 'setMananger']);
-    });
+    # Deposit
+    Route::post('create-deposit', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'deposit']);
+    Route::post('deposit/upload-file', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'uploadFile']);
+  });
 
-    # Withdrawl
-    Route::group(['prefix' => 'withdrawal'], function () {
-        # Request
-        Route::post('request', [App\Http\Controllers\Api\Wallet\WithdrawalController::class, 'withdrawl']);
-    });
+  # Notifications
+  Route::get('/notifications', [App\Http\Controllers\Api\Notifications\NotificationsController::class, 'list'])->name('api.notifications');
 
-    # Settings
-    Route::group(['prefix' => 'settings'], function () {
-        # General
-        Route::get('general', [App\Http\Controllers\Api\Settings\SettingsGeneralController::class, 'data']);
-        Route::post('general/update', [App\Http\Controllers\Api\Settings\SettingsGeneralController::class, 'update']);
+  # Graphic
+  Route::group(['prefix' => 'admin'], function () {
+    #Dashboard
+    Route::get('data', [App\Http\Controllers\Api\Admin\Dashboard\DashboardController::class, 'data']);
 
-        # Profile
-        Route::post('profile/update', [App\Http\Controllers\Api\Settings\SettingsProfileController::class, 'update']);
-
-        # Compliance
-        Route::get('compliance', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'data']);
-        Route::post('compliance/update', [App\Http\Controllers\Api\Settings\SettingsComplianceController::class, 'update']);
-
-        # Financial
-        Route::get('financial', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'data']);
-        Route::post('finacial/update-pix', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updatePix']);
-        Route::post('finacial/update-bank', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updateBank']);
-        Route::post('finacial/update-crypto', [App\Http\Controllers\Api\Settings\SettingsFinancialController::class, 'updateCrypto']);
-
-        # Security
-        Route::post('security/update-password', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'updatePassword']);
-        Route::get('security/2fa', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'data2fa']);
-        Route::post('security/2fa/enable', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'enable2fa']);
-        Route::post('security/2fa/disable', [App\Http\Controllers\Api\Settings\SettingsSecurityController::class, 'disable2fa']);
-
-        # Access Logs
-        Route::get('access-logs', [App\Http\Controllers\Api\Settings\SettingsAccessLogsController::class, 'data']);
-
-        # Update Device token
-        Route::post('device-token/update', [App\Http\Controllers\Api\Settings\SettingsDeviceTokenController::class, 'updateDeviceToken']);
-
-        # Withdrawal report
-        Route::post('plan/withdraw-report', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'WithdrawalReport']);
-    });
-
-    # Wallet
-    Route::group(['prefix' => 'wallet'], function () {
-        Route::get('balance', [\App\Http\Controllers\Api\Wallet\CoinConvertController::class, 'balance']);
-        Route::post('convert-coin', [\App\Http\Controllers\Api\Wallet\CoinConvertController::class, 'convertCoin']);
-
-        # Deposit
-        Route::post('create-deposit', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'deposit']);
-        Route::post('deposit/upload-file', [\App\Http\Controllers\Api\Wallet\DepositFiatController::class, 'uploadFile']);
-    });
-
-    # TESTE RENTABIL
-    Route::get('rentabil', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
-
-
-    # Notifications
-    Route::get('/notifications', [App\Http\Controllers\Api\Notifications\NotificationsController::class, 'list'])->name('api.notifications');
+    #Users
+    Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'users']);
+  });
 });
 
 # Coin
 Route::group(['prefix' => 'coin'], function () {
-    Route::get('listings', [App\Http\Controllers\Api\Coin\CoinController::class, 'coinListings']);
+  Route::get('listings', [App\Http\Controllers\Api\Coin\CoinController::class, 'coinListings']);
 
-    # Get API Listings Latest
-    Route::get('listings-latest', [App\Http\Controllers\Api\Coin\CoinController::class, 'coinListingsLatest']);
+  # Get API Listings Latest
+  Route::get('listings-latest', [App\Http\Controllers\Api\Coin\CoinController::class, 'coinListingsLatest']);
 
-    # Coin Tracker
-    Route::get('tracker', [App\Http\Controllers\Api\Coin\CoinTrackerController::class, 'coinTracker']);
+  # Coin Tracker
+  Route::get('tracker', [App\Http\Controllers\Api\Coin\CoinTrackerController::class, 'coinTracker']);
 });
 
-# Graphic
-Route::group(['prefix' => 'graphic'], function () {
-    Route::get('get-data', [App\Http\Controllers\Api\Graphic\GraphicDataController::class, 'getGraphic']);
-});
 
 # Helpers
 Route::group(['prefix' => 'helpers'], function () {
 
-    Route::get('approve', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'approve']);
+  Route::get('approve', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'approve']);
 
-    # Coins
-    Route::get('coins', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllCoins']);
+  # Coins
+  Route::get('coins', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllCoins']);
 
-    # Banks
-    Route::get('banks', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllBanks']);
+  # Banks
+  Route::get('banks', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllBanks']);
 
-    # Plans
-    Route::get('plans', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPlans']);
+  # Plans
+  Route::get('plans', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPlans']);
 
-    # Countries
-    Route::get('countries', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllCountries']);
+  # Countries
+  Route::get('countries', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllCountries']);
 
-    # Genre
-    Route::get('genres', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllGenres']);
+  # Genre
+  Route::get('genres', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllGenres']);
 
-    # Privacy
-    Route::get('privacy/types-with-options', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPrivacyTypeWithOption']);
-    Route::get('privacy/types', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPrivacyType']);
-    Route::get('privacy/options', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPrivacyOption']);
+  # Privacy
+  Route::get('privacy/types-with-options', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPrivacyTypeWithOption']);
+  Route::get('privacy/types', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPrivacyType']);
+  Route::get('privacy/options', [App\Http\Controllers\Api\Helpers\HelpersController::class, 'getAllPrivacyOption']);
 });
