@@ -138,7 +138,7 @@ class Plan extends Model implements AuditableContract
      */
     public function dataUser()
     {
-      $plans = Plan::get()->limit(10);
+      $plans = Plan::get();
       foreach ($plans as $plan){
         $plan->user;
         $plan->dataPlan;
