@@ -18,6 +18,7 @@ use App\Models\User\UserTokenDevice;
 use App\Models\User\UserPlan;
 use App\Models\User\UserWithdrawalInfo;
 use App\Models\Credit\CreditBalance;
+use App\Models\Plan\Plan;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -206,7 +207,7 @@ class User extends Authenticatable
      */
     public function creditBalance()
     {
-        return $this->hasOne(CreditBalance::class, 'user_id', 'id');
+        return $this->hasMany(CreditBalance::class, 'user_id', 'id');
     }
 
     /**
@@ -227,5 +228,37 @@ class User extends Authenticatable
     public function userPlan()
     {
         return $this->hasOne(UserPlan::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the plans detains
+     *
+     * @return \App\Models\Data\DataPlan
+     */
+    public function plan()
+    {
+        return $this->hasMany(Plan::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get all data of user
+     *
+     * @return \App\Models\User\UserPlan
+     */
+    public function allData()
+    {
+      $users = User::get();
+      foreach($users as $user){
+        $user->profile;
+        $user->address;
+        $user->security;
+        $user->onboarding;
+        $user->compliance;
+        $user->status;
+        $user->financial;
+        $user->creditBalance;
+        $user->plan;
+      }
+        return $users;
     }
 }
