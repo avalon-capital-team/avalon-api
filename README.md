@@ -53,16 +53,17 @@ The Avalon Capital project consists of a social network.
     -   [x] Valor total rendido nao reinvestido
     -   [x] Valor total de saque
     -   [x] Valor total de deposito
+    -   [] Lista de planos ativos
 -   [] Usuários
-    -   [] Lista dos usuários (filtro "clientes, gestores, assessores")
+    -   [x] Lista dos usuários (filtro "clientes, gestores, assessores")
     -   [] Usuário
-        -   [] Dados do usuário
-        -   [] Dados do compliance
-        -   [] Dados do endereço
-        -   [] Dados do 2FA
-        -   [] Dados dos aportes
-        -   [] Dados da carteira
-        -   [] Mudar tipo do usuárioN
+        -   [x] Dados do usuário
+        -   [x] Dados do compliance
+        -   [x] Dados do endereço
+        -   [x] Dados do 2FA
+        -   [x] Dados dos aportes
+        -   [x] Dados da carteira
+        -   [] Mudar tipo do usuário
         -   [] Aprovar usuário
         -   [] Rejeitar usuário
         -   [] Deletar usuário

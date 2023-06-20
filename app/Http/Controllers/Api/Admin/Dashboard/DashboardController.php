@@ -35,6 +35,7 @@ class DashboardController extends Controller
         'clients' => count(User::where('type', 'user')->get()),
         'mananger' => count(User::where('type', 'mananger')->get()),
         'advisor' => count(User::where('type', 'advisor')->get()),
+        'list_plans' => (new Plan())->dataUser(),
         'total_amount' => Plan::where('acting', 1)->sum('amount'),
         'total_amount_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->sum('amount'),
         'total_amount_off_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', false)->sum('amount'),

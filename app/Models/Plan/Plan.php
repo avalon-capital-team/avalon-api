@@ -130,4 +130,20 @@ class Plan extends Model implements AuditableContract
     {
         return $this->belongsTo(UserPlan::class, 'user_plan_id');
     }
+
+    /**
+     * Get the plan detains
+     *
+     * @return \App\Models\User\UserPlan
+     */
+    public function dataUser()
+    {
+      $plans = Plan::get()->limit(10);
+      foreach ($plans as $plan){
+        $plan->user;
+        $plan->dataPlan;
+        $plan->coin;
+      }
+        return $plans;
+    }
 }
