@@ -52,7 +52,7 @@ The Avalon Capital project consists of a social network.
     -   [x] Valor total rendido reinvestido
     -   [x] Valor total rendido nao reinvestido
     -   [x] Valor total de saque
-    -   [] Valor total de deposito
+    -   [x] Valor total de deposito
 -   [] Usuários
     -   [] Lista dos usuários (filtro "clientes, gestores, assessores")
     -   [] Usuário
@@ -62,7 +62,7 @@ The Avalon Capital project consists of a social network.
         -   [] Dados do 2FA
         -   [] Dados dos aportes
         -   [] Dados da carteira
-        -   [] Mudar tipo do usuário
+        -   [] Mudar tipo do usuárioN
         -   [] Aprovar usuário
         -   [] Rejeitar usuário
         -   [] Deletar usuário

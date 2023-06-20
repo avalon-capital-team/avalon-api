@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Deposit\DepositFiat;
 use App\Models\Plan\Plan;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -41,6 +42,8 @@ class DashboardController extends Controller
         'total_income_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->sum('income'),
         'total_income_off_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', false)->sum('income'),
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
+        'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
+        'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
       ]);
     } catch (\Exception $e) {
       return response()->json([
