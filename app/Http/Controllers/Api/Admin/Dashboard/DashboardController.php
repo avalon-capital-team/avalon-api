@@ -35,7 +35,6 @@ class DashboardController extends Controller
         'clients' => count(User::where('type', 'user')->get()),
         'mananger' => count(User::where('type', 'mananger')->get()),
         'advisor' => count(User::where('type', 'advisor')->get()),
-        'list_plans' => (new Plan())->dataUser(),
         'total_amount' => Plan::where('acting', 1)->sum('amount'),
         'total_amount_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->sum('amount'),
         'total_amount_off_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', false)->sum('amount'),
@@ -45,6 +44,7 @@ class DashboardController extends Controller
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
         'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
         'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
+        'list_plans' => (new Plan())->dataUser(),
       ]);
     } catch (\Exception $e) {
       return response()->json([

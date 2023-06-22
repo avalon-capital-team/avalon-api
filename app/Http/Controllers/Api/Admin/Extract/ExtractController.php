@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin\Users;
+namespace App\Http\Controllers\Api\Admin\Extract;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Credit\Credit;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class ExtractController extends Controller
 {
   /**
    * Create a new controller instance.
@@ -27,8 +27,7 @@ class UserController extends Controller
     try {
       return response()->json([
         'status'  => true,
-        'users' => (new User())->allData(),
-
+        'Extract' => Credit::get(),
       ]);
     } catch (\Exception $e) {
       return response()->json([

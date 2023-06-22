@@ -41,7 +41,7 @@ The Avalon Capital project consists of a social network.
     -   [x] Login
     -   [x] Password Recover
     -   [x] Create new Password
--   [] Dashboard
+-   [x] Dashboard
     -   [x] Total dos clientes
     -   [x] Total dos gestores
     -   [x] Total dos assessores
@@ -53,7 +53,7 @@ The Avalon Capital project consists of a social network.
     -   [x] Valor total rendido nao reinvestido
     -   [x] Valor total de saque
     -   [x] Valor total de deposito
-    -   [] Lista de planos ativos
+    -   [x] Lista de planos ativos
 -   [] Usuários
     -   [x] Lista dos usuários (filtro "clientes, gestores, assessores")
     -   [] Usuário

@@ -160,7 +160,19 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('data', [App\Http\Controllers\Api\Admin\Dashboard\DashboardController::class, 'data']);
 
     #Users
-    Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'users']);
+    Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'data']);
+
+    #Withdrals
+    Route::get('withdrals', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'data']);
+
+    #Deposits
+    Route::get('deposits', [App\Http\Controllers\Api\Admin\Deposti\DepositsController::class, 'data']);
+
+    #Extract
+    Route::get('extract', [App\Http\Controllers\Api\Admin\Extract\ExtractController::class, 'data']);
+
+    #Models
+    // Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'users']);
   });
 });
 

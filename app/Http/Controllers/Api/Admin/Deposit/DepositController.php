@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin\Users;
+namespace App\Http\Controllers\Api\Admin\Deposit;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Deposit\DepositFiat;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class DepositController extends Controller
 {
   /**
    * Create a new controller instance.
@@ -27,8 +27,7 @@ class UserController extends Controller
     try {
       return response()->json([
         'status'  => true,
-        'users' => (new User())->allData(),
-
+        'Deposits' => DepositFiat::get(),
       ]);
     } catch (\Exception $e) {
       return response()->json([
