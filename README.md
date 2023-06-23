@@ -74,25 +74,21 @@ The Avalon Capital project consists of a social network.
         -   [] Reaportar
         -   [] Deletar aporte
 -   [] Saques
-    -   [] Lista de saques (filtro "pendente, aprovado, rejeitado")
-    -   [] Dados do saque
+    -   [x] Lista de saques (filtro "pendente, aprovado, rejeitado")
     -   [] Deletar saque
 -   [] Depósitos
-    -   [] Lista de depósitos (filtro "pendente, aprovado, rejeitado")
-    -   [] Dados do depósito
+    -   [x] Lista de depósitos (filtro "pendente, aprovado, rejeitado")
     -   [] Deletar depósito
 -   [] Extrato
-    -   [] Lista de extrato (filtro "moeda, tipo, usuario")
-    -   [] Dados do extrato
+    -   [x] Lista de extrato (filtro "moeda, tipo, usuario")
 -   [] Planos
-    -   [] Lista dos planos
+    -   [x] Lista dos planos
     -   [] Deletar plano
 -   [] Porcentagem
-    -   [] Lista das porcentagens
+    -   [x] Lista das porcentagens
     -   [] Deletar porcentagem
 -   [] Moedas
-    -   [] Lista das moedas
-    -   [] Dados da moeda
+    -   [x] Lista das moedas
     -   [] Deletar moeda
 
 
