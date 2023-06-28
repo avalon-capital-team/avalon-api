@@ -161,6 +161,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     #Users
     Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'data']);
+    Route::post('update/user/report', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateReport']);
 
     #Withdrals
     Route::get('withdrals', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'data']);
