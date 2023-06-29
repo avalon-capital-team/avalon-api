@@ -16,8 +16,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('command:checkPlanDaily')->lastDayOfMonth('6:00');
-        $schedule->command('command:getPriceExchanges')->everyThreeMinutes();
-        $schedule->command('command:getCoinsList')->everyThreeMinutes();
+        $schedule->command('command:getPriceExchanges')->everyMinutes();
+        $schedule->command('command:getCoinsList')->everyMinutes();
     }
 
     /**
