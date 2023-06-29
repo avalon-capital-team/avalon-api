@@ -70,7 +70,7 @@ The Avalon Capital project consists of a social network.
         -   [] Setar um gestor ou assessor
         -   [] Criar aporte
         -   [] Aprovar/rejeitar aporte
-        -   [] Ativar/desativar reaporte
+        -   [x] Ativar/desativar reaporte
         -   [] Reaportar
         -   [] Deletar aporte
 -   [] Saques

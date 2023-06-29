@@ -49,7 +49,7 @@ class UserController extends Controller
       return response()->json([
         'status'  => true,
         'users' => (new PlanResource())->withdralReport($request->user_id, $request->value),
-        'message' => 'Aporte atualizado com sucesso!'
+        'message' => 'Aportes atualizado com sucesso!'
       ]);
     } catch (\Exception $e) {
       return response()->json([
