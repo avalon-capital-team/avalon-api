@@ -118,7 +118,7 @@ class CreditBalanceResource
       ->orderBy(DB::raw('YEAR(created_at)'), 'asc')
       ->orderBy(DB::raw('MONTH(created_at)'), 'asc')
       ->get()
-      ->groupBy(function($item) {
+      ->groupBy(function ($item) {
         return $item['year'] . '-' . str_pad($item['month'], 2, '0', STR_PAD_LEFT);
       });
 
@@ -134,13 +134,13 @@ class CreditBalanceResource
       ->orderBy(DB::raw('YEAR(created_at)'), 'asc')
       ->orderBy(DB::raw('MONTH(created_at)'), 'asc')
       ->get()
-      ->groupBy(function($item) {
+      ->groupBy(function ($item) {
         return $item['year'] . '-' . str_pad($item['month'], 2, '0', STR_PAD_LEFT);
       });
 
     $credits = [];
 
-    foreach($credits_type_2 as $date => $data) {
+    foreach ($credits_type_2 as $date => $data) {
       $credits[$date] = [
         'date' => $date,
         'redeem' => $data[0]['redeem'],
@@ -150,7 +150,7 @@ class CreditBalanceResource
       ];
     }
 
-    foreach($credits_type_3 as $date => $data) {
+    foreach ($credits_type_3 as $date => $data) {
       if (!isset($credits[$date])) {
         $credits[$date] = [
           'date' => $date,
@@ -163,6 +163,28 @@ class CreditBalanceResource
     }
     ksort($credits);
     return $credits;
+  }
+
+  public function sumBalanceMonth(User $user, array $filters)
+  {
+    $credit['rendeem'] = Credit::where('user_id', $user->id)
+      ->where('type_id', 2)
+      ->filterSearch($filters)
+      ->sum('amount');
+
+    $credit['amount'] = Credit::where('user_id', $user->id)
+      ->where('type_id', 3)
+      ->filterSearch($filters)
+      ->sum('amount');
+
+    $credit['base_amount'] = Credit::where('user_id', $user->id)
+      ->where('type_id', 3)
+      ->filterSearch($filters)
+      ->sum('base_amount');
+
+    $credit['rendeem'] = floatval(str_replace('-', '', $credit['rendeem']));
+
+    return $credit;
   }
 
   /**
