@@ -12,389 +12,449 @@ use Illuminate\Support\Facades\DB;
 
 class CreditBalanceResource
 {
-    /**
-     * Get balance of user logged by CoinID
-     *
-     * @param  \App\Models\User $user
-     * @param  int $coinId
-     * @param  array $filters
-     * @return float
-     */
-    public function getGraphicData(User $user, int $coinId = 1, array $filters)
-    {
-        $coin = (new CoinResource())->findById($coinId);
+  /**
+   * Get balance of user logged by CoinID
+   *
+   * @param  \App\Models\User $user
+   * @param  int $coinId
+   * @param  array $filters
+   * @return float
+   */
+  public function getGraphicData(User $user, int $coinId = 1, array $filters)
+  {
+    $coin = (new CoinResource())->findById($coinId);
 
-        $credits = Credit::where('user_id', $user->id)
-            ->where('type_id', 3)
-            ->filterSearch($filters)
-            ->orderBy('created_at', 'asc')
-            ->select('amount', 'base_amount', 'created_at')
-            ->get();
+    $credits = Credit::where('user_id', $user->id)
+      ->where('type_id', 3)
+      ->filterSearch($filters)
+      ->orderBy('created_at', 'asc')
+      ->select('amount', 'base_amount', 'created_at')
+      ->get();
 
-        $creditBalance = $this->checkBalanceByCoinId($user, $coin);
+    $creditBalance = $this->checkBalanceByCoinId($user, $coin);
 
-        if (count($credits) == 0) {
-            $monthData = [
-                'amount' => 0,
-                'base_amount' => 0,
-                'month' => null
-            ];
-        } else {
-            $monthData = $this->towerChart($user, $credits);
-        }
-
-        $balance_total = $creditBalance->balance_placed + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->withdrawal));
-        if (!$balance_total == 0.0) {
-            $balance_placed = $creditBalance->balance_placed * 100 / $balance_total;
-            $balance_rendeem = floatval(str_replace('-', '', $creditBalance->withdrawal)) * 100 / $balance_total;
-            $balance_income = $creditBalance->income * 100 / $balance_total;
-        } else {
-            $balance_placed = 0;
-            $balance_rendeem = 0;
-            $balance_income = 0;
-        }
-
-        $data = [
-            'balance_enable' => $creditBalance->balance_enable,
-            'balance_placed' => $creditBalance->balance_placed,
-            'balance_pending' => $creditBalance->balance_pending,
-            'balance_rendeem' => $creditBalance->withdrawal,
-            'balance_income' => $creditBalance->income,
-            'pie_chart' => [
-                'placed' => $balance_placed,
-                'rendeem' => $balance_rendeem,
-                'income' => $balance_income
-            ],
-            'chart' => $monthData,
-        ];
-
-        return $data;
+    if (count($credits) == 0) {
+      $monthData = [
+        'amount' => 0,
+        'base_amount' => 0,
+        'month' => null
+      ];
+    } else {
+      $monthData = $this->towerChart($user, $credits);
     }
 
-    /**
-     * Get a sum per month
-     *
-     * @param  \App\Models\User $user
-     * @return float
-     */
-    public function towerChart(User $user, $credits)
-    {
-        $i = 0;
-        foreach ($credits as $credit) {
-            $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
-            $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
-
-            $filters = [
-                'date_from' => $initialMonth,
-                'date_to' => $finalMonth
-            ];
-
-            $monthSelected = $this->sumBalanceMonth($user, $filters);
-
-            $monthSelected['month'] = $credit['created_at'];
-            $monthData[++$i] = $monthSelected;
-        }
-
-        return $monthData;
+    $balance_total = $creditBalance->balance_placed + $creditBalance->income + floatval(str_replace('-', '', $creditBalance->withdrawal));
+    if (!$balance_total == 0.0) {
+      $balance_placed = $creditBalance->balance_placed * 100 / $balance_total;
+      $balance_rendeem = floatval(str_replace('-', '', $creditBalance->withdrawal)) * 100 / $balance_total;
+      $balance_income = $creditBalance->income * 100 / $balance_total;
+    } else {
+      $balance_placed = 0;
+      $balance_rendeem = 0;
+      $balance_income = 0;
     }
 
-    /**
-     * Get a sum per month
-     *
-     * @param  \App\Models\User $user
-     * @return float
-     */
-    public function reportData(User $user)
-    {
-        $credits = Credit::where('user_id', $user->id)
-            ->where('type_id', 3)
-            ->orderBy('created_at', 'asc')
-            ->select('amount', 'base_amount', 'created_at')
-            ->get();
+    $data = [
+      'balance_enable' => $creditBalance->balance_enable,
+      'balance_placed' => $creditBalance->balance_placed,
+      'balance_pending' => $creditBalance->balance_pending,
+      'balance_rendeem' => $creditBalance->withdrawal,
+      'balance_income' => $creditBalance->income,
+      'pie_chart' => [
+        'placed' => $balance_placed,
+        'rendeem' => $balance_rendeem,
+        'income' => $balance_income
+      ],
+      'chart' => $monthData,
+    ];
 
-        if (count($credits) == 0) {
-            $monthData = [
-                'amount' => 0,
-                'rendeem' => 0,
-                'base_amount' => 0,
-                'month' => null
-            ];
-        } else {
-            $i = 0;
-            foreach ($credits as $credit) {
-                $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
-                $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
+    return $data;
+  }
 
-                $filters = [
-                    'date_from' => $initialMonth,
-                    'date_to' => $finalMonth
-                ];
+  /**
+   * Get a sum per month
+   *
+   * @param  \App\Models\User $user
+   * @return float
+   */
+  public function towerChart(User $user, $credits)
+  {
+    $i = 0;
+    foreach ($credits as $credit) {
+      $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+      $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
 
-                $monthSelected = $this->sumBalanceMonth($user, $filters);
+      $filters = [
+        'date_from' => $initialMonth,
+        'date_to' => $finalMonth
+      ];
 
-                $monthSelected['month'] = $credit['created_at'];
-                $monthData[++$i] = $monthSelected;
-            }
-        }
+      $monthSelected = $this->sumBalanceMonth($user, $filters);
 
-        return $monthData;
+      $monthSelected['month'] = $credit['created_at'];
+      $monthData[++$i] = $monthSelected;
     }
 
-    /**
-     * Perform the sum of credit and base
-     *
-     * @param  \App\Models\User $user
-     * @param  array $filters
-     * @return float
-     */
-    public function sumBalanceMonth(User $user, array $filters)
-    {
-        $credit['rendeem'] = Credit::where('user_id', $user->id)
-            ->where('type_id', 2)
-            ->filterSearch($filters)
-            ->sum('amount');
+    return $monthData;
+  }
 
-        $credit['amount'] = Credit::where('user_id', $user->id)
-            ->where('type_id', 3)
-            ->filterSearch($filters)
-            ->sum('amount');
+  /**
+   * Get a sum per month
+   *
+   * @param  \App\Models\User $user
+   * @return float
+   */
+  public function reportData(User $user)
+  {
+    $credits = Credit::where('user_id', $user->id)
+      ->where('type_id', 3)
+      ->orderBy('created_at', 'asc')
+      ->select('amount', 'base_amount', 'created_at')
+      ->get();
 
-        $credit['base_amount'] = Credit::where('user_id', $user->id)
-            ->where('type_id', 3)
-            ->filterSearch($filters)
-            ->sum('base_amount');
+    if (count($credits) == 0) {
+      $monthData = [
+        'amount' => 0,
+        'rendeem' => 0,
+        'base_amount' => 0,
+        'month' => null
+      ];
+    } else {
+      // $i = 0;
+      // $sumPerMonth = []; // array auxiliar
 
-        $credit['rendeem'] = floatval(str_replace('-', '', $credit['rendeem']));
+      // foreach ($credits as $credit) {
+      //   $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+      //   $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
 
-        return $credit;
+      //   $filters = [
+      //     'date_from' => $initialMonth,
+      //     'date_to' => $finalMonth
+      //   ];
+
+      //   $monthSelected = $this->sumBalanceMonth($user, $filters);
+
+      //   // Pega o mês e o ano para usar como chave no array $sumPerMonth
+      //   $monthYearKey = date('Y-m', strtotime($credit['created_at']));
+
+      //   if (!isset($sumPerMonth[$monthYearKey])) { // se não tivermos uma entrada para esse mês ainda
+      //     $sumPerMonth[$monthYearKey] = $monthSelected; // criamos uma
+      //     $sumPerMonth[$monthYearKey]['month'] = $credit['created_at']; // atribuímos a data de criação
+      //     $monthData[++$i] = $sumPerMonth[$monthYearKey]; // adicionamos no array final
+      //   } else { // se já tivermos uma entrada para esse mês
+      //     $sumPerMonth[$monthYearKey]['rendeem'] += $monthSelected['rendeem']; // somamos o saldo
+      //     $sumPerMonth[$monthYearKey]['amount'] += $monthSelected['amount']; // somamos o saldo
+      //     $sumPerMonth[$monthYearKey]['base_amount'] += $monthSelected['base_amount']; // somamos o saldo
+      //     $monthData[$i] = $sumPerMonth[$monthYearKey]; // atualizamos a entrada no array final
+      //   }
+      // }
+
+      $i = 0;
+      foreach ($credits as $credit) {
+          $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+          $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
+
+          $filters = [
+              'date_from' => $initialMonth,
+              'date_to' => $finalMonth
+          ];
+
+          $monthSelected = $this->sumBalanceMonth($user, $filters);
+
+          $monthSelected['month'] = $credit['created_at'];
+          $monthData[++$i] = $monthSelected;
+      }
     }
 
-    /**
-     * Get balance of user logged by CoinID
-     *
-     * @param  \App\Models\User $user
-     * @param  int $coinId
-     * @return float
-     */
-    public function getBalanceByCoinId(User $user, int $coinId)
-    {
-        $coin = (new CoinResource())->findById($coinId);
-        $creditBalance = $this->checkBalanceByCoinId($user, $coin);
-        return ($creditBalance) ? $creditBalance->balance_placed : 0;
+    return $monthData;
+  }
+
+  /**
+   * Perform the sum of credit and base
+   *
+   * @param  \App\Models\User $user
+   * @param  array $filters
+   * @return float
+   */
+  public function sumBalanceMonth(User $user, array $filters)
+  {
+    // Realiza a somatória no banco de dados, agrupando por mês
+    $credits = Credit::select([
+      DB::raw('YEAR(created_at) year'),
+      DB::raw('MONTH(created_at) month'),
+      DB::raw('SUM(amount) as sum_amount'),
+      'base_amount',
+      DB::raw('SUM(CASE WHEN type_id = 2 THEN amount ELSE 0 END) as sum_redeem'),
+    ])
+      ->where('user_id', $user->id)
+      ->where(function ($query) {
+        $query->where('type_id', 2)
+          ->orWhere('type_id', 3);
+      })
+      ->groupBy('year', 'month')
+      ->get();
+
+    // Converte os resultados para a estrutura desejada
+    $monthlyCredits = [];
+    foreach ($credits as $credit) {
+      $monthlyCredits[] = [
+        'month' => $credit->year . '-' . str_pad($credit->month, 2, '0', STR_PAD_LEFT),
+        'amount' => $credit->sum_amount,
+        'base_amount' => $credit->base_amount,
+        'redeem' => floatval(str_replace('-', '', $credit->sum_redeem)),
+      ];
     }
 
-    /**
-     * Get balances of user logged by CoinID
-     *
-     * @param  \App\Models\User $user
-     * @param  int $coinId
-     * @return array
-     */
-    public function getBalancesByCoinId(User $user, int $coinId)
-    {
-        return $user->creditBalance()->where('coin_id', $coinId)->get();
+    return $monthlyCredits;
+  }
+  // public function sumBalanceMonth(User $user, array $filters)
+  // {
+  //   $credit['rendeem'] = Credit::where('user_id', $user->id)
+  //     ->where('type_id', 2)
+  //     ->filterSearch($filters)
+  //     ->sum('amount');
+
+  //   $credit['amount'] = Credit::where('user_id', $user->id)
+  //     ->where('type_id', 3)
+  //     ->filterSearch($filters)
+  //     ->sum('amount');
+
+  //   $credit['base_amount'] = Credit::where('user_id', $user->id)
+  //     ->where('type_id', 3)
+  //     ->filterSearch($filters)
+  //     ->sum('base_amount');
+
+  //   $credit['rendeem'] = floatval(str_replace('-', '', $credit['rendeem']));
+
+  //   return $credit;
+  // }
+
+  /**
+   * Get balance of user logged by CoinID
+   *
+   * @param  \App\Models\User $user
+   * @param  int $coinId
+   * @return float
+   */
+  public function getBalanceByCoinId(User $user, int $coinId)
+  {
+    $coin = (new CoinResource())->findById($coinId);
+    $creditBalance = $this->checkBalanceByCoinId($user, $coin);
+    return ($creditBalance) ? $creditBalance->balance_placed : 0;
+  }
+
+  /**
+   * Get balances of user logged by CoinID
+   *
+   * @param  \App\Models\User $user
+   * @param  int $coinId
+   * @return array
+   */
+  public function getBalancesByCoinId(User $user, int $coinId)
+  {
+    return $user->creditBalance()->where('coin_id', $coinId)->get();
+  }
+
+  /**
+   * Get balance of user with Balance Id and Coin Id
+   *
+   * @param  \App\Models\User $user
+   * @param  int $coinId
+   * @param  int $balanceId
+   * @return \App\Models\Credit\CreditBalance
+   */
+  public function getBalances(User $user)
+  {
+    return $user->creditBalance()->where('user_id', $user->id)->get();
+  }
+
+  /**
+   * Get balance of user with Balance Id and Coin Id
+   *
+   * @param  \App\Models\User $user
+   * @param  int $coinId
+   * @param  int $balanceId
+   * @return \App\Models\Credit\CreditBalance
+   */
+  public function getBalanceByCoinIdAndBalanceId(User $user, $coin_id)
+  {
+    return $user->creditBalance()->where('user_id', $user->id)->where('coin_id', $coin_id)->first();
+  }
+
+  /**
+   * Move Balance to pending
+   *
+   * @param \App\Models\Credit\CreditBalance $credit
+   */
+  public function moveBalanceToPending(CreditBalance $creditBalance, float $amount)
+  {
+    $creditBalance->balance_enable -= $amount;
+    $creditBalance->balance_pending += $amount;
+    $creditBalance->save();
+  }
+
+  /**
+   * Move Balance to pending
+   *
+   * @param \App\Models\Credit\CreditBalance $credit
+   */
+  public function moveBalanceToEnable(CreditBalance $creditBalance, float $amount)
+  {
+    $creditBalance->balance_pending -= $amount;
+    $creditBalance->balance_enable += $amount;
+    $creditBalance->save();
+  }
+
+  /**
+   * Move Balance to pending
+   *
+   * @param \App\Models\Credit\CreditBalance $credit
+   */
+  public function moveBalanceToPlaced(CreditBalance $creditBalance, float $amount)
+  {
+    $creditBalance->balance_pending -= $amount;
+    $creditBalance->balance_placed += $amount;
+    $creditBalance->save();
+  }
+
+  /**
+   * Move Balance to pending
+   *
+   * @param \App\Models\Credit\CreditBalance $credit
+   */
+  public function moveBalanceToIncome(CreditBalance $creditBalance, float $amount)
+  {
+    $creditBalance->balance_placed -= $amount;
+    $creditBalance->balance_pending += $amount;
+    $creditBalance->save();
+  }
+
+  /**
+   * Check balance of user by CoinID
+   *
+   * @param  \App\Models\User $user
+   * @param  \App\Models\Coin\Coin $coin
+   * @return \App\Models\Credit\CreditBalance
+   */
+  public function checkBalanceByCoinId(User $user, Coin $coin)
+  {
+    $balance = CreditBalance::where('user_id', $user->id)->where('coin_id', $coin->id)->first();
+    if (!$balance) {
+      $user->creditBalance()->create(['coin_id' => $coin->id, 'show_wallet' => 1]);
+      $balance =  CreditBalance::where('user_id', $user->id)->where('coin_id', $coin->id)->first();
     }
 
-    /**
-     * Get balance of user with Balance Id and Coin Id
-     *
-     * @param  \App\Models\User $user
-     * @param  int $coinId
-     * @param  int $balanceId
-     * @return \App\Models\Credit\CreditBalance
-     */
-    public function getBalances(User $user)
-    {
-        return $user->creditBalance()->where('user_id', $user->id)->get();
-    }
+    return $balance;
+  }
 
-    /**
-     * Get balance of user with Balance Id and Coin Id
-     *
-     * @param  \App\Models\User $user
-     * @param  int $coinId
-     * @param  int $balanceId
-     * @return \App\Models\Credit\CreditBalance
-     */
-    public function getBalanceByCoinIdAndBalanceId(User $user, $coin_id)
-    {
-        return $user->creditBalance()->where('user_id', $user->id)->where('coin_id', $coin_id)->first();
-    }
+  /**
+   * @param  arrey $data
+   * @return bool
+   */
+  public function inativePlan($data)
+  {
+    $coin = (new CoinResource())->findById($data['coin_id']);
+    $user = User::where('id', ($data['user_id']))->first();
 
-    /**
-     * Move Balance to pending
-     *
-     * @param \App\Models\Credit\CreditBalance $credit
-     */
-    public function moveBalanceToPending(CreditBalance $creditBalance, float $amount)
-    {
-        $creditBalance->balance_enable -= $amount;
-        $creditBalance->balance_pending += $amount;
-        $creditBalance->save();
-    }
+    $user->userPlan->amount -= $data['amount'];
 
-    /**
-     * Move Balance to pending
-     *
-     * @param \App\Models\Credit\CreditBalance $credit
-     */
-    public function moveBalanceToEnable(CreditBalance $creditBalance, float $amount)
-    {
-        $creditBalance->balance_pending -= $amount;
-        $creditBalance->balance_enable += $amount;
-        $creditBalance->save();
-    }
+    $balance = $this->checkBalanceByCoinId($user, $coin);
+    $balance['balance_placed'] -= $data->amount;
+    $balance['balance_pending'] += $data->amount;
 
-    /**
-     * Move Balance to pending
-     *
-     * @param \App\Models\Credit\CreditBalance $credit
-     */
-    public function moveBalanceToPlaced(CreditBalance $creditBalance, float $amount)
-    {
-        $creditBalance->balance_pending -= $amount;
-        $creditBalance->balance_placed += $amount;
-        $creditBalance->save();
-    }
+    $user->userPlan->save();
 
-    /**
-     * Move Balance to pending
-     *
-     * @param \App\Models\Credit\CreditBalance $credit
-     */
-    public function moveBalanceToIncome(CreditBalance $creditBalance, float $amount)
-    {
-        $creditBalance->balance_placed -= $amount;
-        $creditBalance->balance_pending += $amount;
-        $creditBalance->save();
-    }
+    return $balance->save();
+  }
 
-    /**
-     * Check balance of user by CoinID
-     *
-     * @param  \App\Models\User $user
-     * @param  \App\Models\Coin\Coin $coin
-     * @return \App\Models\Credit\CreditBalance
-     */
-    public function checkBalanceByCoinId(User $user, Coin $coin)
-    {
-        $balance = CreditBalance::where('user_id', $user->id)->where('coin_id', $coin->id)->first();
-        if (!$balance) {
-            $user->creditBalance()->create(['coin_id' => $coin->id, 'show_wallet' => 1]);
-            $balance =  CreditBalance::where('user_id', $user->id)->where('coin_id', $coin->id)->first();
-        }
+  /**
+   * @param  arrey $data
+   * @return bool
+   */
+  public function approveBalance($data)
+  {
+    $coin = (new CoinResource())->findById($data['coin_id']);
+    $user = User::where('id', ($data['user_id']))->first();
 
-        return $balance;
-    }
+    $user->userPlan->amount += $data['amount'];
+    $user->userPlan->acting = 1;
 
-    /**
-     * @param  arrey $data
-     * @return bool
-     */
-    public function inativePlan($data)
-    {
-        $coin = (new CoinResource())->findById($data['coin_id']);
-        $user = User::where('id', ($data['user_id']))->first();
+    $balance = $this->checkBalanceByCoinId($user, $coin);
+    $balance['balance_pending'] -= $data->amount;
+    $balance['balance_placed'] += $data->amount;
 
-        $user->userPlan->amount -= $data['amount'];
+    $user->userPlan->save();
 
-        $balance = $this->checkBalanceByCoinId($user, $coin);
-        $balance['balance_placed'] -= $data->amount;
-        $balance['balance_pending'] += $data->amount;
+    return $balance->save();
+  }
 
-        $user->userPlan->save();
+  /**
+   * @param  \App\Models\User $user
+   * @param  int $coin_id
+   * @param  float $amount
+   * @return bool
+   */
+  public function createOrUpdateBalance(User $user, int $coin_id, float $amount, int $plan_id)
+  {
+    $coin = (new CoinResource())->findById($coin_id);
+    $balance = $this->checkBalanceByCoinId($user, $coin);
+    $balance->plan_id = $plan_id;
+    $balance->coin_id = $coin_id;
+    $balance->balance_pending += $amount;
 
-        return $balance->save();
-    }
+    return $balance->save();
+  }
 
-    /**
-     * @param  arrey $data
-     * @return bool
-     */
-    public function approveBalance($data)
-    {
-        $coin = (new CoinResource())->findById($data['coin_id']);
-        $user = User::where('id', ($data['user_id']))->first();
-
-        $user->userPlan->amount += $data['amount'];
-        $user->userPlan->acting = 1;
-
-        $balance = $this->checkBalanceByCoinId($user, $coin);
-        $balance['balance_pending'] -= $data->amount;
-        $balance['balance_placed'] += $data->amount;
-
-        $user->userPlan->save();
-
-        return $balance->save();
-    }
-
-    /**
-     * @param  \App\Models\User $user
-     * @param  int $coin_id
-     * @param  float $amount
-     * @return bool
-     */
-    public function createOrUpdateBalance(User $user, int $coin_id, float $amount, int $plan_id)
-    {
-        $coin = (new CoinResource())->findById($coin_id);
-        $balance = $this->checkBalanceByCoinId($user, $coin);
-        $balance->plan_id = $plan_id;
-        $balance->coin_id = $coin_id;
-        $balance->balance_pending += $amount;
-
-        return $balance->save();
-    }
-
-    /**
-     * @param  \App\Models\User $user
-     * @param  int $coin_id
-     * @param  float $amount
-     * @param  string $field
-     * @return bool
-     */
-    public function updateField(User $user, int $coin_id, float $amount, string $field)
-    {
-        $coin = (new CoinResource())->findById($coin_id);
-        $balance = $this->checkBalanceByCoinId($user, $coin);
-        $balance->$field += $amount;
-        return $balance->save();
-    }
+  /**
+   * @param  \App\Models\User $user
+   * @param  int $coin_id
+   * @param  float $amount
+   * @param  string $field
+   * @return bool
+   */
+  public function updateField(User $user, int $coin_id, float $amount, string $field)
+  {
+    $coin = (new CoinResource())->findById($coin_id);
+    $balance = $this->checkBalanceByCoinId($user, $coin);
+    $balance->$field += $amount;
+    return $balance->save();
+  }
 
 
-    /**
-     * Get balances of wallets
-     *
-     * @param  \App\Models\User $user
-     * @param  int $coinId
-     * @return \App\Models\Credit\CreditBalance
-     */
-    public function getBalancesSales(User $user, int $coinId)
-    {
-        return CreditBalance::where('user_id', $user->id)
-            ->where('coin_id', $coinId)
-            ->whereNotNull('token_sale_id')
-            ->with('coin')
-            ->get();
-    }
+  /**
+   * Get balances of wallets
+   *
+   * @param  \App\Models\User $user
+   * @param  int $coinId
+   * @return \App\Models\Credit\CreditBalance
+   */
+  public function getBalancesSales(User $user, int $coinId)
+  {
+    return CreditBalance::where('user_id', $user->id)
+      ->where('coin_id', $coinId)
+      ->whereNotNull('token_sale_id')
+      ->with('coin')
+      ->get();
+  }
 
-    /**
-     * Get balances of brl with average
-     *
-     * @param  \App\Models\User $user
-     * @return array
-     */
-    public function getInfoConvertedBrl(User $user)
-    {
-        $coinBrl = (new CoinResource())->findBySymbol('BRL');
+  /**
+   * Get balances of brl with average
+   *
+   * @param  \App\Models\User $user
+   * @return array
+   */
+  public function getInfoConvertedBrl(User $user)
+  {
+    $coinBrl = (new CoinResource())->findBySymbol('BRL');
 
-        $data['balance'] = CreditBalance::where('user_id', $user->id)
-            ->where('coin_id', $coinBrl->id)
-            ->sum('balance_placed');
+    $data['balance'] = CreditBalance::where('user_id', $user->id)
+      ->where('coin_id', $coinBrl->id)
+      ->sum('balance_placed');
 
-        $data['average'] = CreditBalance::where('user_id', $user->id)
-            ->join('coins', 'coins.id', '=', 'credits_balance.coin_id')
-            ->sum(DB::raw('credits_balance.balance_placed * coins.price_brl'));
+    $data['average'] = CreditBalance::where('user_id', $user->id)
+      ->join('coins', 'coins.id', '=', 'credits_balance.coin_id')
+      ->sum(DB::raw('credits_balance.balance_placed * coins.price_brl'));
 
-        return $data;
-    }
+    return $data;
+  }
 }
