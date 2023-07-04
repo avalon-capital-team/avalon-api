@@ -120,50 +120,50 @@ class CreditBalanceResource
         'month' => null
       ];
     } else {
-      // $i = 0;
-      // $sumPerMonth = []; // array auxiliar
-
-      // foreach ($credits as $credit) {
-      //   $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
-      //   $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
-
-      //   $filters = [
-      //     'date_from' => $initialMonth,
-      //     'date_to' => $finalMonth
-      //   ];
-
-      //   $monthSelected = $this->sumBalanceMonth($user, $filters);
-
-      //   // Pega o mês e o ano para usar como chave no array $sumPerMonth
-      //   $monthYearKey = date('Y-m', strtotime($credit['created_at']));
-
-      //   if (!isset($sumPerMonth[$monthYearKey])) { // se não tivermos uma entrada para esse mês ainda
-      //     $sumPerMonth[$monthYearKey] = $monthSelected; // criamos uma
-      //     $sumPerMonth[$monthYearKey]['month'] = $credit['created_at']; // atribuímos a data de criação
-      //     $monthData[++$i] = $sumPerMonth[$monthYearKey]; // adicionamos no array final
-      //   } else { // se já tivermos uma entrada para esse mês
-      //     $sumPerMonth[$monthYearKey]['rendeem'] += $monthSelected['rendeem']; // somamos o saldo
-      //     $sumPerMonth[$monthYearKey]['amount'] += $monthSelected['amount']; // somamos o saldo
-      //     $sumPerMonth[$monthYearKey]['base_amount'] += $monthSelected['base_amount']; // somamos o saldo
-      //     $monthData[$i] = $sumPerMonth[$monthYearKey]; // atualizamos a entrada no array final
-      //   }
-      // }
-
       $i = 0;
+      $sumPerMonth = []; // array auxiliar
+
       foreach ($credits as $credit) {
-          $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
-          $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
+        $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+        $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
 
-          $filters = [
-              'date_from' => $initialMonth,
-              'date_to' => $finalMonth
-          ];
+        $filters = [
+          'date_from' => $initialMonth,
+          'date_to' => $finalMonth
+        ];
 
-          $monthSelected = $this->sumBalanceMonth($user, $filters);
+        $monthSelected = $this->sumBalanceMonth($user, $filters);
 
-          // $monthSelected['month'] = $credit['created_at'];
-          // $monthData[++$i] = $monthSelected;
+        // Pega o mês e o ano para usar como chave no array $sumPerMonth
+        $monthYearKey = date('Y-m', strtotime($credit['created_at']));
+
+        if (!isset($sumPerMonth[$monthYearKey])) { // se não tivermos uma entrada para esse mês ainda
+          $sumPerMonth[$monthYearKey] = $monthSelected; // criamos uma
+          $sumPerMonth[$monthYearKey]['month'] = $credit['created_at']; // atribuímos a data de criação
+          $monthData[++$i] = $sumPerMonth[$monthYearKey]; // adicionamos no array final
+        } else { // se já tivermos uma entrada para esse mês
+          $sumPerMonth[$monthYearKey]['rendeem'] += $monthSelected['rendeem']; // somamos o saldo
+          $sumPerMonth[$monthYearKey]['amount'] += $monthSelected['amount']; // somamos o saldo
+          $sumPerMonth[$monthYearKey]['base_amount'] += $monthSelected['base_amount']; // somamos o saldo
+          $monthData[$i] = $sumPerMonth[$monthYearKey]; // atualizamos a entrada no array final
+        }
       }
+
+      // $i = 0;
+      // foreach ($credits as $credit) {
+      //     $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
+      //     $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
+
+      //     $filters = [
+      //         'date_from' => $initialMonth,
+      //         'date_to' => $finalMonth
+      //     ];
+
+      //     $monthSelected = $this->sumBalanceMonth($user, $filters);
+
+      //     // $monthSelected['month'] = $credit['created_at'];
+      //     // $monthData[++$i] = $monthSelected;
+      // }
     }
 
     return $monthSelected;
