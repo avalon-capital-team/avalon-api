@@ -176,7 +176,7 @@ class CreditBalanceResource
    * @param  array $filters
    * @return float
    */
-  public function sumBalanceMonth(User $user, array $filters)
+  public function sumBalanceMonthf(User $user, array $filters)
   {
     // Realiza a somatória no banco de dados, agrupando por mês
     $credits = Credit::select([
@@ -207,27 +207,27 @@ class CreditBalanceResource
 
     return $monthlyCredits;
   }
-  // public function sumBalanceMonth(User $user, array $filters)
-  // {
-  //   $credit['rendeem'] = Credit::where('user_id', $user->id)
-  //     ->where('type_id', 2)
-  //     ->filterSearch($filters)
-  //     ->sum('amount');
+  public function sumBalanceMonth(User $user, array $filters)
+  {
+    $credit['rendeem'] = Credit::where('user_id', $user->id)
+      ->where('type_id', 2)
+      ->filterSearch($filters)
+      ->sum('amount');
 
-  //   $credit['amount'] = Credit::where('user_id', $user->id)
-  //     ->where('type_id', 3)
-  //     ->filterSearch($filters)
-  //     ->sum('amount');
+    $credit['amount'] = Credit::where('user_id', $user->id)
+      ->where('type_id', 3)
+      ->filterSearch($filters)
+      ->sum('amount');
 
-  //   $credit['base_amount'] = Credit::where('user_id', $user->id)
-  //     ->where('type_id', 3)
-  //     ->filterSearch($filters)
-  //     ->sum('base_amount');
+    $credit['base_amount'] = Credit::where('user_id', $user->id)
+      ->where('type_id', 3)
+      ->filterSearch($filters)
+      ->sum('base_amount');
 
-  //   $credit['rendeem'] = floatval(str_replace('-', '', $credit['rendeem']));
+    $credit['rendeem'] = floatval(str_replace('-', '', $credit['rendeem']));
 
-  //   return $credit;
-  // }
+    return $credit;
+  }
 
   /**
    * Get balance of user logged by CoinID
