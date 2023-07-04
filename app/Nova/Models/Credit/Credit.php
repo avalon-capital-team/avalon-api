@@ -72,7 +72,7 @@ class Credit extends Resource
      * @var array
      */
     public static $search = [
-        'description', 'username'
+        'description', 'user_id'
     ];
 
     /**
