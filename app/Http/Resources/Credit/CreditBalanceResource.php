@@ -161,12 +161,12 @@ class CreditBalanceResource
 
           $monthSelected = $this->sumBalanceMonth($user, $filters);
 
-          $monthSelected['month'] = $credit['created_at'];
-          $monthData[++$i] = $monthSelected;
+          // $monthSelected['month'] = $credit['created_at'];
+          // $monthData[++$i] = $monthSelected;
       }
     }
 
-    return $monthData;
+    return $monthSelected;
   }
 
   /**
@@ -176,7 +176,7 @@ class CreditBalanceResource
    * @param  array $filters
    * @return float
    */
-  public function sumBalanceMonthf(User $user, array $filters)
+  public function sumBalanceMonth(User $user, array $filters)
   {
     // Realiza a somatória no banco de dados, agrupando por mês
     $credits = Credit::select([
@@ -207,7 +207,7 @@ class CreditBalanceResource
 
     return $monthlyCredits;
   }
-  public function sumBalanceMonth(User $user, array $filters)
+  public function sumBalanceMonthd(User $user, array $filters)
   {
     $credit['rendeem'] = Credit::where('user_id', $user->id)
       ->where('type_id', 2)
