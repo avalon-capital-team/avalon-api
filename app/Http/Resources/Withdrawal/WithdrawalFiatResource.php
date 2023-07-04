@@ -43,7 +43,7 @@ class WithdrawalFiatResource
         }
 
         # Create debit
-        $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->id, 2, 1, floatval('-' . $amount), $user->userPlan->amount, $description);
+        $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->id, 2, 1, floatval('-' . $amount), $user->userPlan->amount + $user->userPlan->income, $description);
 
         $coin = Coin::where('id', $coin_id)->first();
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);

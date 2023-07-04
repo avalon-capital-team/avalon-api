@@ -244,7 +244,7 @@ class PlanResource
       $base_amount = $plan->amount + $plan->income;
     }
 
-    $description = 'Rendimento mensal';
+    $description = 'Rendimento mensal do usuário:' . $user->name;
     (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($base_amount),  $description);
 
     $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
