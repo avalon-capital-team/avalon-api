@@ -110,6 +110,7 @@ class CreditBalanceResource
       ->where('type_id', 2)
       ->select(
         DB::raw('SUM(amount) as redeem'),
+        DB::raw('SUM(base_amount) as redeem_base_amount'),
         DB::raw('MONTH(created_at) as month'),
         DB::raw('YEAR(created_at) as year')
       )
