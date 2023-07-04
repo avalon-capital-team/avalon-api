@@ -160,19 +160,8 @@ class CreditBalanceResource
         ];
       }
     }
-
+    ksort($credits);
     return $credits;
-  }
-
-  public function sumBalanceMonth(User $user, array $filters)
-  {
-    $credit['rendeem'] = Credit::where('user_id', $user->id)
-      ->where('type_id', 2)
-      ->sum('amount');
-
-    $credit['rendeem'] = floatval(str_replace('-', '', $credit['rendeem']));
-
-    return $credit;
   }
 
   /**
