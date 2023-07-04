@@ -175,6 +175,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     #Models
     // Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'users']);
   });
+  Route::get('job/reports', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
 });
 
 # Coin

@@ -106,123 +106,69 @@ class CreditBalanceResource
    */
   public function reportData(User $user)
   {
-    $credits = Credit::where('user_id', $user->id)
+    $credits_type_2 = Credit::where('user_id', $user->id)
+      ->where('type_id', 2)
+      ->select(
+        DB::raw('SUM(amount) as redeem'),
+        DB::raw('MONTH(created_at) as month'),
+        DB::raw('YEAR(created_at) as year')
+      )
+      ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+      ->orderBy(DB::raw('YEAR(created_at)'), 'asc')
+      ->orderBy(DB::raw('MONTH(created_at)'), 'asc')
+      ->get()
+      ->groupBy(function($item) {
+        return $item['year'] . '-' . str_pad($item['month'], 2, '0', STR_PAD_LEFT);
+      });
+
+    $credits_type_3 = Credit::where('user_id', $user->id)
       ->where('type_id', 3)
-      ->orderBy('created_at', 'asc')
-      ->select('amount', 'base_amount', 'created_at')
-      ->get();
+      ->select(
+        DB::raw('SUM(amount) as amount'),
+        DB::raw('SUM(base_amount) as base_amount'),
+        DB::raw('MONTH(created_at) as month'),
+        DB::raw('YEAR(created_at) as year')
+      )
+      ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+      ->orderBy(DB::raw('YEAR(created_at)'), 'asc')
+      ->orderBy(DB::raw('MONTH(created_at)'), 'asc')
+      ->get()
+      ->groupBy(function($item) {
+        return $item['year'] . '-' . str_pad($item['month'], 2, '0', STR_PAD_LEFT);
+      });
 
-    if (count($credits) == 0) {
-      $monthData = [
-        'amount' => 0,
-        'rendeem' => 0,
-        'base_amount' => 0,
-        'month' => null
+    $credits = [];
+
+    foreach($credits_type_2 as $date => $data) {
+      $credits[$date] = [
+        'date' => $date,
+        'redeem' => $data[0]['redeem'],
+        'redeem_base_amount' => $data[0]['redeem_base_amount'],
+        'amount' => isset($credits_type_3[$date]) ? $credits_type_3[$date][0]['amount'] : 0,
+        'base_amount' => isset($credits_type_3[$date]) ? $credits_type_3[$date][0]['base_amount'] : 0,
       ];
-    } else {
-      // $i = 0;
-      // $sumPerMonth = []; // array auxiliar
+    }
 
-      // foreach ($credits as $credit) {
-      //   $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
-      //   $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
-
-      //   $filters = [
-      //     'date_from' => $initialMonth,
-      //     'date_to' => $finalMonth
-      //   ];
-
-      //   $monthSelected = $this->sumBalanceMonth($user, $filters);
-
-      //   // Pega o mês e o ano para usar como chave no array $sumPerMonth
-      //   $monthYearKey = date('Y-m', strtotime($credit['created_at']));
-
-      //   if (!isset($sumPerMonth[$monthYearKey])) { // se não tivermos uma entrada para esse mês ainda
-      //     $sumPerMonth[$monthYearKey] = $monthSelected; // criamos uma
-      //     $sumPerMonth[$monthYearKey]['month'] = $credit['created_at']; // atribuímos a data de criação
-      //     $monthData[++$i] = $sumPerMonth[$monthYearKey]; // adicionamos no array final
-      //   } else { // se já tivermos uma entrada para esse mês
-      //     $sumPerMonth[$monthYearKey]['rendeem'] += $monthSelected['rendeem']; // somamos o saldo
-      //     $sumPerMonth[$monthYearKey]['amount'] += $monthSelected['amount']; // somamos o saldo
-      //     $sumPerMonth[$monthYearKey]['base_amount'] += $monthSelected['base_amount']; // somamos o saldo
-      //     $monthData[$i] = $sumPerMonth[$monthYearKey]; // atualizamos a entrada no array final
-      //   }
-      // }
-
-      $i = 0;
-      foreach ($credits as $credit) {
-          $initialMonth = date('Y', strtotime($credit['created_at'])) . '-' . date('m', strtotime($credit['created_at'])) . '-' .  '01';
-          $finalMonth = date('Y-m-t', strtotime($credit['created_at']));
-
-          $filters = [
-              'date_from' => $initialMonth,
-              'date_to' => $finalMonth
-          ];
-
-          $monthSelected = $this->sumBalanceMonth($user, $filters);
-
-          // $monthSelected['month'] = $credit['created_at'];
-          // $monthData[++$i] = $monthSelected;
+    foreach($credits_type_3 as $date => $data) {
+      if (!isset($credits[$date])) {
+        $credits[$date] = [
+          'date' => $date,
+          'redeem' => 0,
+          'redeem_base_amount' => 0,
+          'amount' => $data[0]['amount'],
+          'base_amount' => $data[0]['base_amount'],
+        ];
       }
     }
 
-    return $monthSelected;
+    return $credits;
   }
 
-  /**
-   * Perform the sum of credit and base
-   *
-   * @param  \App\Models\User $user
-   * @param  array $filters
-   * @return float
-   */
   public function sumBalanceMonth(User $user, array $filters)
-  {
-    // Realiza a somatória no banco de dados, agrupando por mês
-    $credits = Credit::select([
-      DB::raw('YEAR(created_at) year'),
-      DB::raw('MONTH(created_at) month'),
-      DB::raw('SUM(amount) as sum_amount'),
-      'base_amount',
-      DB::raw('SUM(CASE WHEN type_id = 2 THEN amount ELSE 0 END) as sum_redeem'),
-    ])
-      ->where('user_id', $user->id)
-      ->where(function ($query) {
-        $query->where('type_id', 2)
-          ->orWhere('type_id', 3);
-      })
-      ->groupBy('year', 'month')
-      ->get();
-
-    // Converte os resultados para a estrutura desejada
-    $monthlyCredits = [];
-    foreach ($credits as $credit) {
-      $monthlyCredits[] = [
-        'month' => $credit->year . '-' . str_pad($credit->month, 2, '0', STR_PAD_LEFT),
-        'amount' => $credit->sum_amount,
-        'base_amount' => $credit->base_amount,
-        'redeem' => floatval(str_replace('-', '', $credit->sum_redeem)),
-      ];
-    }
-
-    return $monthlyCredits;
-  }
-  public function sumBalanceMonthd(User $user, array $filters)
   {
     $credit['rendeem'] = Credit::where('user_id', $user->id)
       ->where('type_id', 2)
-      ->filterSearch($filters)
       ->sum('amount');
-
-    $credit['amount'] = Credit::where('user_id', $user->id)
-      ->where('type_id', 3)
-      ->filterSearch($filters)
-      ->sum('amount');
-
-    $credit['base_amount'] = Credit::where('user_id', $user->id)
-      ->where('type_id', 3)
-      ->filterSearch($filters)
-      ->sum('base_amount');
 
     $credit['rendeem'] = floatval(str_replace('-', '', $credit['rendeem']));
 
