@@ -162,6 +162,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     #Users
     Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'data']);
     Route::post('update/user/report', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateReport']);
+    Route::post('update/user/type', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateUserType']);
+    Route::post('update/user/compliance', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateCompliance']);
+    Route::post('user/delete', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateUserDelete']);
 
     #Withdrals
     Route::get('withdrals', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'data']);
@@ -188,7 +191,6 @@ Route::group(['prefix' => 'coin'], function () {
   # Coin Tracker
   Route::get('tracker', [App\Http\Controllers\Api\Coin\CoinTrackerController::class, 'coinTracker']);
 });
-
 
 # Helpers
 Route::group(['prefix' => 'helpers'], function () {

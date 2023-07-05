@@ -32,7 +32,7 @@ class WithdrawalFiatResource
         }
 
         if ($balance->balance_enable < $amount) {
-            throw new \Exception('Você não tem saldo suficiente.', 403);
+            throw new \Exception('Você não tem saldo disponivel para saque.', 403);
         }
 
         # Description

@@ -239,4 +239,23 @@ class UserComplianceResource
             $userCompliance->user->notify(new ComplianceDeclineNotification($userCompliance));
         }
     }
+
+    /**
+   * Updata User Compliance
+   *
+   * @param  \App\Http\Requests\Auth\RegisterRequest $request
+   * @return \App\Models\User
+   * @throws \Exception
+   */
+  public function updateUserCompliance(UserCompliance $user, $type)
+  {
+    if (!$user) {
+      throw new \Exception('Não foi possível cadastrar o indicador. Tente novamente!', 403);
+    }
+
+    $user->status_id = $type;
+    $user->save();
+
+    return $user;
+  }
 }

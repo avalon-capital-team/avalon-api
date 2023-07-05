@@ -63,10 +63,9 @@ The Avalon Capital project consists of a social network.
         -   [x] Dados do 2FA
         -   [x] Dados dos aportes
         -   [x] Dados da carteira
-        -   [] Mudar tipo do usuário
-        -   [] Aprovar usuário
-        -   [] Rejeitar usuário
-        -   [] Deletar usuário
+        -   [x] Mudar tipo do usuário
+        -   [x] Aprovar/rejeitar usuário
+        -   [x] Deletar usuário
         -   [] Setar um gestor ou assessor
         -   [] Criar aporte
         -   [] Aprovar/rejeitar aporte

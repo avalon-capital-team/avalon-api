@@ -213,7 +213,6 @@ class PlanResource
 
   public function dispatchIncomes(Plan $plan)
   {
-
     $data_plan = DataPlan::where('id', $plan->plan_id)->first();
     $coin = Coin::where('id', $plan->coin_id)->first();
     $user = User::where('id', $plan->user_id)->first();
@@ -238,16 +237,11 @@ class PlanResource
       }
     }
 
-    if ($plan->withdrawal_report == 0) {
-      $base_amount = $plan->amount;
-    } else {
-      $base_amount = $plan->amount + $plan->income;
-    }
+    $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
 
     $description = 'Rendimento mensal do usuário:' . $user->name;
-    (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($base_amount),  $description);
+    (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($balance->balance_placed),  $description);
 
-    $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
     $balance->income += $income;
 
     if ($plan->withdrawal_report == 0) {
@@ -277,11 +271,7 @@ class PlanResource
     $date_from = date('Y-m-t');
     $date_to = date('Y-m-' . '01');
     $days = $this->dateInterval($date_to, $date_from);
-    if ($sponsor) {
-      $percent = $sponsor->porcent / $days;
-    } else {
-      $percent = $data_plan->porcent / $days;
-    }
+    $percent = $sponsor ? $sponsor->porcent / $days : $data_plan->porcent / $days;
 
     if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
       $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
@@ -290,12 +280,7 @@ class PlanResource
       $percentPeriodo = $days * $percent;
     }
 
-    if ($plan->withdrawal_report == 0) {
-      $amount = $plan->amount;
-    } else {
-      $amount = $plan->amount + $plan->income;
-    }
-
+    $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
     $value = ($percentPeriodo / 100) * $amount;
 
     return $value;
