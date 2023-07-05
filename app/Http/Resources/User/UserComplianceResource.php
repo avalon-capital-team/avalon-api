@@ -247,13 +247,14 @@ class UserComplianceResource
    * @return \App\Models\User
    * @throws \Exception
    */
-  public function updateUserCompliance(UserCompliance $user, $type)
+  public function updateUserCompliance(UserCompliance $user, $type, $message)
   {
     if (!$user) {
       throw new \Exception('Não foi possível cadastrar o indicador. Tente novamente!', 403);
     }
 
     $user->status_id = $type;
+    $user->message = $message;
     $user->save();
 
     return $user;

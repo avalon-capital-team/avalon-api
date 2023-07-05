@@ -169,7 +169,7 @@ class UserController extends Controller
 
       return response()->json([
         'status'  => true,
-        'users' => (new UserComplianceResource())->updateUserCompliance($user->compliance, $request->type),
+        'users' => (new UserComplianceResource())->updateUserCompliance($user->compliance, $request->type, $request->message),
         'message' => 'Usuário ' . $type . '.'
       ]);
     } catch (\Exception $e) {
