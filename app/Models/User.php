@@ -268,7 +268,7 @@ class User extends Authenticatable
         $user->status;
         $user->financial;
         $user->creditBalance;
-        $user->credit;
+        $user->credits;
         $user->plan;
       }
         return $users;
