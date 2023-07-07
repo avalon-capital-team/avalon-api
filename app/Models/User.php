@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Jobs\Credit\CreateCreditBalance;
+use App\Models\Credit\Credit;
 use App\Models\Data\DataGenre;
 use App\Models\User\UserAddress;
 use App\Models\User\UserCompliance;
@@ -205,6 +206,16 @@ class User extends Authenticatable
      *
      * @return \App\Models\User\UserTokenDevice
      */
+    public function credits()
+    {
+        return $this->hasMany(Credit::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get balance
+     *
+     * @return \App\Models\User\UserTokenDevice
+     */
     public function creditBalance()
     {
         return $this->hasMany(CreditBalance::class, 'user_id', 'id');
@@ -257,6 +268,7 @@ class User extends Authenticatable
         $user->status;
         $user->financial;
         $user->creditBalance;
+        $user->credit;
         $user->plan;
       }
         return $users;
