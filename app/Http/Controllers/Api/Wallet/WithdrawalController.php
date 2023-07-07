@@ -30,7 +30,7 @@ class WithdrawalController extends Controller
     public function withdrawlPlan(Request $request)
     {
         try {
-          $user = User::find(3);
+          $user = User::find($request->user_id);
             (new PlanResource())->withdrawalPlan($user, $request->amount);
             (new WithdrawalFiatResource())->createWithdrawal($user, $request->coin_id, $request->type, $request->amount);
             return response()->json([
