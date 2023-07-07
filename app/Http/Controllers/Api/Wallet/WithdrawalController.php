@@ -8,6 +8,7 @@ use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Plan\PlanResource;
 use App\Http\Resources\Withdrawal\WithdrawalFiatResource;
 use App\Http\Resources\Withdrawal\WithdrawalCryptoResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class WithdrawalController extends Controller
@@ -29,8 +30,9 @@ class WithdrawalController extends Controller
     public function withdrawlPlan(Request $request)
     {
         try {
-            (new PlanResource())->withdrawalPlan(auth()->user(), $request->amount);
-            (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $request->coin_id, $request->type, $request->amount);
+          $user = User::find(3);
+            (new PlanResource())->withdrawalPlan($user, $request->amount);
+            (new WithdrawalFiatResource())->createWithdrawal($user, $request->coin_id, $request->type, $request->amount);
             return response()->json([
                 'status' => true,
                 'message' => 'A solicitação de saque foi realizada com sucesso.'
