@@ -11,65 +11,76 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserPlan extends Model
 {
-    use HasFactory;
-    /**
-     * table
-     *
-     * @var string
-     */
-    protected $table = 'users_plan';
+  use HasFactory;
+  /**
+   * table
+   *
+   * @var string
+   */
+  protected $table = 'users_plan';
+  protected $appends = ['total'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'user_id',
-        'plan_id',
-        'coin_id',
-        'amount',
-        'acting',
-        'payment_voucher_url',
-    ];
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array<int, string>
+   */
+  protected $fillable = [
+    'user_id',
+    'plan_id',
+    'coin_id',
+    'amount',
+    'acting',
+    'payment_voucher_url',
+  ];
 
-    /**
-     * Get user
-     *
-     * @return App\Models\User
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+  /**
+   * Get user
+   *
+   * @return App\Models\User
+   */
+  public function getTotalAttribute()
+  {
+    return $this->amount + $this->income;
+  }
 
-    /**
-     * Get the plan detains
-     *
-     * @return \App\Models\Data\DataPlan
-     */
-    public function coin()
-    {
-        return $this->belongsTo(Coin::class, 'coin_id');
-    }
+  /**
+   * Get user
+   *
+   * @return App\Models\User
+   */
+  public function user()
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
 
-    /**
-     * Get the plan detains
-     *
-     * @return \App\Models\Data\DataPlan
-     */
-    public function dataPlan()
-    {
-        return $this->belongsTo(DataPlan::class, 'plan_id');
-    }
+  /**
+   * Get the plan detains
+   *
+   * @return \App\Models\Data\DataPlan
+   */
+  public function coin()
+  {
+    return $this->belongsTo(Coin::class, 'coin_id');
+  }
 
-    /**
-     * Get the plans detains
-     *
-     * @return \App\Models\Data\DataPlan
-     */
-    public function plan()
-    {
-        return $this->hasMany(Plan::class, 'user_plan_id', 'id');
-    }
+  /**
+   * Get the plan detains
+   *
+   * @return \App\Models\Data\DataPlan
+   */
+  public function dataPlan()
+  {
+    return $this->belongsTo(DataPlan::class, 'plan_id');
+  }
+
+  /**
+   * Get the plans detains
+   *
+   * @return \App\Models\Data\DataPlan
+   */
+  public function plan()
+  {
+    return $this->hasMany(Plan::class, 'user_plan_id', 'id');
+  }
 }
