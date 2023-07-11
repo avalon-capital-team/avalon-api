@@ -8,14 +8,23 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    /**
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('auth:sanctum');
+  }
+
+  /**
    * @param \App\Htt\Resorces\User\User @resource
    * @return \Illuminate\Http\JsonResponse
    */
   public function data(UserResource $resource)
   {
     try {
-
       return response()->json([
         'status'  => true,
         'users' => $resource->getClients(),

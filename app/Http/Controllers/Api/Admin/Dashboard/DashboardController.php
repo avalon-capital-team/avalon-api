@@ -7,19 +7,20 @@ use App\Models\Deposit\DepositFiat;
 use App\Models\Plan\Plan;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\User\UserPlan;
 use App\Models\Withdrawal\WithdrawalFiat;
 
 class DashboardController extends Controller
 {
   /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:sanctum');
-    }
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('auth:sanctum');
+  }
 
   /**
    * @param \App\Htt\Resorces\User\User @resource
@@ -35,12 +36,12 @@ class DashboardController extends Controller
         'clients' => count(User::where('type', 'user')->get()),
         'mananger' => count(User::where('type', 'mananger')->get()),
         'advisor' => count(User::where('type', 'advisor')->get()),
-        'total_amount' => Plan::where('acting', 1)->sum('amount'),
-        'total_amount_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->sum('amount'),
-        'total_amount_off_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', false)->sum('amount'),
-        'total_income' => Plan::where('acting', 1)->sum('income'),
-        'total_income_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->sum('income'),
-        'total_income_off_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', false)->sum('income'),
+        'total_amount' => UserPlan::where('acting', 1)->sum('amount'),
+        'total_amount_reinvested' => UserPlan::where('acting', 1)->where('withdrawal_report', true)->sum('amount'),
+        'total_amount_off_reinvested' => UserPlan::where('acting', 1)->where('withdrawal_report', false)->sum('amount'),
+        'total_income' => UserPlan::where('acting', 1)->sum('income'),
+        'total_income_reinvested' => UserPlan::where('acting', 1)->where('withdrawal_report', true)->sum('income'),
+        'total_income_off_reinvested' => UserPlan::where('acting', 1)->where('withdrawal_report', false)->sum('income'),
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
         'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
         'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
