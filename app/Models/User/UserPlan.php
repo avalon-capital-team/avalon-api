@@ -36,9 +36,6 @@ class UserPlan extends Model
 
   public function getTotalMonthAttribute()
 {
-    if ($this->withdrawal_report == 0) {
-      return $this->amount * 0.05;
-    }
     return ($this->amount + $this->income) * 0.05;
 }
 
