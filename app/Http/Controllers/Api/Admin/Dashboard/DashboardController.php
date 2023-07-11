@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserResource;
 use App\Models\Deposit\DepositFiat;
 use App\Models\Plan\Plan;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class DashboardController extends Controller
    * @param \App\Htt\Resorces\User\User @resource
    * @return \Illuminate\Http\JsonResponse
    */
-  public function data()
+  public function data(UserResource $resource)
   {
     try {
 
@@ -45,7 +46,7 @@ class DashboardController extends Controller
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
         'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
         'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
-        'list_plans' => (new Plan())->dataUser(),
+        'list_plans' => $resource->getClients(),
       ]);
     } catch (\Exception $e) {
       return response()->json([
