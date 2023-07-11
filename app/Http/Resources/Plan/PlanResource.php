@@ -206,6 +206,7 @@ class PlanResource
     } else {
       $user_plan = UserPlan::find($user_id);
       $user_plan->withdrawal_report = $value;
+      $user_plan->save();
       foreach ($plans as $plan) {
         $plan->withdrawal_report = $value;
         $plan->save();
