@@ -64,7 +64,7 @@ class UserResource
   public function getClients()
   {
     $user = User::with(['address', 'sponsor' => function ($query) {
-      $query->select('id', 'name', 'username', 'email', 'phone');
+      $query->select('id', 'name', 'username', 'email', 'phone', 'type');
     }, 'userPlan', 'userPlan.dataPlan', 'userPlan.coin' => function ($query) {
       $query->select('id', 'symbol', 'price_brl', 'price_usd', 'name');
     }, 'plan',])->whereHas('userPlan', function ($query) {
