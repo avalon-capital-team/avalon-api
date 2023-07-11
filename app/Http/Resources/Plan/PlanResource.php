@@ -9,6 +9,7 @@ use App\Models\Coin\Coin;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Models\Data\DataPercent;
+use App\Models\User\UserPlan;
 use App\Nova\Models\Coin\Coin as CoinCoin;
 use DateTime;
 
@@ -203,6 +204,8 @@ class PlanResource
     if (count($plans) == 0) {
       return false;
     } else {
+      $user_plan = UserPlan::find($user_id);
+      $user_plan->withdrawal_report = $value;
       foreach ($plans as $plan) {
         $plan->withdrawal_report = $value;
         $plan->save();
