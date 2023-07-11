@@ -200,18 +200,21 @@ class PlanResource
    */
   function withdralReport($user_id, bool $value)
   {
-    $plans = Plan::where('user_id', $user_id)->where('acting', 1)->get();
-    if (count($plans) == 0) {
-      return false;
-    } else {
-      $user_plan = UserPlan::find($user_id);
-      $user_plan->withdrawal_report = $value;
-      $user_plan->save();
-      foreach ($plans as $plan) {
-        $plan->withdrawal_report = $value;
-        $plan->save();
-      }
+    $planCount = Plan::where('user_id', $user_id)
+        ->where('acting', 1)
+        ->count();
+
+    if ($planCount === 0) {
+        return false;
     }
+
+    UserPlan::where('user_id', $user_id)
+        ->update(['withdrawal_report' => $value]);
+
+    Plan::where('user_id', $user_id)
+        ->where('acting', 1)
+        ->update(['withdrawal_report' => $value]);
+
     return true;
   }
 
