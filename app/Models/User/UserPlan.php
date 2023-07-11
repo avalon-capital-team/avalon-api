@@ -18,7 +18,7 @@ class UserPlan extends Model
    * @var string
    */
   protected $table = 'users_plan';
-  protected $appends = ['total'];
+  protected $appends = ['total', 'total_month'];
 
   /**
    * The attributes that are mass assignable.
@@ -33,6 +33,14 @@ class UserPlan extends Model
     'acting',
     'payment_voucher_url',
   ];
+
+  public function getTotalMonthAttribute()
+{
+    if ($this->withdrawal_report == 0) {
+      return $this->amount * 0.05;
+    }
+    return ($this->amount + $this->income) * 0.05;
+}
 
   /**
    * Get user
