@@ -71,7 +71,7 @@ class UserPlan extends Resource
             BelongsTo::make('Usuário', 'user', 'App\Nova\Models\User\User')->searchable()->withSubtitles(),
 
             BelongsTo::make('Plano', 'dataPlan', 'App\Nova\Models\Data\DataPlan'),
-
+            Boolean::make('Reaporte Automatico', 'withdrawal_report'),
             Currency::make('Valor', 'amount')
                 ->displayUsing(function ($value) {
                     return currency_format($value, 'brl');

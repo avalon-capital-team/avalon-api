@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserDataRequest;
 use App\Http\Resources\Plan\PlanResource;
 use App\Http\Resources\User\UserComplianceResource;
 use App\Http\Resources\User\UserResource;
@@ -20,6 +21,28 @@ class UserController extends Controller
   public function __construct()
   {
     $this->middleware('auth:sanctum');
+  }
+
+ /**
+   * @param \App\Htt\Resorces\User\User @resource
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function update(UserResource $resource, UserDataRequest $request, $id)
+  {
+    $user = User::find($id);
+    try {
+      $resource->updateUser($user, $request->validated());
+      return response()->json([
+        'status'  => true,
+        'message' => 'User updated successfully.'
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+
   }
 
   /**
@@ -91,7 +114,6 @@ class UserController extends Controller
         'status'  => true,
         'message' => 'Usuário deletado com sucesso.'
       ]);
-
     } catch (\Exception $e) {
       return response()->json([
         'status' => false,
@@ -132,17 +154,17 @@ class UserController extends Controller
       $user = User::find($request->user_id);
       $sponsor = User::find($request->sponsor_id);
 
-      if($sponsor->type == 'mananger'){
+      if ($sponsor->type == 'mananger') {
         $sponsor_name = 'Gestor';
       }
-      if($sponsor->type == 'advisor'){
+      if ($sponsor->type == 'advisor') {
         $sponsor_name = 'Assessor';
       }
 
       return response()->json([
         'status'  => true,
         'users' => (new UserResource())->updateUserType($user, $sponsor),
-        'message' => $sponsor_name .' setado com sucesso.'
+        'message' => $sponsor_name . ' setado com sucesso.'
       ]);
     } catch (\Exception $e) {
       return response()->json([

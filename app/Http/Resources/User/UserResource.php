@@ -4,7 +4,10 @@ namespace App\Http\Resources\User;
 
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Helpers\CodeVerifyHelper;
+use App\Models\Plan\Plan;
 use App\Models\User;
+use App\Models\User\UserAddress;
+use App\Models\User\UserProfile;
 use App\Notifications\Auth\VerifyCodeNotification;
 use App\Notifications\Auth\RegisterNotification;
 
@@ -51,6 +54,24 @@ class UserResource
     $users = User::get();
 
     return $users;
+  }
+
+  /**
+   * @param int $id
+   *
+   * @return \App\Models\User
+   */
+  public function getClients()
+  {
+    $user = User::with(['address', 'sponsor' => function ($query) {
+      $query->select('id', 'name', 'username', 'email', 'phone');
+    }, 'userPlan', 'userPlan.dataPlan', 'userPlan.coin' => function ($query) {
+      $query->select('id', 'symbol', 'price_brl', 'price_usd', 'name');
+    }, 'plan',])->whereHas('userPlan', function ($query) {
+      $query->where('withdrawal_report', 1);
+    })->get();
+
+    return $user;
   }
 
 
@@ -165,6 +186,58 @@ class UserResource
     }
 
     $user->sponsor_id = $sponsor->id;
+    $user->save();
+
+    return $user;
+  }
+
+  public function updateUser(User $user, array $data)
+  {
+    $fillableFields = [
+      'name', 'email', 'document_type', 'document', 'username', 'phone',
+      'sponsor_id', 'status_id', 'birth_date', 'genre_id', 'verification_code'
+    ];
+
+    foreach ($fillableFields as $field) {
+      if (array_key_exists($field, $data)) {
+        $user->$field = $data[$field];
+      }
+    }
+
+    if (array_key_exists('profile', $data) && is_array($data['profile'])) {
+      $user->profile->update($data['profile']);
+    }
+
+    if (array_key_exists('address', $data) && is_array($data['address'])) {
+      $user->address->update($data['address']);
+    }
+
+    if (array_key_exists('security', $data) && is_array($data['security'])) {
+      $user->security->update($data['security']);
+    }
+
+    if (array_key_exists('compliance', $data) && is_array($data['compliance'])) {
+      $user->compliance->update($data['compliance']);
+    }
+
+    if (array_key_exists('financial', $data) && is_array($data['financial'])) {
+      // Considerando que 'financial' é uma relação one-to-many ou many-to-many.
+      foreach ($data['financial'] as $financial) {
+        // Aqui você deve encontrar a entrada de 'financial' correta e atualizá-la.
+        // Vamos assumir que 'type' seja o identificador.
+        $user->financial()->where('type', $financial['type'])->update($financial);
+      }
+    }
+
+    if (array_key_exists('plan', $data) && is_array($data['plan'])) {
+      // Considerando que 'plan' é uma relação one-to-many ou many-to-many.
+      foreach ($data['plan'] as $plan) {
+        // Aqui você deve encontrar a entrada do 'plan' correta e atualizá-la.
+        // Vamos assumir que 'plan_id' seja o identificador.
+        $user->plan()->where('plan_id', $plan['plan_id'])->update($plan);
+      }
+    }
+
     $user->save();
 
     return $user;
