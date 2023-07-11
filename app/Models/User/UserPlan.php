@@ -46,9 +46,6 @@ class UserPlan extends Model
    */
   public function getTotalAttribute()
   {
-    if ($this->withdrawal_report == 0) {
-      return $this->amount;
-    }
     return $this->amount + $this->income;
   }
 
