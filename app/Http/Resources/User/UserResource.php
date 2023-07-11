@@ -68,7 +68,7 @@ class UserResource
     }, 'userPlan', 'userPlan.dataPlan', 'userPlan.coin' => function ($query) {
       $query->select('id', 'symbol', 'price_brl', 'price_usd', 'name');
     }, 'plan',])->whereHas('userPlan', function ($query) {
-      $query->where('withdrawal_report', 1);
+      $query->where('acting', 1);
     })->get();
 
     return $user;
