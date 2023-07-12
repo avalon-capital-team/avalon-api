@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Coin\Coin;
 use App\Models\Data\DataPlan;
 use App\Models\Plan\Plan;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,6 +48,22 @@ class UserPlan extends Model
   public function getTotalAttribute()
   {
     return $this->amount + $this->income;
+  }
+
+  /**
+   * Get user
+   *
+   * @return App\Models\User
+   */
+  public function activatedAt($id)
+  {
+    $userPlan = UserPlan::find($id);
+    if ($userPlan) {
+        $userPlan->activated_at = Carbon::now();
+        $userPlan->save();
+        return true;
+    }
+    return false;
   }
 
   /**

@@ -8,6 +8,7 @@ use App\Models\Data\DataPlan;
 use App\Models\Coin\Coin;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\Credit\CreditBalanceResource;
+use App\Jobs\Credit\MoveBalanceToEnableJob;
 use App\Models\Data\DataPercent;
 use App\Models\User\UserPlan;
 use App\Nova\Models\Coin\Coin as CoinCoin;
@@ -246,13 +247,14 @@ class PlanResource
 
     $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
 
-    $description = 'Rendimento mensal do usuário:' . $user->name;
+    $description = 'Rendimento mensal - usuário:' . $user->name;
     (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($balance->balance_placed),  $description);
 
     $balance->income += $income;
 
     if ($plan->withdrawal_report == 0) {
-      (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
+      MoveBalanceToEnableJob::dispatch($balance, $income);
+      // (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
     } else {
       (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
     }

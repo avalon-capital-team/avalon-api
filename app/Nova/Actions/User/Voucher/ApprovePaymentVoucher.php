@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Carbon\Carbon;
 use App\Http\Resources\Credit\CreditBalanceResource;
+use App\Models\User\UserPlan;
 
 class ApprovePaymentVoucher extends Action
 {
@@ -28,6 +29,7 @@ class ApprovePaymentVoucher extends Action
         foreach ($models as $model) {
             $model->acting = 1;
             (new CreditBalanceResource())->approveBalance($model);
+            (new UserPlan())->activatedAt($model->user_plan_id);
             $model->activated_at = Carbon::now();
             $model->save();
             $this->markAsFinished($model);

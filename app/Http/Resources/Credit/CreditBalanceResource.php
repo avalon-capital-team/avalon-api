@@ -268,6 +268,27 @@ class CreditBalanceResource
    *
    * @param \App\Models\Credit\CreditBalance $credit
    */
+  public function createBalanceToEnable(CreditBalance $creditBalance, float $amount)
+  {
+    $creditBalance->balance_enable += $amount;
+    $creditBalance->save();
+  }
+
+  /**
+   * Move Balance to pending
+   *
+   * @param \App\Models\Credit\CreditBalance $credit
+   */
+  public function createBalanceToPlaced(CreditBalance $creditBalance, float $amount)
+  {
+    $creditBalance->balance_placed += $amount;
+    $creditBalance->save();
+  }
+  /**
+   * Move Balance to pending
+   *
+   * @param \App\Models\Credit\CreditBalance $credit
+   */
   public function moveBalanceToPlaced(CreditBalance $creditBalance, float $amount)
   {
     $creditBalance->balance_pending -= $amount;

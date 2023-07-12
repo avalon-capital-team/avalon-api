@@ -190,6 +190,7 @@ return [
         NotificationChannels\OneSignal\OneSignalServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
         Torann\Currency\CurrencyServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -216,6 +217,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Google2FA' => PragmaRX\Google2FALaravel\Facade::class,
+        'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
     ])->toArray(),
 
 ];
