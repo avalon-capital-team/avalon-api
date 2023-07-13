@@ -49,6 +49,26 @@ class UserController extends Controller
    * @param \App\Htt\Resorces\User\User @resource
    * @return \Illuminate\Http\JsonResponse
    */
+  public function usersPending(UserResource $resource)
+  {
+    try {
+      return response()->json([
+        'status'  => true,
+        'users' => $resource->getNewUsers(),
+
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
+
+  /**
+   * @param \App\Htt\Resorces\User\User @resource
+   * @return \Illuminate\Http\JsonResponse
+   */
   public function data()
   {
     try {

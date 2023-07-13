@@ -171,6 +171,18 @@ class WithdrawalFiatResource
             // $withdrawalFiat->user->notify(new WithdrawalFiatNotification($withdrawalFiat));
         }
     }
+
+    /**
+     * Get history paginate
+     *
+     * @param  \App\Models\User $user
+     * @return App\Models\Withdrawal\WithdrawalFiat;
+     */
+    public function getWithdralPendings()
+    {
+        return WithdrawalFiat::where('status_id', 3)->get();
+    }
+
     /**
      * Get history paginate
      *

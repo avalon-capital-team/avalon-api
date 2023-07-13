@@ -61,6 +61,22 @@ class UserResource
    *
    * @return \App\Models\User
    */
+  public function getNewUsers()
+  {
+    $user = User::with([
+      'compliance'
+    ])->whereHas('compliance', function ($query) {
+      $query->where('status_id', 1);
+    })->get();
+
+    return $user;
+  }
+
+  /**
+   * @param int $id
+   *
+   * @return \App\Models\User
+   */
   public function getClients()
   {
     $user = User::with([
@@ -77,7 +93,7 @@ class UserResource
       }, 'plan' => function ($query) {
         $query->select('user_id', 'token', 'amount', 'income', 'acting', 'activated_at', 'payment_voucher_url', 'withdrawal_report');
       }, 'creditBalance' => function ($query) {
-        $query->select('user_id','coin_id', 'balance_enable', 'balance_placed');
+        $query->select('user_id', 'coin_id', 'balance_enable', 'balance_placed');
       }, 'credits' => function ($query) {
         $query->select('user_id', 'uuid', 'amount', 'base_amount', 'description', 'type_id');
       },
