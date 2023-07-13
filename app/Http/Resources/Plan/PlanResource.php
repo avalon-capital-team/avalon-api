@@ -253,8 +253,8 @@ class PlanResource
     $balance->income += $income;
 
     if ($plan->withdrawal_report == 0) {
-      MoveBalanceToEnableJob::dispatch($balance, $income);
-      // (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
+      // MoveBalanceToEnableJob::dispatch($balance, $income);
+      (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
     } else {
       (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
     }

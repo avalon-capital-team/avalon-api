@@ -177,7 +177,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('extract', [App\Http\Controllers\Api\Admin\Extract\ExtractController::class, 'data']);
 
     #Models
-    // Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'users']);
+    Route::get('plans/data', [App\Http\Controllers\Api\Admin\Models\ModelsController::class, 'dataPlan']);
+    Route::post('plan/update', [App\Http\Controllers\Api\Admin\Models\ModelsController::class, 'updatePlan']);
   });
   Route::get('job/reports', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
 });

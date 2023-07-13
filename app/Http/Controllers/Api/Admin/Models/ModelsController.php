@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin\Models;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Data\DataPlanResource;
 use App\Models\Coin\Coin;
 use App\Models\Data\DataPercent;
 use App\Models\Data\DataPlan;
@@ -21,7 +22,6 @@ class ModelsController extends Controller
   }
 
   /**
-   * @param \App\Htt\Resorces\User\User @resource
    * @return \Illuminate\Http\JsonResponse
    */
   public function dataPlan()
@@ -40,7 +40,25 @@ class ModelsController extends Controller
   }
 
   /**
-   * @param \App\Htt\Resorces\User\User @resource
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function updatePlan(Request $request)
+  {
+    try {
+      return response()->json([
+        'status'  => true,
+        'plans' => (new DataPlanResource())->updatePlan($request->plan_id, $request->data),
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
+
+
+  /**
    * @return \Illuminate\Http\JsonResponse
    */
   public function dataParcents()
@@ -59,7 +77,6 @@ class ModelsController extends Controller
   }
 
   /**
-   * @param \App\Htt\Resorces\User\User @resource
    * @return \Illuminate\Http\JsonResponse
    */
   public function dataCoins()
