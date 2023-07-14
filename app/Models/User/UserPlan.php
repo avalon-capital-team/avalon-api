@@ -20,7 +20,7 @@ class UserPlan extends Model
    * @var string
    */
   protected $table = 'users_plan';
-  // protected $appends = ['total', 'total_month'];
+  protected $appends = ['total'];
 
   /**
    * The attributes that are mass assignable.
