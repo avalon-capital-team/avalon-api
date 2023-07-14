@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin\Extract;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Credit\CreditResource;
 use App\Models\Credit\Credit;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,7 @@ class ExtractController extends Controller
     try {
       return response()->json([
         'status'  => true,
-        'Extract' => Credit::get(),
+        'Extract' => (new CreditResource)->getCredits(),
       ]);
     } catch (\Exception $e) {
       return response()->json([

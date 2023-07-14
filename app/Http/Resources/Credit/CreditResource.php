@@ -69,6 +69,23 @@ class CreditResource
     return $extract;
   }
 
+  /**
+   * Get history paginate
+   *
+   * @param  \App\Models\User $user
+   * @return App\Models\Withdrawal\WithdrawalFiat;
+   */
+  public function getCredits()
+  {
+    $withdrawals = Credit::with([
+      'user' => function ($query) {
+        $query->select('id', 'name', 'username', 'email'); // adicione mais campos conforme necessário
+      }
+    ])->get();
+
+    return $withdrawals;
+  }
+
 
   /**
    * Create new Credit
