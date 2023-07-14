@@ -93,7 +93,7 @@ class UserResource
       }, 'plan' => function ($query) {
         $query->select('user_id', 'token', 'amount', 'income', 'acting', 'activated_at', 'payment_voucher_url', 'withdrawal_report');
       }, 'creditBalance' => function ($query) {
-        $query->select('user_id', 'coin_id', 'balance_enable', 'balance_placed');
+        $query->select('user_id', 'coin_id', 'balance_enable');
       }, 'credits' => function ($query) {
         $query->select('user_id', 'uuid', 'amount', 'base_amount', 'description', 'type_id', 'created_at');
       },
