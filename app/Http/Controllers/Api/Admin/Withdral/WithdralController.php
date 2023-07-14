@@ -45,7 +45,7 @@ class WithdralController extends Controller
     try {
       return response()->json([
         'status'  => true,
-        'withdrals' => (new WithdrawalFiatResource)->getWithdralPendings(),
+        'withdrals_pendings' => (new WithdrawalFiatResource)->getWithdralPendings(),
       ]);
     } catch (\Exception $e) {
       return response()->json([

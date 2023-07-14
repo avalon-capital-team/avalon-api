@@ -46,8 +46,8 @@ class WithdrawalFiatResource
         $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->id, 2, 1, floatval('-' . $amount), $user->userPlan->amount + $user->userPlan->income, $description);
 
         $coin = Coin::where('id', $coin_id)->first();
+        # Check Balance
         $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
-        (new CreditBalanceResource())->moveBalanceToEnable($balance, floatval('-' . $amount));
 
         if ($debit) {
             # Create Withdrawal
@@ -61,8 +61,8 @@ class WithdrawalFiatResource
                 'withdrawal',
             );
 
-            // # Send mail
-            // if (env('APP_ENV') != 'testing') {
+            # Send mail
+            // if (env('APP_ENV') != null) {
             //     $user->notify(
             //         new WithdrawalFiatNotification($withdrawal)
             //     );

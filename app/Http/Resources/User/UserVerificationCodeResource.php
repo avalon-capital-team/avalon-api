@@ -65,6 +65,7 @@ class UserVerificationCodeResource
      */
     public function verify(string $code, string $type, int $userId)
     {
+      dd($userId);
         $codeIsValid = UserVerificationCode::query()
             ->for($type)
             ->where('user_id', $userId)

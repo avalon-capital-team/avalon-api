@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Models\User;
 use App\Models\Coin\Coin;
+use App\Models\Credit\CreditBalance;
 use App\Models\Data\DataPlan;
 use App\Models\Plan\Plan;
 use Carbon\Carbon;
@@ -36,9 +37,11 @@ class UserPlan extends Model
   ];
 
   public function getTotalMonthAttribute()
-{
-    return ($this->amount + $this->income) * 0.05;
-}
+  {
+    $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
+    $total = $balance->balance_placed * 0.05;
+    return $total;
+  }
 
   /**
    * Get user
@@ -47,21 +50,23 @@ class UserPlan extends Model
    */
   public function getTotalAttribute()
   {
-    return $this->amount + $this->income;
+    $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
+
+    return $balance->balance_placed;
   }
 
   /**
    * Get user
    *
-   * @return App\Models\User
+   * @return App\Models\UserPlan
    */
   public function activatedAt($id)
   {
     $userPlan = UserPlan::find($id);
     if ($userPlan) {
-        $userPlan->activated_at = Carbon::now();
-        $userPlan->save();
-        return true;
+      $userPlan->activated_at = Carbon::now();
+      $userPlan->save();
+      return true;
     }
     return false;
   }

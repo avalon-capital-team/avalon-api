@@ -154,8 +154,8 @@ class PlanResource
 
     $coin = Coin::where('id', $user->userPlan->coin_id)->first();
     $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
-    (new CreditBalanceResource())->moveBalanceToIncome($balance, $amount);
-    (new CreditBalanceResource())->moveBalanceToEnable($balance, $amount);
+
+    (new CreditBalanceResource())->moveBalanceToPending($balance, $amount);
     return true;
   }
 

@@ -56,19 +56,15 @@ class WithdrawalController extends Controller
    */
   public function withdrawl(WithdrawalFiatRequest $request)
   {
-    return response()->json([
-      'status' => true,
-      'message' => 'Em manutenção, em breve disponível.'
-    ], 200);
     try {
       $validated = $request->validated();
 
       (new PlanResource())->withdrawalPlan(auth()->user(), $validated['amount']);
 
-      if ($validated['coin_id'] == '1') {
-        (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
-      } else {
+      if ($validated['coin_id'] != '1') {
         (new WithdrawalCryptoResource())->createWithdrawalCrypto(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
+      } else {
+        (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
       }
 
       return response()->json([

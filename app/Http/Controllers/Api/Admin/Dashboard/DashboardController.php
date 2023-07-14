@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\Deposit\DepositFiat;
 use App\Models\Plan\Plan;
@@ -30,6 +31,7 @@ class DashboardController extends Controller
   public function data(UserResource $resource)
   {
     try {
+      $extract = (new CreditResource())->sumarySixMonth();
 
       return response()->json([
         'status'  => true,
@@ -46,6 +48,7 @@ class DashboardController extends Controller
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
         'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
         'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
+        'extract' => $extract,
         'list_plans' => $resource->getClients(),
       ]);
     } catch (\Exception $e) {
