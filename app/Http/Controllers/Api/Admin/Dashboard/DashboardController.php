@@ -48,7 +48,7 @@ class DashboardController extends Controller
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
         'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
         'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
-        'extract' => $extract,
+        // 'extract' => $extract,
         'list_plans' => $resource->getClients(),
       ]);
     } catch (\Exception $e) {
