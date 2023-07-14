@@ -84,6 +84,12 @@ class UserResource
         $query->select('user_id', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'complement');
       }, 'sponsor' => function ($query) {
         $query->select('id', 'name', 'username', 'email', 'phone', 'type');
+      }, 'userPlan' => function ($query) {
+        $query->select('plan_id', 'coin_id', 'user_id', 'amount', 'income', 'acting', 'activated_at', 'payment_voucher_url', 'withdrawal_report');
+      }, 'userPlan.dataPlan' => function ($query) {
+        $query->select('id', 'name', 'rescue', 'porcent');
+      }, 'userPlan.coin' => function ($query) {
+        $query->select('id', 'name', 'symbol', 'price_brl', 'price_usd');
       }, 'plan' => function ($query) {
         $query->select('user_id', 'token', 'amount', 'income', 'acting', 'activated_at', 'payment_voucher_url', 'withdrawal_report');
       }, 'creditBalance' => function ($query) {
