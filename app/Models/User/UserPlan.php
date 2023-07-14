@@ -39,23 +39,29 @@ class UserPlan extends Model
   public function getTotalMonthAttribute()
   {
     $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
-    $total = $balance->balance_placed * 0.05;
-    return $total;
+    if ($balance) {
+        $total = $balance->balance_placed * 0.05;
+        return $total;
+    } else {
+        // retorne um valor padrão se não houver saldo
+        return 0;
+    }
   }
 
-  /**
-   * Get user
-   *
-   * @return App\Models\User
-   */
   public function getTotalAttribute()
   {
     $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
-    return $balance->balance_placed;
+    if ($balance) {
+        $total = $balance->balance_placed;
+        return $total;
+    } else {
+        // retorne um valor padrão se não houver saldo
+        return 0;
+    };
   }
 
   /**
-   * Get user
+   * Get user plan
    *
    * @return App\Models\UserPlan
    */
