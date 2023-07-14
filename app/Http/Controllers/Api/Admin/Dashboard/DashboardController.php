@@ -49,7 +49,7 @@ class DashboardController extends Controller
         'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
         'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
         // 'extract' => $extract,
-        'list_plans' => $resource->getClients(),
+        // 'list_plans' => $resource->getClients(),
       ]);
     } catch (\Exception $e) {
       return response()->json([
