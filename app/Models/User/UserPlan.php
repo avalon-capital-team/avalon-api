@@ -39,11 +39,8 @@ class UserPlan extends Model
   public function getTotalMonthAttribute()
   {
     $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
-    if(!$balance->balance_placed){
-      $total = $balance->balance_placed * 0.05;
-    } else {
-      $total = 0.000000;
-    }
+    dd($balance);
+    $total = $balance->balance_placed * 0.05;
     return $total;
   }
 
@@ -55,14 +52,8 @@ class UserPlan extends Model
   public function getTotalAttribute()
   {
     $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
-
-    if(!$balance->balance_placed){
-      $total = $balance->balance_placed;
-    } else {
-      $total = 0.000000;
-    }
-
-    return $total;
+    dd($balance);
+    return $balance->balance_placed;
   }
 
   /**
