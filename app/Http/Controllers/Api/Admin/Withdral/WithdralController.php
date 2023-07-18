@@ -27,7 +27,7 @@ class WithdralController extends Controller
     try {
       return response()->json([
         'status'  => true,
-        'withdrals' =>  (new WithdrawalFiatResource)->getWithdral(),
+        'withdrals' => (new WithdrawalFiatResource)->getWithdral(),
       ]);
     } catch (\Exception $e) {
       return response()->json([
@@ -45,7 +45,34 @@ class WithdralController extends Controller
     try {
       return response()->json([
         'status'  => true,
-        'withdrals_pendings' => (new WithdrawalFiatResource)->getWithdral(),
+        'withdrals_pendings' => (new WithdrawalFiatResource)->getWithdralPendings(),
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
+
+  /**
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function withdralPayment(Request $request)
+  {
+    try {
+      $model = WithdrawalFiat::find($request->id);
+
+      if ($request->type == 1) {
+        $withdral = (new WithdrawalFiatResource())->approveWithdrawal($model, $request->message);
+        $message = 'Saque aprovado com sucesso.';
+      } else {
+        $withdral = (new WithdrawalFiatResource())->cancelWithdrawal($model, $request->message);
+        $message = 'Saque cancelado com sucesso.';
+      }
+      return response()->json([
+        'status'  => true,
+        'message' => $message
       ]);
     } catch (\Exception $e) {
       return response()->json([

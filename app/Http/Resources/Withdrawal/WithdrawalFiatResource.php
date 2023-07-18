@@ -169,6 +169,7 @@ class WithdrawalFiatResource
 
       # Send mail
       // $withdrawalFiat->user->notify(new WithdrawalFiatNotification($withdrawalFiat));
+      return true;
     }
   }
 

@@ -163,6 +163,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('users', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'data']);
     Route::get('users/pending', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'usersPending']);
     Route::get('clients', [App\Http\Controllers\Api\Admin\Users\ClientController::class, 'data']);
+    Route::post('update/user', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateUser']);
     Route::post('update/user/report', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateReport']);
     Route::post('update/user/type', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateUserType']);
     Route::post('update/user/compliance', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateCompliance']);
@@ -171,6 +172,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     #Withdrals
     Route::get('withdrals', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'data']);
     Route::get('withdrals/pending', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'withdralPendings']);
+    Route::post('withdral/payment', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'withdralPayment']);
 
     #Deposits
     Route::get('deposits', [App\Http\Controllers\Api\Admin\Deposit\DepositController::class, 'data']);

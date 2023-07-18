@@ -23,28 +23,6 @@ class UserController extends Controller
     $this->middleware('auth:sanctum');
   }
 
- /**
-   * @param \App\Htt\Resorces\User\User @resource
-   * @return \Illuminate\Http\JsonResponse
-   */
-  public function update(UserResource $resource, UserDataRequest $request, $id)
-  {
-    $user = User::find($id);
-    try {
-      $resource->updateUser($user, $request->validated());
-      return response()->json([
-        'status'  => true,
-        'message' => 'User updated successfully.'
-      ]);
-    } catch (\Exception $e) {
-      return response()->json([
-        'status' => false,
-        'message'  => $e->getMessage()
-      ], 400);
-    }
-
-  }
-
   /**
    * @param \App\Htt\Resorces\User\User @resource
    * @return \Illuminate\Http\JsonResponse
@@ -233,6 +211,28 @@ class UserController extends Controller
         'status'  => true,
         'users' => (new PlanResource())->withdralReport($request->user_id, $request->value),
         'message' => 'Aportes atualizado com sucesso!'
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
+
+  /**
+   * @param \App\Htt\Resorces\User\User @resource
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function updateUser(UserResource $resource, UserDataRequest $request)
+  {
+    try {
+      $validated = $request->validated();
+      $user = User::find($validated['id']);
+      return response()->json([
+        'status'  => true,
+        'user' => $resource->updateUser($user, $validated),
+        'message' => 'Usuário atualizado com sucesso!'
       ]);
     } catch (\Exception $e) {
       return response()->json([

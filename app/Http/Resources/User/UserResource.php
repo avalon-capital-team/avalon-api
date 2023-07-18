@@ -194,7 +194,7 @@ class UserResource
   public function updateUserType(User $user, $type)
   {
     if (!$user) {
-      throw new \Exception('Não foi possível cadastrar o indicador. Tente novamente!', 403);
+      throw new \Exception('Não foi possível atualizar o cliente. Tente novamente!', 403);
     }
 
     $user->type = $type;
@@ -225,8 +225,7 @@ class UserResource
   public function updateUser(User $user, array $data)
   {
     $fillableFields = [
-      'name', 'email', 'document_type', 'document', 'username', 'phone',
-      'sponsor_id', 'status_id', 'birth_date', 'genre_id', 'verification_code'
+      'name', 'email', 'username', 'phone', 'genre_id'
     ];
 
     foreach ($fillableFields as $field) {
@@ -235,38 +234,8 @@ class UserResource
       }
     }
 
-    if (array_key_exists('profile', $data) && is_array($data['profile'])) {
-      $user->profile->update($data['profile']);
-    }
-
     if (array_key_exists('address', $data) && is_array($data['address'])) {
       $user->address->update($data['address']);
-    }
-
-    if (array_key_exists('security', $data) && is_array($data['security'])) {
-      $user->security->update($data['security']);
-    }
-
-    if (array_key_exists('compliance', $data) && is_array($data['compliance'])) {
-      $user->compliance->update($data['compliance']);
-    }
-
-    if (array_key_exists('financial', $data) && is_array($data['financial'])) {
-      // Considerando que 'financial' é uma relação one-to-many ou many-to-many.
-      foreach ($data['financial'] as $financial) {
-        // Aqui você deve encontrar a entrada de 'financial' correta e atualizá-la.
-        // Vamos assumir que 'type' seja o identificador.
-        $user->financial()->where('type', $financial['type'])->update($financial);
-      }
-    }
-
-    if (array_key_exists('plan', $data) && is_array($data['plan'])) {
-      // Considerando que 'plan' é uma relação one-to-many ou many-to-many.
-      foreach ($data['plan'] as $plan) {
-        // Aqui você deve encontrar a entrada do 'plan' correta e atualizá-la.
-        // Vamos assumir que 'plan_id' seja o identificador.
-        $user->plan()->where('plan_id', $plan['plan_id'])->update($plan);
-      }
     }
 
     $user->save();

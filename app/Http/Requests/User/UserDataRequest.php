@@ -13,7 +13,7 @@ class UserDataRequest extends FormRequest
    */
   public function authorize()
   {
-    return false;
+    return true;
   }
 
   /**
@@ -22,37 +22,35 @@ class UserDataRequest extends FormRequest
    * @return array<string, mixed>
    */
   public function rules()
-  {
-    return [
-      'name' => 'sometimes|required|string',
-      'email' => 'sometimes|required|email',
-      // ... (regras para outros campos do usuário)
+    {
+        return [
+            'id'     => ['required'],
+            'username'      => ['sometimes', 'unique:users,username'],
+            'email'      => ['sometimes', 'unique:users,email'],
+            'name'      => ['sometimes'],
+            'phone'      => ['sometimes'],
+            'genre_id'      => ['sometimes'],
+            'address.street'     => ['sometimes'],
+            'address.neighborhood'     => ['sometimes'],
+            'address.city'     => ['sometimes'],
+            'address.state'     => ['sometimes'],
+            'address.number'     => ['sometimes'],
+            'address.cep'     => ['sometimes'],
+        ];
+    }
 
-      'profile.ong_id' => 'nullable',
-      'profile.avatar' => 'nullable',
-
-      'address.cep' => 'nullable',
-      'address.street' => 'nullable',
-      // ... (regras para outros campos do endereço)
-
-      'security.google_2fa' => 'nullable',
-
-      'compliance.status_id' => 'nullable|integer',
-      'compliance.message' => 'nullable|string',
-      'compliance.approved_at' => 'nullable|date',
-
-      'financial.*.type' => 'required|string',
-      'financial.*.data' => 'nullable',
-
-      'plan.*.plan_id' => 'required|integer',
-      'plan.*.coin_id' => 'required|integer',
-      'plan.*.payment_method_id' => 'required|integer',
-      'plan.*.amount' => 'required|numeric',
-      'plan.*.income' => 'required|numeric',
-      'plan.*.acting' => 'required|boolean',
-      'plan.*.withdrawal_report' => 'required|boolean',
-      'plan.*.payment_voucher_url' => 'nullable|url',
-      'plan.*.activated_at' => 'nullable|date',
-  ];
-  }
+    /**
+     * messages
+     *
+     * @return void
+     */
+    public function messages()
+    {
+        return [
+            'id.required'    => __('O id do usuario é obrigatório'),
+            'username.unique'    => __('Já esta sendo utilizado esse username'),
+            'email.unique'    => __('Já esta sendo utilizado esse email'),
+        ];
+    }
 }
+
