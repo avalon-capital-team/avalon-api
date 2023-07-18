@@ -173,7 +173,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('withdrals/pending', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'withdralPendings']);
 
     #Deposits
-    Route::get('deposits', [App\Http\Controllers\Api\Admin\Deposit\DepositsController::class, 'data']);
+    Route::get('deposits', [App\Http\Controllers\Api\Admin\Deposit\DepositController::class, 'data']);
 
     #Extract
     Route::get('extract', [App\Http\Controllers\Api\Admin\Extract\ExtractController::class, 'data']);
