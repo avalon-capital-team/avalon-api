@@ -224,6 +224,27 @@ class UserController extends Controller
    * @param \App\Htt\Resorces\User\User @resource
    * @return \Illuminate\Http\JsonResponse
    */
+  public function updataPlan(Request $request)
+  {
+    try {
+      $user = User::find($request->user_id);
+      return response()->json([
+        'status'  => true,
+        'users' => (new PlanResource())->updataPlan($user, $request->plan_id),
+        'message' => 'Plano atualizado com sucesso!'
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
+
+  /**
+   * @param \App\Htt\Resorces\User\User @resource
+   * @return \Illuminate\Http\JsonResponse
+   */
   public function updateUser(UserResource $resource, UserDataRequest $request)
   {
     try {

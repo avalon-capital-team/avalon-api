@@ -125,11 +125,8 @@ class PlanResource
   }
 
   /**
-   * Check a days installments
    *
-   * @param  string $date_from
-   * @param  string $date_to
-   * @return string
+   * @return bool
    */
   function withdrawalPlan(User $user, $amount)
   {
@@ -160,11 +157,26 @@ class PlanResource
   }
 
   /**
-   * Check a days installments
    *
-   * @param  string $date_from
-   * @param  string $date_to
-   * @return string
+   * @return bool
+   */
+  function updataPlan(User $user, $data)
+  {
+    $plans = Plan::where('user_id', $user->id)->get();
+
+    foreach ($plans as $plan) {
+      $plan->plan_id = $data;
+      $plan->save();
+    }
+    $user->userPlan->plan_id = $data;
+    $user->userPlan->save();
+
+    return true;
+  }
+
+  /**
+   *
+   * @return bool
    */
   function dateInterval($date_from, $date_to)
   {
@@ -177,7 +189,6 @@ class PlanResource
   }
 
   /**
-   * Check a days installments
    *
    * User
    * @param  bool $value
@@ -193,7 +204,6 @@ class PlanResource
   }
 
   /**
-   * Check a days installments
    *
    * User
    * @param  bool $value
