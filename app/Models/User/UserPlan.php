@@ -38,14 +38,13 @@ class UserPlan extends Model
 
   public function getTotalMonthAttribute()
   {
-    $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
-    if ($balance) {
-        $total = $balance->balance_placed * 0.05;
-        return $total;
-    } else {
-        // retorne um valor padrão se não houver saldo
-        return 0;
-    }
+    $total = Plan::where('acting', 1)->where('withdrawal_report', false)->sum('income');
+    if ($total) {
+      return $total * 0.05;
+  } else {
+      // retorne um valor padrão se não houver saldo
+      return 0;
+  };
   }
 
   public function getTotalAttribute()
