@@ -32,10 +32,8 @@ class WithdrawalController extends Controller
     try {
       $user = User::find($request->user_id);
       if ($user) {
-        (new PlanResource())->withdrawalPlan($user, $request->amount);
         (new WithdrawalFiatResource())->createWithdrawal($user, $request->coin_id, $request->type, $request->amount);
       } else {
-        (new PlanResource())->withdrawalPlan(auth()->user(), $request->amount);
         (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $request->coin_id, $request->type, $request->amount);
       }
       return response()->json([
@@ -59,13 +57,13 @@ class WithdrawalController extends Controller
     try {
       $validated = $request->validated();
 
-      (new PlanResource())->withdrawalPlan(auth()->user(), $validated['amount']);
 
       if ($validated['coin_id'] != '1') {
         (new WithdrawalCryptoResource())->createWithdrawalCrypto(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
       } else {
         (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $validated['coin_id'], $validated['type'], $validated['amount']);
       }
+      (new PlanResource())->withdrawalPlan(auth()->user(), $validated['amount']);
 
       return response()->json([
         'status' => true,

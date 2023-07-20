@@ -275,13 +275,12 @@ class UserController extends Controller
 
       $user = User::find($request->user_id);
 
-      (new PlanResource())->withdrawalPlan(auth()->user(), $request['amount']);
-
       if ($request['coin_id'] != '1') {
         (new WithdrawalCryptoResource())->createWithdrawalCrypto($user, $request['coin_id'], $request['type'], $request['amount']);
       } else {
         (new WithdrawalFiatResource())->createWithdrawal($user, $request['coin_id'], $request['type'], $request['amount']);
       }
+      (new PlanResource())->withdrawalPlan($user, $request['amount']);
 
       return response()->json([
         'status' => true,

@@ -4,6 +4,7 @@ namespace App\Http\Resources\Withdrawal;
 
 use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
+use App\Http\Resources\Plan\PlanResource;
 use App\Models\Coin\Coin;
 use App\Models\Plan\Plan;
 use App\Models\User;
