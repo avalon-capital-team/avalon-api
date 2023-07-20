@@ -66,6 +66,8 @@ class CreditResource
         ->sum('base_amount');
     }
 
+    $extract = array_reverse($extract);
+
     return $extract;
   }
 
