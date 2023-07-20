@@ -66,7 +66,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DataOngSeeder::class);
         $this->call(DataPrivacyTypeSeeder::class);
         $this->call(DataBankSeeder::class);
-        $this->call(DataCountrySeeder::class);
+        // $this->call(DataCountrySeeder::class);
         $this->call(DataPercentSeeder::class);
 
         # Onboarding
