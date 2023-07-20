@@ -38,7 +38,7 @@ class UserPlan extends Model
 
   public function getTotalMonthAttribute()
   {
-    $total = Plan::where('user_id', $this->user_id)->where('acting', 1)->where('withdrawal_report', false)->sum('income');
+    $total = Plan::where('user_id', $this->user_id)->where('acting', 1)->sum('income');
     if ($total) {
       return $total * 0.05;
   } else {
