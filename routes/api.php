@@ -167,6 +167,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('update/user', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateUser']);
     Route::post('update/user/plan', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updataPlan']);
     Route::post('update/user/report', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateReport']);
+    Route::post('update/user/action-plan', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'actionPlan']);
     Route::post('update/user/type', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateUserType']);
     Route::post('update/user/compliance', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateCompliance']);
     Route::post('user/delete', [App\Http\Controllers\Api\Admin\Users\UserController::class, 'updateUserDelete']);
