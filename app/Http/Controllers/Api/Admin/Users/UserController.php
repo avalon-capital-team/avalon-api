@@ -7,6 +7,8 @@ use App\Http\Requests\User\UserDataRequest;
 use App\Http\Resources\Plan\PlanResource;
 use App\Http\Resources\User\UserComplianceResource;
 use App\Http\Resources\User\UserResource;
+use App\Http\Resources\Withdrawal\WithdrawalCryptoResource;
+use App\Http\Resources\Withdrawal\WithdrawalFiatResource;
 use App\Models\User;
 use App\Nova\Models\User\User as UserUser;
 use Illuminate\Http\Request;
@@ -260,6 +262,36 @@ class UserController extends Controller
         'status' => false,
         'message'  => $e->getMessage()
       ], 400);
+    }
+  }
+
+  /**
+   * @param  \Illuminate\Http\Request
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function withdrawl(Request $request)
+  {
+    try {
+
+      $user = User::find($request->user_id);
+
+      (new PlanResource())->withdrawalPlan(auth()->user(), $request['amount']);
+
+      if ($request['coin_id'] != '1') {
+        (new WithdrawalCryptoResource())->createWithdrawalCrypto($user, $request['coin_id'], $request['type'], $request['amount']);
+      } else {
+        (new WithdrawalFiatResource())->createWithdrawal($user, $request['coin_id'], $request['type'], $request['amount']);
+      }
+
+      return response()->json([
+        'status' => true,
+        'message' => 'A solicitação de saque foi realizada com sucesso.'
+      ], 200);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status'  => false,
+        'message' => $e->getMessage()
+      ], $e->getCode() ?? 400);
     }
   }
 }

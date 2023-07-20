@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\User\UserResource;
+use App\Models\Credit\CreditBalance;
 use App\Models\Deposit\DepositFiat;
 use App\Models\Plan\Plan;
 use Illuminate\Http\Request;
@@ -39,7 +40,8 @@ class DashboardController extends Controller
         'clients' => count(User::where('type', 'user')->get()),
         'mananger' => count(User::where('type', 'mananger')->get()),
         'advisor' => count(User::where('type', 'advisor')->get()),
-        'total_amount' => Plan::where('acting', 1)->where('user_id', '!=', 6)->sum('amount'),
+        // 'total_amount' => Plan::where('acting', 1)->where('user_id', '!=', 6)->sum('amount'),
+        'total_amount' => CreditBalance::where('coin_id', 1)->where('user_id', '!=', 6)->sum('balance_placed'),
         'total_amount_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->where('user_id', '!=', 6)->sum('amount'),
         'total_amount_off_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', false)->where('user_id', '!=', 6)->sum('amount'),
         'total_income' => Plan::where('acting', 1)->where('user_id', '!=', 6)->sum('income'),
