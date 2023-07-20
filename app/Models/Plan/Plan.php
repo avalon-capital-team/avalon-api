@@ -146,4 +146,20 @@ class Plan extends Model implements AuditableContract
       }
         return $plans;
     }
+
+    /**
+     * Get the plan detains
+     *
+     * @return \App\Models\User\UserPlan
+     */
+    public function pendingPlans()
+    {
+      $plans = Plan::where('acting', 0 )->get();
+      foreach ($plans as $plan){
+        $plan->user;
+        $plan->dataPlan;
+        $plan->coin;
+      }
+        return $plans;
+    }
 }

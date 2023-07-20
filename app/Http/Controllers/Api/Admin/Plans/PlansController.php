@@ -26,7 +26,7 @@ class PlansController extends Controller
     try {
       return response()->json([
         'status'  => true,
-        'pending_plans' => Plan::where('acting', 0 )->get(),
+        'pending_plans' => (new Plan())->pendingPlans()
       ]);
     } catch (\Exception $e) {
       return response()->json([
