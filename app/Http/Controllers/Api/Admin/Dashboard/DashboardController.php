@@ -36,7 +36,7 @@ class DashboardController extends Controller
       $extract = (new CreditResource())->sumarySixMonth();
       $total_off = (new CreditBalanceResource())->incomeOffReinvisted();
       $total_amount_reinvested = (new CreditBalanceResource())->amountReinvisted();
-      $users_month = (new UserResource())->usersMonth();
+      $users_month = (new UserResource())->managerMonth();
 
       return response()->json([
         'status'  => true,
