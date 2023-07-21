@@ -463,6 +463,6 @@ class CreditBalanceResource
         $total_balance_placed += $creditBalance->balance_placed;
       }
     }
-    return $total_balance_placed;
+    return $plans;
   }
 }
