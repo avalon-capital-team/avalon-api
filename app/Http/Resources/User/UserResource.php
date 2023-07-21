@@ -104,10 +104,10 @@ class UserResource
     }
 
     // Inverter o array para que os resultados fiquem do mais antigo para o mais atual.
-    $result = array_reverse($result);
+    $result = $result;
 
     // Retornar os resultados para a visualização ou fazer outras operações.
-    return $count;
+    return $result;
 }
 
 
