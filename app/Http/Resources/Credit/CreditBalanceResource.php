@@ -450,7 +450,7 @@ class CreditBalanceResource
   public function amountReinvisted()
   {
     $plans = UserPlan::where('acting', 1)
-      ->where('withdrawal_report', false)
+      ->where('withdrawal_report', true)
       ->where('user_id', '!=', 6)
       ->get();
 
@@ -463,6 +463,6 @@ class CreditBalanceResource
         $total_balance_placed += $creditBalance->balance_placed;
       }
     }
-    return $plans;
+    return $total_balance_placed;
   }
 }
