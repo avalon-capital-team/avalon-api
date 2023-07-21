@@ -437,7 +437,7 @@ class CreditBalanceResource
         $total_balance_placed += $creditBalance->balance_placed;
       }
     }
-    $five_percent = $total_balance_placed * 0.05;
+    $five_percent = $total_balance_placed;
     return $five_percent;
   }
 }
