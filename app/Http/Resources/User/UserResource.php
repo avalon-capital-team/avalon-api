@@ -77,8 +77,52 @@ class UserResource
    * @return \App\Models\User
    */
   // 2. Crie o método no seu controlador para obter a contagem de usuários por mês.
+  public function managerMonth()
+  {
+    // Defina os tipos de usuário que você deseja filtrar.
+    $userType = ['user', 'mananger', 'advisor'];
+
+    // Obter a data atual.
+    $date = Carbon::now();
+
+    // Criar um array para armazenar os resultados.
+    $result = [];
+
+    // Loop para obter os últimos 6 meses, a partir da data atual até 6 meses atrás.
+    for ($i = 0; $i <= 5; $i++) {
+      // Subtrair o número de meses do mês atual.
+      $monthAgo = $date->copy()->subMonths($i);
+
+      // Obter o primeiro dia do mês.
+      $firstDayMonth = $monthAgo->copy()->startOfMonth();
+
+      // Obter o último dia do mês.
+      $lastDayMonth = $monthAgo->copy()->endOfMonth();
+
+      // Loop para obter as contagens de usuários por tipo.
+      foreach ($userType as $type) {
+        // Consulta para obter a contagem de usuários do tipo específico que entraram no mês.
+        $count = User::where('type', $type)
+          ->whereBetween('created_at', [$firstDayMonth, $lastDayMonth])
+          ->count();
+
+        // Armazenar o resultado no array.
+        $result[$type][$monthAgo->format('Y-m')] = $count;
+      }
+    }
+
+    // Retornar os resultados para a visualização ou fazer outras operações.
+    return $result;
+  }
+
+  /**
+   * @param int $id
+   *
+   * @return \App\Models\User
+   */
+  // 2. Crie o método no seu controlador para obter a contagem de usuários por mês.
   public function usersMonth()
-{
+  {
     // Obter a data atual.
     $date = Carbon::now();
 
@@ -86,20 +130,20 @@ class UserResource
     $result = [];
 
     for ($i = 0; $i <= 5; $i++) {
-        // Subtrair o número de meses do mês atual.
-        $monthAgo = $date->copy()->subMonths($i);
+      // Subtrair o número de meses do mês atual.
+      $monthAgo = $date->copy()->subMonths($i);
 
-        // Obter o primeiro dia do mês.
-        $firstDayMonth = $monthAgo->copy()->startOfMonth();
+      // Obter o primeiro dia do mês.
+      $firstDayMonth = $monthAgo->copy()->startOfMonth();
 
-        // Obter o último dia do mês.
-        $lastDayMonth = $monthAgo->copy()->endOfMonth();
+      // Obter o último dia do mês.
+      $lastDayMonth = $monthAgo->copy()->endOfMonth();
 
-        // Consulta para obter a contagem de usuários que entraram no mês.
-        $count = User::whereBetween('created_at', [$firstDayMonth, $lastDayMonth])->count();
+      // Consulta para obter a contagem de usuários que entraram no mês.
+      $count = User::whereBetween('created_at', [$firstDayMonth, $lastDayMonth])->count();
 
-        // Armazenar o resultado no array.
-        $result[$monthAgo->format('Y-m')] = $count;
+      // Armazenar o resultado no array.
+      $result[$monthAgo->format('Y-m')] = $count;
     }
 
     // Inverter o array para que os resultados fiquem do mais antigo para o mais atual.
@@ -107,7 +151,7 @@ class UserResource
 
     // Retornar os resultados para a visualização ou fazer outras operações.
     return $result;
-}
+  }
 
 
   /**
