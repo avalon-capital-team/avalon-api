@@ -102,9 +102,8 @@ class UserResource
       // Armazenar o resultado no array.
       $resultados[$mesAnterior->format('Y-m')] = $count;
     }
-
     // Retornar os resultados para a visualização ou fazer outras operações.
-    return $resultados;
+    return array_reverse($resultados);
   }
 
   /**
