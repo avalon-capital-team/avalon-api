@@ -20,10 +20,41 @@ class DepositController extends Controller
   }
 
   /**
-   * @param \App\Htt\Resorces\User\User @resource
    * @return \Illuminate\Http\JsonResponse
    */
   public function data()
+  {
+    try {
+      return response()->json([
+        'status'  => true,
+        'Deposits' => (new DepositFiatResource)->getDeposits(),
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
+
+  /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function approve(Request $request)
+    {
+        $deposit = DepositFiat::find($request->id);
+
+        (new DepositFiatResource())->approveDeposit($deposit);
+        return response()->json([
+            'status'  => true,
+            'message' => 'Aprovado'
+        ]);
+    }
+
+  /**
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function actionDeposit()
   {
     try {
       return response()->json([

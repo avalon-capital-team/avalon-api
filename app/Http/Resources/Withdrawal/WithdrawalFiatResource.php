@@ -107,14 +107,17 @@ class WithdrawalFiatResource
 
       # Create reverse credit
       $credit = (new CreditResource())->create(
-        $withdrawalFiat->user,
+        $withdrawalFiat->user->id,
         $withdrawalFiat->coin->id,
+        $withdrawalFiat->user->userPlan->id,
         3,
         1,
         floatval(str_replace('-', '', $withdrawalFiat->debit->amount)),
-        0.000000,
+        (float) $withdrawalFiat->debit->base_amount,
         $description
       );
+
+      (new PlanResource())->reverseWithdrawalPlan($withdrawalFiat->user, $withdrawalFiat->debit->amount);
 
       if ($credit) {
         # Update Status
@@ -139,9 +142,9 @@ class WithdrawalFiatResource
         );
 
         # Send mail
-        $withdrawalFiat->user->notify(
-          new WithdrawalFiatNotification($withdrawalFiat)
-        );
+        // $withdrawalFiat->user->notify(
+        //   new WithdrawalFiatNotification($withdrawalFiat)
+        // );
 
         return true;
       }
