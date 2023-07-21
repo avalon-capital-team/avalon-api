@@ -415,4 +415,29 @@ class CreditBalanceResource
 
     return $data;
   }
+
+  /**
+   * Get balances of brl with average
+   *
+   * @return array
+   */
+  public function incomeOffReinvisted()
+  {
+    $plans = Plan::where('acting', 1)
+      ->where('withdrawal_report', false)
+      ->where('user_id', '!=', 6)
+      ->get();
+
+    $total_balance_placed = 0;
+
+    foreach ($plans as $plan) {
+      $creditBalance = CreditBalance::where('user_id', $plan->user_id)->first();
+
+      if ($creditBalance) {
+        $total_balance_placed += $creditBalance->balance_placed;
+      }
+    }
+    $five_percent = $total_balance_placed * 0.05;
+    return $five_percent;
+  }
 }

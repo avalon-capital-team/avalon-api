@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Credit\CreditBalanceResource;
 use App\Http\Resources\Credit\CreditResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\Credit\CreditBalance;
@@ -33,6 +34,7 @@ class DashboardController extends Controller
   {
     try {
       $extract = (new CreditResource())->sumarySixMonth();
+      $total_off = (new CreditBalanceResource())->incomeOffReinvisted();
 
       return response()->json([
         'status'  => true,
@@ -42,10 +44,8 @@ class DashboardController extends Controller
         'advisor' => count(User::where('type', 'advisor')->get()),
         'total_amount' => CreditBalance::where('coin_id', 1)->where('user_id', '!=', 6)->sum('balance_placed'),
         'total_amount_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->where('user_id', '!=', 6)->sum('amount'),
-        'total_amount_off_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', false)->where('user_id', '!=', 6)->sum('amount'),
-        'total_income' => Plan::where('acting', 1)->where('user_id', '!=', 6)->sum('income'),
         'total_income_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->where('user_id', '!=', 6)->sum('income'),
-        'total_income_off_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', false)->where('user_id', '!=', 6)->sum('income'),
+        'total_income_off_reinvested' => $total_off,
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
         'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
         'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
