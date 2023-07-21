@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Plan\Plan;
 use App\Models\Coin\Coin;
 use App\Models\Credit\Credit;
+use App\Models\User\UserPlan;
 use Illuminate\Support\Facades\DB;
 
 class CreditBalanceResource
@@ -423,7 +424,7 @@ class CreditBalanceResource
    */
   public function incomeOffReinvisted()
   {
-    $plans = Plan::where('acting', 1)
+    $plans = UserPlan::where('acting', 1)
       ->where('withdrawal_report', false)
       ->where('user_id', '!=', 6)
       ->get();
@@ -437,7 +438,7 @@ class CreditBalanceResource
         $total_balance_placed += $creditBalance->balance_placed;
       }
     }
-    $five_percent = $total_balance_placed;
+    $five_percent = $total_balance_placed * 0.05;
     return $five_percent;
   }
 }
