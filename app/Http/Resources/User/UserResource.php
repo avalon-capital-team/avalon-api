@@ -107,7 +107,7 @@ class UserResource
     $result = array_reverse($result);
 
     // Retornar os resultados para a visualização ou fazer outras operações.
-    return $result;
+    return $count;
 }
 
 
