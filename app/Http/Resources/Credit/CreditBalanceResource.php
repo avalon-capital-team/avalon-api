@@ -432,7 +432,7 @@ class CreditBalanceResource
     $total_balance_placed = 0;
 
     foreach ($plans as $plan) {
-      $creditBalance = CreditBalance::where('user_id', $plan->user_id)->first();
+      $creditBalance = CreditBalance::where('user_id', $plan->user_id)->where('coin_id', 1)->first();
 
       if ($creditBalance) {
         $total_balance_placed += $creditBalance->balance_placed;
@@ -440,5 +440,29 @@ class CreditBalanceResource
     }
     $five_percent = $total_balance_placed * 0.05;
     return $five_percent;
+  }
+
+  /**
+   * Get balances of brl with average
+   *
+   * @return array
+   */
+  public function amountReinvisted()
+  {
+    $plans = UserPlan::where('acting', 1)
+      ->where('withdrawal_report', false)
+      ->where('user_id', '!=', 6)
+      ->get();
+
+    $total_balance_placed = 0;
+
+    foreach ($plans as $plan) {
+      $creditBalance = CreditBalance::where('user_id', $plan->user_id)->where('coin_id', 1)->first();
+
+      if ($creditBalance) {
+        $total_balance_placed += $creditBalance->balance_placed;
+      }
+    }
+    return $total_balance_placed;
   }
 }

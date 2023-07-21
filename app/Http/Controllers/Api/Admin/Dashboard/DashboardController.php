@@ -35,6 +35,7 @@ class DashboardController extends Controller
     try {
       $extract = (new CreditResource())->sumarySixMonth();
       $total_off = (new CreditBalanceResource())->incomeOffReinvisted();
+      $total_amount_reinvested = (new CreditBalanceResource())->amountReinvisted();
 
       return response()->json([
         'status'  => true,
@@ -43,7 +44,7 @@ class DashboardController extends Controller
         'mananger' => count(User::where('type', 'mananger')->get()),
         'advisor' => count(User::where('type', 'advisor')->get()),
         'total_amount' => CreditBalance::where('coin_id', 1)->where('user_id', '!=', 6)->sum('balance_placed'),
-        'total_amount_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->where('user_id', '!=', 6)->sum('amount'),
+        'total_amount_reinvested' => $total_amount_reinvested,
         'total_income_reinvested' => Plan::where('acting', 1)->where('withdrawal_report', true)->where('user_id', '!=', 6)->sum('income'),
         'total_income_off_reinvested' => $total_off,
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
