@@ -108,7 +108,7 @@ class WithdrawalFiatResource
       # Create reverse credit
       $credit = (new CreditResource())->create(
         $withdrawalFiat->user,
-        $withdrawalFiat->coin,
+        $withdrawalFiat->coin->id,
         3,
         1,
         floatval(str_replace('-', '', $withdrawalFiat->debit->amount)),
