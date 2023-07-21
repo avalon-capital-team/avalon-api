@@ -10,7 +10,7 @@ use App\Models\User\UserAddress;
 use App\Models\User\UserProfile;
 use App\Notifications\Auth\VerifyCodeNotification;
 use App\Notifications\Auth\RegisterNotification;
-
+use Carbon\Carbon;
 
 class UserResource
 {
@@ -70,6 +70,41 @@ class UserResource
     })->get();
 
     return $user;
+  }
+  /**
+   * @param int $id
+   *
+   * @return \App\Models\User
+   */
+  // 2. Crie o método no seu controlador para obter a contagem de usuários por mês.
+  public function usersMonth()
+  {
+    // Obter a data atual.
+    $dataAtual = Carbon::now();
+
+    // Criar um array para armazenar os resultados.
+    $resultados = [];
+
+    // Loop para obter os últimos 6 meses.
+    for ($i = 1; $i <= 6; $i++) {
+      // Subtrair o número de meses do mês atual.
+      $mesAnterior = $dataAtual->copy()->subMonths($i);
+
+      // Obter o primeiro dia do mês anterior.
+      $primeiroDiaMesAnterior = $mesAnterior->copy()->startOfMonth();
+
+      // Obter o último dia do mês anterior.
+      $ultimoDiaMesAnterior = $mesAnterior->copy()->endOfMonth();
+
+      // Consulta para obter a contagem de usuários que entraram no mês anterior.
+      $count = User::whereBetween('created_at', [$primeiroDiaMesAnterior, $ultimoDiaMesAnterior])->count();
+
+      // Armazenar o resultado no array.
+      $resultados[$mesAnterior->format('Y-m')] = $count;
+    }
+
+    // Retornar os resultados para a visualização ou fazer outras operações.
+    return $resultados;
   }
 
   /**

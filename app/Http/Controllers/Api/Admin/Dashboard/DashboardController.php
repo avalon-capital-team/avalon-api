@@ -36,6 +36,7 @@ class DashboardController extends Controller
       $extract = (new CreditResource())->sumarySixMonth();
       $total_off = (new CreditBalanceResource())->incomeOffReinvisted();
       $total_amount_reinvested = (new CreditBalanceResource())->amountReinvisted();
+      $users_month = (new UserResource())->usersMonth();
 
       return response()->json([
         'status'  => true,
@@ -50,6 +51,7 @@ class DashboardController extends Controller
         'pending_withdral' => WithdrawalFiat::where('status_id', 3)->sum('amount'),
         'awaiting_payment_deposit' => DepositFiat::where('status_id', 1)->sum('amount'),
         'proof_sent_deposit' => DepositFiat::where('status_id', 2)->sum('amount'),
+        'users_month' => $users_month,
         'extract' => $extract,
         'list_plans' => $resource->getClients(),
       ]);
