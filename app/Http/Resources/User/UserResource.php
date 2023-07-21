@@ -85,26 +85,25 @@ class UserResource
     // Criar um array para armazenar os resultados.
     $result = [];
 
-    // Loop para obter os últimos 6 meses.
-    for ($i = 1; $i <= 6; $i++) {
+    for ($i = 0; $i <= 5; $i++) {
         // Subtrair o número de meses do mês atual.
-        $lastMonth = $date->copy()->subMonths($i);
+        $monthAgo = $date->copy()->subMonths($i);
 
-        // Obter o primeiro dia do mês anterior.
-        $firstDayMonth = $lastMonth->copy()->startOfMonth();
+        // Obter o primeiro dia do mês.
+        $firstDayMonth = $monthAgo->copy()->startOfMonth();
 
-        // Obter o último dia do mês anterior.
-        $lastDayMonth = $lastMonth->copy()->endOfMonth();
+        // Obter o último dia do mês.
+        $lastDayMonth = $monthAgo->copy()->endOfMonth();
 
-        // Consulta para obter a contagem de usuários que entraram no mês anterior.
+        // Consulta para obter a contagem de usuários que entraram no mês.
         $count = User::whereBetween('created_at', [$firstDayMonth, $lastDayMonth])->count();
 
         // Armazenar o resultado no array.
-        $result[$lastMonth->format('Y-m')] = $count;
+        $result[$monthAgo->format('Y-m')] = $count;
     }
 
     // Inverter o array para que os resultados fiquem do mais antigo para o mais atual.
-    $result = $result;
+    $result = array_reverse($result);
 
     // Retornar os resultados para a visualização ou fazer outras operações.
     return $result;
