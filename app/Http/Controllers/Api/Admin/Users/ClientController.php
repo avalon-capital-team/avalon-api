@@ -56,6 +56,7 @@ class ClientController extends Controller
   {
     try {
       $model = Plan::find($request->id);
+
       $model->acting = $request->type;
       if($request->type == 1){
         (new CreditBalanceResource())->approveBalance($model);
@@ -66,7 +67,6 @@ class ClientController extends Controller
 
       $model->activated_at = Carbon::now();
       $model->save();
-      $this->markAsFinished($model);
 
       return response()->json([
         'status'  => true,
