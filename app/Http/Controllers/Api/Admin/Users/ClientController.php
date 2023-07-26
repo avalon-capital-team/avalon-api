@@ -68,6 +68,17 @@ class ClientController extends Controller
       $model->activated_at = Carbon::now();
       $model->save();
 
+      if($request->type == 1){
+        return response()->json([
+          'status'  => true,
+          'message' => 'Aporte ativado com sucesso',
+        ]);
+      }else{
+        return response()->json([
+          'status'  => true,
+          'message' => 'Aporte negado com sucesso',
+        ]);
+      }
       return response()->json([
         'status'  => true,
         'message' => 'Aporte ativado com sucesso',
