@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class ModelsController extends Controller
 {
-    /**
+  /**
    * Create a new controller instance.
    *
    * @return void
@@ -61,13 +61,41 @@ class ModelsController extends Controller
   /**
    * @return \Illuminate\Http\JsonResponse
    */
-  public function dataParcents()
+  public function dataPorcents()
   {
     try {
       return response()->json([
         'status'  => true,
         'percent' => DataPercent::get(),
       ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
+
+  /**
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function updataPorcent(Request $request)
+  {
+    $request->validate([
+      'name' => 'sometimes',
+      'rescue' => 'sometimes',
+      'porcent' => 'sometimes',
+      'type' => 'sometimes',
+    ]);
+
+    try {
+      $plan = DataPlan::find($request->id);
+      if ($plan) {
+        $plan->update($request->only(['name', 'rescue', 'porcent', 'type']));
+        return response()->json(['message' => 'DataPlan updated successfully!'], 200);
+      } else {
+        return response()->json(['message' => 'DataPlan not found.'], 404);
+      }
     } catch (\Exception $e) {
       return response()->json([
         'status' => false,
