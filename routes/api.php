@@ -177,13 +177,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('withdrals', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'data']);
     Route::get('withdrals/pending', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'withdralPendings']);
     Route::post('withdral/payment', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'withdralPayment']);
+    Route::post('withdral/delete', [App\Http\Controllers\Api\Admin\Withdral\WithdralController::class, 'deleteWithdral']);
 
     #Deposits
     Route::get('deposits', [App\Http\Controllers\Api\Admin\Deposit\DepositController::class, 'data']);
     Route::post('deposit/approve', [App\Http\Controllers\Api\Admin\Deposit\DepositController::class, 'approve']);
+    Route::post('deposit/delete', [App\Http\Controllers\Api\Admin\Deposit\DepositController::class, 'deleteDeposit']);
 
     #Plans
     Route::get('plans/pending', [App\Http\Controllers\Api\Admin\Plans\PlansController::class, 'pendingPlans']);
+    Route::get('plan/delete', [App\Http\Controllers\Api\Admin\Plans\PlansController::class, 'deletePlan']);
 
     #Extract
     Route::get('extract', [App\Http\Controllers\Api\Admin\Extract\ExtractController::class, 'data']);

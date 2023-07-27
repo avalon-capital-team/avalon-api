@@ -81,4 +81,31 @@ class WithdralController extends Controller
       ], 400);
     }
   }
+
+  /**
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function deleteWithdral(Request $request)
+  {
+    try {
+      $withdral = WithdrawalFiat::find($request->id);
+      if($withdral){
+        $withdral->delete();
+        return response()->json([
+          'status'  => true,
+          'message' => 'Saque deletado com sucesso'
+        ]);
+      }
+      return response()->json([
+        'status'  => false,
+        'message' => 'Saque não encontrado'
+      ]);
+
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
 }

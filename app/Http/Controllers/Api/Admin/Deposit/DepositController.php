@@ -68,4 +68,31 @@ class DepositController extends Controller
       ], 400);
     }
   }
+
+  /**
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function deleteDeposit(Request $request)
+  {
+    try {
+      $deposit = DepositFiat::find($request->id);
+      if($deposit){
+        $deposit->delete();
+        return response()->json([
+          'status'  => true,
+          'message' => 'Deposito deletado com sucesso'
+        ]);
+      }
+      return response()->json([
+        'status'  => false,
+        'message' => 'Deposito não encontrado'
+      ]);
+
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
 }
