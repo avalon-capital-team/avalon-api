@@ -186,7 +186,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     #Plans
     Route::get('plans/pending', [App\Http\Controllers\Api\Admin\Plans\PlansController::class, 'pendingPlans']);
-    Route::get('plan/delete', [App\Http\Controllers\Api\Admin\Plans\PlansController::class, 'deletePlan']);
+    Route::post('plan/delete', [App\Http\Controllers\Api\Admin\Plans\PlansController::class, 'deletePlan']);
 
     #Extract
     Route::get('extract', [App\Http\Controllers\Api\Admin\Extract\ExtractController::class, 'data']);
