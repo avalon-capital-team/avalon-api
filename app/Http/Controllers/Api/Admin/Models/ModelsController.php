@@ -82,19 +82,19 @@ class ModelsController extends Controller
   public function updataPorcent(Request $request)
   {
     $request->validate([
+      'id' => 'required',
       'name' => 'sometimes',
-      'rescue' => 'sometimes',
+      'tag' => 'sometimes',
       'porcent' => 'sometimes',
-      'type' => 'sometimes',
     ]);
 
     try {
-      $plan = DataPlan::find($request->id);
-      if ($plan) {
-        $plan->update($request->only(['name', 'rescue', 'porcent', 'type']));
-        return response()->json(['message' => 'DataPlan updated successfully!'], 200);
+      $porcent = DataPercent::find($request->id);
+      if ($porcent) {
+        $porcent->update($request->only(['name', 'tag', 'porcent']));
+        return response()->json(['message' => 'Porcent updated successfully!'], 200);
       } else {
-        return response()->json(['message' => 'DataPlan not found.'], 404);
+        return response()->json(['message' => 'Porcent not found.'], 404);
       }
     } catch (\Exception $e) {
       return response()->json([
