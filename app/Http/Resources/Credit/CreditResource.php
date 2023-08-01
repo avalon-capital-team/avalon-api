@@ -49,27 +49,31 @@ class CreditResource
    * @return \App\Models\Credit\Credit
    */
   public function sumarySixMonth()
-  {
+{
     $extract = [];
+    $excludeId = 6;
 
     for ($i = 0; $i < 6; $i++) {
-      $monthStart = now()->subMonths($i)->startOfMonth();
-      $monthEnd = now()->subMonths($i)->endOfMonth();
+        $monthStart = now()->subMonths($i)->startOfMonth();
+        $monthEnd = now()->subMonths($i)->endOfMonth();
 
-      $extract[$i]['month'] = $monthStart->format('m/Y');
-      $extract[$i]['amount'] = Credit::where('type_id', 3)
-        ->whereBetween('created_at', [$monthStart, $monthEnd])
-        ->sum('amount');
+        $extract[$i]['month'] = $monthStart->format('m/Y');
+        $extract[$i]['amount'] = Credit::where('type_id', 3)
+            ->where('user_id', '!=', $excludeId)
+            ->whereBetween('created_at', [$monthStart, $monthEnd])
+            ->sum('amount');
 
-      $extract[$i]['base_amount'] = Credit::where('type_id', 3)
-        ->whereBetween('created_at', [$monthStart, $monthEnd])
-        ->sum('base_amount');
+        $extract[$i]['base_amount'] = Credit::where('type_id', 3)
+            ->where('user_id', '!=', $excludeId)
+            ->whereBetween('created_at', [$monthStart, $monthEnd])
+            ->sum('base_amount');
     }
 
     $extract = array_reverse($extract);
 
     return $extract;
-  }
+}
+
 
   /**
    * Get history paginate
