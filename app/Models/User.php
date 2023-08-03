@@ -99,8 +99,6 @@ class User extends Authenticatable
     ];
   }
 
-
-
   /**
    * Get the profile from user
    *
@@ -249,6 +247,16 @@ class User extends Authenticatable
   public function sponsor()
   {
     return $this->hasOne(User::class, 'id', 'sponsor_id');
+  }
+
+  /**
+   * Get the plan from user
+   *
+   * @return \App\Models\User\UserPlan
+   */
+  public function clients()
+  {
+    return $this->hasMany(User::class, 'sponsor_id', 'id');
   }
 
   /**

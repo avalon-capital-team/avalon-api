@@ -177,10 +177,6 @@ class PlanResource
     $user->userPlan->income -= $amount;
     $user->userPlan->save();
 
-    $coin = Coin::where('id', $user->userPlan->coin_id)->first();
-    $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
-
-    (new CreditBalanceResource())->moveBalanceToPending($balance, $amount);
     return true;
   }
 

@@ -30,12 +30,9 @@ class WithdrawalController extends Controller
   public function withdrawlPlan(Request $request)
   {
     try {
-      $user = User::find($request->user_id);
-      if ($user) {
-        (new WithdrawalFiatResource())->createWithdrawal($user, $request->coin_id, $request->type, $request->amount);
-      } else {
         (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $request->coin_id, $request->type, $request->amount);
-      }
+        (new PlanResource())->withdrawalPlan(auth()->user(), $request->amount);
+
       return response()->json([
         'status' => true,
         'message' => 'A solicitação de saque foi realizada com sucesso.'

@@ -272,25 +272,20 @@ class UserController extends Controller
   public function withdrawl(Request $request)
   {
     try {
+      (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $request->coin_id, $request->type, $request->amount);
+      (new PlanResource())->withdrawalPlan(auth()->user(), $request->amount);
 
-      $user = User::find($request->user_id);
+    return response()->json([
+      'status' => true,
+      'message' => 'A solicitação de saque foi realizada com sucesso.'
+    ], 200);
 
-      if ($request['coin_id'] != '1') {
-        (new WithdrawalCryptoResource())->createWithdrawalCrypto($user, $request['coin_id'], $request['type'], $request['amount']);
-      } else {
-        (new WithdrawalFiatResource())->createWithdrawal($user, $request['coin_id'], $request['type'], $request['amount']);
-      }
-      (new PlanResource())->withdrawalPlan($user, $request['amount']);
+  } catch (\Exception $e) {
 
-      return response()->json([
-        'status' => true,
-        'message' => 'A solicitação de saque foi realizada com sucesso.'
-      ], 200);
-    } catch (\Exception $e) {
-      return response()->json([
-        'status'  => false,
-        'message' => $e->getMessage()
-      ], $e->getCode() ?? 400);
-    }
+    return response()->json([
+      'status'  => false,
+      'message' => $e->getMessage()
+    ], $e->getCode() ?? 400);
+  }
   }
 }
