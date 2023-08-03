@@ -128,7 +128,9 @@ class UserResource
         $query->select('user_id', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'complement');
       }, 'sponsor' => function ($query) {
         $query->select('id', 'name', 'username', 'email', 'phone', 'type');
-      },'clients', 'userPlan' => function ($query) {
+      },'clients' => function ($query) {
+        $query->select('id', 'name', 'username', 'email', 'sponsor_id', 'phone', 'type');
+      }, 'userPlan' => function ($query) {
         $query->select('plan_id', 'coin_id', 'user_id', 'amount', 'income', 'acting', 'activated_at', 'payment_voucher_url', 'withdrawal_report');
       }, 'userPlan.dataPlan' => function ($query) {
         $query->select('id', 'name', 'rescue', 'porcent');
