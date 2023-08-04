@@ -121,4 +121,30 @@ class ModelsController extends Controller
       ], 400);
     }
   }
+
+  /**
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function updateCoin(Request $request)
+  {
+    $request->validate([
+      'id' => 'required',
+      'show_wallet' => 'required',
+    ]);
+
+    try {
+      $coin = Coin::find($request->id);
+      if ($coin) {
+        $coin->update($request->only('show_wallet'));
+        return response()->json(['message' => 'Show wallet updated successfully!'], 200);
+      } else {
+        return response()->json(['message' => 'Show wallet not found.'], 404);
+      }
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message'  => $e->getMessage()
+      ], 400);
+    }
+  }
 }

@@ -196,6 +196,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('porcents', [App\Http\Controllers\Api\Admin\Models\ModelsController::class, 'dataPorcents']);
     Route::get('porcent/updata', [App\Http\Controllers\Api\Admin\Models\ModelsController::class, 'updataPorcent']);
     Route::get('coins', [App\Http\Controllers\Api\Admin\Models\ModelsController::class, 'dataCoins']);
+    Route::post('coin/update', [App\Http\Controllers\Api\Admin\Models\ModelsController::class, 'updateCoin']);
     Route::post('plan/update', [App\Http\Controllers\Api\Admin\Models\ModelsController::class, 'updatePlan']);
   });
   Route::get('job/reports', [App\Http\Controllers\Api\Plan\UserPlanController::class, 'rentabil']);
