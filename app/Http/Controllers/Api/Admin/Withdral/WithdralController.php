@@ -62,12 +62,12 @@ class WithdralController extends Controller
   {
     try {
       $model = WithdrawalFiat::find($request->id);
-
+dd($model);
       if ($request->type == 1) {
-        $withdral = (new WithdrawalFiatResource())->approveWithdrawal($model, $request->message);
+        (new WithdrawalFiatResource())->approveWithdrawal($model, $request->message);
         $message = 'Saque aprovado com sucesso.';
       } else {
-        $withdral = (new WithdrawalFiatResource())->cancelWithdrawal($model, $request->message);
+        (new WithdrawalFiatResource())->cancelWithdrawal($model, $request->message);
         $message = 'Saque cancelado com sucesso.';
       }
       return response()->json([
@@ -89,7 +89,7 @@ class WithdralController extends Controller
   {
     try {
       $withdral = WithdrawalFiat::find($request->id);
-      if($withdral){
+      if ($withdral) {
         $withdral->delete();
         return response()->json([
           'status'  => true,
@@ -100,7 +100,6 @@ class WithdralController extends Controller
         'status'  => false,
         'message' => 'Saque não encontrado'
       ]);
-
     } catch (\Exception $e) {
       return response()->json([
         'status' => false,

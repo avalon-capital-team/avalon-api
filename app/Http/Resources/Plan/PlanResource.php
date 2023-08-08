@@ -129,28 +129,33 @@ class PlanResource
    * @return bool
    */
   function reverseWithdrawalPlan(User $user, $amount)
-  {
+{
     $plans = Plan::where('user_id', $user->id)->get();
     $user_plan = $user->userPlan;
 
     if ($amount > $user_plan->income) {
-      throw new \Exception('Não foi possível liberar o valor. Tente novamente mais tarde!', 403);
+        throw new \Exception('Não foi possível liberar o valor. Tente novamente mais tarde!', 403);
+    }
+
+    if ($user_plan->income == 0) {
+        throw new \Exception('O rendimento do plano do usuário é zero, divisão não permitida!', 403);
     }
 
     foreach ($plans as $plan) {
-      $data['percet'] = $plan->income / $user_plan->income;
-      $data['amount'] = $data['percet'] * $amount;
-      $data['plan'] = $plan->income;
-      $data['userplan'] = $user_plan->income;
+        $data['percet'] = $plan->income / $user_plan->income;
+        $data['amount'] = $data['percet'] * $amount;
+        $data['plan'] = $plan->income;
+        $data['userplan'] = $user_plan->income;
 
-      $plan->income += $data['amount'];
-      $plan->save();
+        $plan->income += $data['amount'];
+        $plan->save();
     }
     $user->userPlan->income += $amount;
     $user->userPlan->save();
 
     return true;
-  }
+}
+
 
   /**
    *
