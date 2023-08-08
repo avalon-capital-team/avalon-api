@@ -128,7 +128,7 @@ class UserResource
         $query->select('user_id', 'cep', 'street', 'neighborhood', 'city', 'state', 'number', 'complement');
       }, 'sponsor' => function ($query) {
         $query->select('id', 'name', 'username', 'email', 'phone', 'type');
-      },'clients' => function ($query) {
+      }, 'clients' => function ($query) {
         $query->select('id', 'name', 'username', 'email', 'sponsor_id', 'phone', 'type');
       }, 'userPlan' => function ($query) {
         $query->select('plan_id', 'coin_id', 'user_id', 'amount', 'income', 'acting', 'activated_at', 'payment_voucher_url', 'withdrawal_report');
@@ -270,7 +270,7 @@ class UserResource
     return $user;
   }
 
-  public function updateUser(User $user, array $data)
+  public function updateUser(User $user, $data)
   {
     $fillableFields = [
       'name', 'email', 'username', 'phone', 'genre_id'
@@ -284,14 +284,22 @@ class UserResource
 
     if (array_key_exists('address', $data) && is_array($data['address'])) {
       $user->address->update($data['address']);
-      $user->address->save();
     }
 
     if (array_key_exists('financial', $data) && is_array($data['financial'])) {
-      $user->financial->update($data['financial']);
-      $user->financial->save();
-    }
+      if (array_key_exists('type', $data['financial']) && array_key_exists('data', $data['financial'])) {
+        $type = $data['financial']['type'];
+        $updateData = ['data' => json_encode($data['financial']['data'])];
 
+        switch ($type) {
+          case 'pix':
+          case 'bank':
+          case 'crypto':
+            $user->financial()->where('type', $type)->update($updateData);
+            break;
+        }
+      }
+    }
     $user->save();
 
     return $user;

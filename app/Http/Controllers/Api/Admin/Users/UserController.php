@@ -252,6 +252,7 @@ class UserController extends Controller
     try {
       $validated = $request->validated();
       $user = User::find($validated['id']);
+
       return response()->json([
         'status'  => true,
         'user' => $resource->updateUser($user, $validated),

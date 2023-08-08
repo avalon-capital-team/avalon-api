@@ -36,6 +36,17 @@ class UserDataRequest extends FormRequest
             'address.state'     => ['sometimes'],
             'address.number'     => ['sometimes'],
             'address.cep'     => ['sometimes'],
+            'financial.type'     => ['sometimes'],
+            'financial.data.key_type'     => ['sometimes'],
+            'financial.data.key'     => ['sometimes'],
+            'financial.data.bank_id'     => ['sometimes'],
+            'financial.data.type'     => ['sometimes'],
+            'financial.data.account'     => ['sometimes'],
+            'financial.data.account_digit'     => ['sometimes'],
+            'financial.data.agency'     => ['sometimes'],
+            'financial.data.coin_id'     => ['sometimes'],
+            'financial.data.address'     => ['sometimes'],
+            'financial.data.network'     => ['sometimes'],
         ];
     }
 
