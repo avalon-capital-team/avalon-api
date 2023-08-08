@@ -62,7 +62,8 @@ class WithdralController extends Controller
   {
     try {
       $model = WithdrawalFiat::find($request->id);
-dd($model);
+      if (!$model) return response()->json(['status'  => false, 'message' => 'Saque não encontrado']);
+
       if ($request->type == 1) {
         (new WithdrawalFiatResource())->approveWithdrawal($model, $request->message);
         $message = 'Saque aprovado com sucesso.';
