@@ -284,10 +284,12 @@ class UserResource
 
     if (array_key_exists('address', $data) && is_array($data['address'])) {
       $user->address->update($data['address']);
+      $user->address->save();
     }
 
     if (array_key_exists('financial', $data) && is_array($data['financial'])) {
       $user->financial->update($data['financial']);
+      $user->financial->save();
     }
 
     $user->save();
