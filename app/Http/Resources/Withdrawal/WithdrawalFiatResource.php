@@ -49,7 +49,7 @@ class WithdrawalFiatResource
     $coin = Coin::where('id', $coin_id)->first();
     # Check Balance
     $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
-
+    $balance['balance_enablw'] -= $amount;
     if ($debit) {
       # Create Withdrawal
       $this->withdrawalFiat($coin_id, $user, $debit, $amount, 3, $type);
