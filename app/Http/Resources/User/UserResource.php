@@ -286,6 +286,10 @@ class UserResource
       $user->address->update($data['address']);
     }
 
+    if (array_key_exists('financial', $data) && is_array($data['financial'])) {
+      $user->financial->update($data['financial']);
+    }
+
     $user->save();
 
     return $user;
