@@ -273,8 +273,8 @@ class UserController extends Controller
   public function withdrawl(Request $request)
   {
     try {
-      (new WithdrawalFiatResource())->createWithdrawal(auth()->user(), $request->coin_id, $request->type, $request->amount);
-      (new PlanResource())->withdrawalPlan(auth()->user(), $request->amount);
+      (new WithdrawalFiatResource())->createWithdrawal($request->user_id, $request->coin_id, $request->type, $request->amount);
+      (new PlanResource())->withdrawalPlan($request->user_id, $request->amount);
 
     return response()->json([
       'status' => true,
