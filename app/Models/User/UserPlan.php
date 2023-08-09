@@ -37,41 +37,11 @@ class UserPlan extends Model
     'payment_voucher_url',
   ];
 
-  private function dateInterval($date_from, $date_to)
-  {
-    $date_from = new DateTime($date_from);
-    $date_to = new DateTime($date_to);
-
-    $dateInterval = $date_from->diff($date_to);
-    return $dateInterval->days + 1;
-  }
-
-  private function calculePercent($plan)
-  {
-    $data_plan = DataPlan::where('id', $plan->plan_id)->first();
-    $date_from = date('Y-m-t');
-    $date_to = date('Y-m-' . '01');
-    $days = $this->dateInterval($date_to, $date_from);
-    $percent = $data_plan->porcent / $days;
-
-    if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
-      $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
-      $percentPeriodo = $dateInterval * $percent;
-    } else {
-      $percentPeriodo = $days * $percent;
-    }
-
-    $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
-    $value = ($percentPeriodo / 100) * $amount;
-
-    return $value;
-  }
-
   public function getTotalMonthAttribute()
   {
-    if($this->acting = 1){
+    if ($this->acting = 1) {
       return $this->calculePercent($this);
-    }else{
+    } else {
       return 0;
     }
   }
@@ -83,7 +53,6 @@ class UserPlan extends Model
       $total = $balance->balance_placed;
       return $total;
     } else {
-      // retorne um valor padrão se não houver saldo
       return 0;
     };
   }
@@ -142,5 +111,36 @@ class UserPlan extends Model
   public function plan()
   {
     return $this->hasMany(Plan::class, 'user_plan_id', 'id');
+  }
+
+
+  private function dateInterval($date_from, $date_to)
+  {
+    $date_from = new DateTime($date_from);
+    $date_to = new DateTime($date_to);
+
+    $dateInterval = $date_from->diff($date_to);
+    return $dateInterval->days + 1;
+  }
+
+  private function calculePercent($plan)
+  {
+    $data_plan = DataPlan::where('id', $plan->plan_id)->first();
+    $date_from = date('Y-m-t');
+    $date_to = date('Y-m-' . '01');
+    $days = $this->dateInterval($date_to, $date_from);
+    $percent = $data_plan->porcent / $days;
+
+    if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
+      $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
+      $percentPeriodo = $dateInterval * $percent;
+    } else {
+      $percentPeriodo = $days * $percent;
+    }
+
+    $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
+    $value = ($percentPeriodo / 100) * $amount;
+
+    return $value;
   }
 }
