@@ -274,8 +274,9 @@ class UserController extends Controller
   {
     try {
       $user = User::find($request->user_id);
+      if(!$user)return response()->json(['status' => false,'message' => 'Usuário não encontrado'], 200);
+
       (new WithdrawalFiatResource())->createWithdrawal($user, $request->coin_id, $request->type, $request->amount);
-      (new PlanResource())->withdrawalPlan($user, $request->amount);
 
     return response()->json([
       'status' => true,

@@ -28,6 +28,7 @@ class WithdrawalFiatResource
     # Check Balance
     $balance = (new CreditBalanceResource())->getBalanceByCoinIdAndBalanceId($user, $coin_id);
 
+
     if (!$balance) {
       throw new \Exception('Carteira não encontrada.', 403);
     }
@@ -35,6 +36,7 @@ class WithdrawalFiatResource
     if ($balance->balance_enable < $amount) {
       throw new \Exception('Você não tem saldo disponivel para saque.', 403);
     }
+    (new PlanResource())->withdrawalPlan($user, $amount);
 
     # Description
     if ($type == 'bank') {
@@ -42,14 +44,13 @@ class WithdrawalFiatResource
     } else {
       $description = 'Saque para o PIX';
     }
-
-    # Create debit
-    $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->id, 2, 1, floatval('-' . $amount), $user->userPlan->amount + $user->userPlan->income, $description);
+    // # Create debit
+    $debit = (new CreditResource())->create($user->id, $coin_id, $user->userPlan->id, 2, 1, floatval('-' . $amount), $balance->balance_enable, $description);
 
     $coin = Coin::where('id', $coin_id)->first();
     # Check Balance
     $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
-    $balance['balance_enablw'] -= $amount;
+
     if ($debit) {
       # Create Withdrawal
       $this->withdrawalFiat($coin_id, $user, $debit, $amount, 3, $type);
@@ -104,13 +105,12 @@ class WithdrawalFiatResource
       } else {
         $description = 'Saque estornado #' . $withdrawalFiat->id . '';
       }
-
       # Create reverse credit
       $credit = (new CreditResource())->create(
         $withdrawalFiat->user->id,
         $withdrawalFiat->coin->id,
         $withdrawalFiat->user->userPlan->id,
-        3,
+        2,
         1,
         floatval(str_replace('-', '', $withdrawalFiat->debit->amount)),
         (float) $withdrawalFiat->debit->base_amount,
@@ -118,10 +118,12 @@ class WithdrawalFiatResource
       );
 
       (new PlanResource())->reverseWithdrawalPlan($withdrawalFiat->user, $withdrawalFiat->debit->amount);
+      // dd($withdrawalFiat->user, $withdrawalFiat->debit->amount);
 
       if ($credit) {
         # Update Status
         $withdrawalFiat->status_id = 1;
+        $withdrawalFiat->rejected_at = date('Y-m-d H:i:s');
         $withdrawalFiat->reject_motive = $message;
         $withdrawalFiat->save();
 
@@ -164,7 +166,6 @@ class WithdrawalFiatResource
   public function approveWithdrawal(WithdrawalFiat $withdrawalFiat, string $payment_confirmation = null)
   {
     if (in_array($withdrawalFiat->status_id, [3])) {
-
       #Change Status
       $withdrawalFiat->status_id = 2;
       $withdrawalFiat->payment_confirmation = $payment_confirmation;

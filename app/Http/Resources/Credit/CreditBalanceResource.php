@@ -359,7 +359,7 @@ class CreditBalanceResource
     $balance = $this->checkBalanceByCoinId($user, $coin);
     $balance->plan_id = $plan_id;
     $balance->coin_id = $coin_id;
-    $balance->balance_pending += $amount;
+    // $balance->balance_pending += $amount;
 
     return $balance->save();
   }
@@ -376,6 +376,8 @@ class CreditBalanceResource
     $coin = (new CoinResource())->findById($coin_id);
     $balance = $this->checkBalanceByCoinId($user, $coin);
     $balance->$field += $amount;
+    $balance->balance_enable -= $amount;
+
     return $balance->save();
   }
 

@@ -128,33 +128,28 @@ class PlanResource
    *
    * @return bool
    */
-  function reverseWithdrawalPlan(User $user, $amount)
-{
+  public function reverseWithdrawalPlan(User $user, $amount)
+  {
+    $amount = abs($amount);
     $plans = Plan::where('user_id', $user->id)->get();
     $user_plan = $user->userPlan;
 
-    if ($amount > $user_plan->income) {
-        throw new \Exception('Não foi possível liberar o valor. Tente novamente mais tarde!', 403);
-    }
-
-    if ($user_plan->income == 0) {
-        throw new \Exception('O rendimento do plano do usuário é zero, divisão não permitida!', 403);
-    }
-
     foreach ($plans as $plan) {
-        $data['percet'] = $plan->income / $user_plan->income;
-        $data['amount'] = $data['percet'] * $amount;
-        $data['plan'] = $plan->income;
-        $data['userplan'] = $user_plan->income;
+      $data['percet'] = $plan->income / $user_plan->income;
+      $data['amount'] = $data['percet'] * $amount;
+      $data['plan'] = $plan->income;
+      $data['userplan'] = $user_plan->income;
 
-        $plan->income += $data['amount'];
-        $plan->save();
+      $plan->income += $data['amount'];
+      $plan->save();
     }
+
     $user->userPlan->income += $amount;
     $user->userPlan->save();
 
     return true;
-}
+  }
+
 
 
   /**
@@ -278,28 +273,29 @@ class PlanResource
         (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 4, $status_id, floatval($rent), 0, $description);
 
         $balance_sponsor = (new CreditBalanceResource())->checkBalanceByCoinId($sponsor, $coin);
-        (new CreditBalanceResource())->moveBalanceToEnable($balance_sponsor, $rent);
+
+        $balance_sponsor->balance_enable += $rent;
         $balance_sponsor->income += $rent;
         $balance_sponsor->save();
       }
     }
-
     $balance = (new CreditBalanceResource())->checkBalanceByCoinId($user, $coin);
 
-    $description = 'Rendimento mensal - usuário:' . $user->name;
-    (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($balance->balance_placed),  $description);
+    if ($plan->withdrawal_report == 1) {
+      $balance->balance_placed += $income;
+      $base_amount = $plan->amount + $plan->income;
+    } else {
+      $balance->balance_enable += $income;
+      $base_amount = $plan->amount;
+    }
+
+    $description = 'Rendimento mensal - usuário: ' . $user->name;
+    (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($base_amount),  $description);
 
     $balance->income += $income;
 
-    if ($plan->withdrawal_report == 0) {
-      // MoveBalanceToEnableJob::dispatch($balance, $income);
-      (new CreditBalanceResource())->moveBalanceToEnable($balance, $income);
-    } else {
-      (new CreditBalanceResource())->moveBalanceToPlaced($balance, $income);
-    }
-
     $user->userPlan->income += $income;
-
+    $balance->balance_pending = 0.000000;
     $plan->income += $income;
 
     $balance->save();
