@@ -7,6 +7,7 @@ use App\Models\Coin\Coin;
 use App\Models\Credit\CreditBalance;
 use App\Models\Data\DataPlan;
 use App\Models\Plan\Plan;
+use DateTime;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,27 +37,51 @@ class UserPlan extends Model
     'payment_voucher_url',
   ];
 
+  private function dateInterval($date_from, $date_to)
+  {
+    $date_from = new DateTime($date_from);
+    $date_to = new DateTime($date_to);
+
+    // Redeem the difference between the dates
+    $dateInterval = $date_from->diff($date_to);
+    return $dateInterval->days + 1;
+  }
+
+  private function calculePercent($plan, $sponsor = null)
+  {
+    $data_plan = DataPlan::where('id', $plan->plan_id)->first();
+    $date_from = date('Y-m-t');
+    $date_to = date('Y-m-' . '01');
+    $days = $this->dateInterval($date_to, $date_from);
+    $percent = $sponsor ? $sponsor->porcent / $days : $data_plan->porcent / $days;
+
+    if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
+      $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
+      $percentPeriodo = $dateInterval * $percent;
+    } else {
+      $percentPeriodo = $days * $percent;
+    }
+
+    $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
+    $value = ($percentPeriodo / 100) * $amount;
+
+    return $value;
+  }
+
   public function getTotalMonthAttribute()
   {
-    $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
-    if ($balance) {
-        $total = $balance->balance_placed * 0.05;
-        return $total;
-    } else {
-        // retorne um valor padrão se não houver saldo
-        return 0;
-    }
+    return $this->calculePercent($this);;
   }
 
   public function getTotalAttribute()
   {
     $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
     if ($balance) {
-        $total = $balance->balance_placed;
-        return $total;
+      $total = $balance->balance_placed;
+      return $total;
     } else {
-        // retorne um valor padrão se não houver saldo
-        return 0;
+      // retorne um valor padrão se não houver saldo
+      return 0;
     };
   }
 
