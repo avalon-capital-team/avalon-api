@@ -42,18 +42,17 @@ class UserPlan extends Model
     $date_from = new DateTime($date_from);
     $date_to = new DateTime($date_to);
 
-    // Redeem the difference between the dates
     $dateInterval = $date_from->diff($date_to);
     return $dateInterval->days + 1;
   }
 
-  private function calculePercent($plan, $sponsor = null)
+  private function calculePercent($plan)
   {
     $data_plan = DataPlan::where('id', $plan->plan_id)->first();
     $date_from = date('Y-m-t');
     $date_to = date('Y-m-' . '01');
     $days = $this->dateInterval($date_to, $date_from);
-    $percent = $sponsor ? $sponsor->porcent / $days : $data_plan->porcent / $days;
+    $percent = $data_plan->porcent / $days;
 
     if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
       $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
