@@ -141,7 +141,7 @@ class UserPlan extends Model
     if ($plan->amount === $balance->balance_enabled) {
       $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
     } else {
-      $amount = $balance->balance_enabled;
+      $amount = ($plan->withdrawal_report == 0) ? $balance->balance_enabled : $plan->amount + $plan->income;
     }
     $value = ($percentPeriodo / 100) * $amount;
 
