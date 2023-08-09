@@ -138,10 +138,10 @@ class UserPlan extends Model
     } else {
       $percentPeriodo = $days * $percent;
     }
-    if ($plan->amount === $balance->balance_enabled) {
+    if ($plan->amount === $balance->balance_placed) {
       $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
     } else {
-      $amount = ($plan->withdrawal_report == 0) ? $balance->balance_enabled : $plan->amount + $plan->income;
+      $amount = ($plan->withdrawal_report == 0) ? $balance->balance_placed : $plan->amount + $plan->income;
     }
     $value = ($percentPeriodo / 100) * $amount;
 
