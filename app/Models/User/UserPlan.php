@@ -40,7 +40,7 @@ class UserPlan extends Model
   public function getTotalMonthAttribute()
   {
     if ($this->acting = 1) {
-      return $this->calculePercent($this);
+      return 0;
     } else {
       return 0;
     }
