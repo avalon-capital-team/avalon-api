@@ -125,6 +125,7 @@ class UserPlan extends Model
 
   private function calculePercent($plan)
   {
+    $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
     $data_plan = DataPlan::where('id', $plan->plan_id)->first();
     $date_from = date('Y-m-t');
     $date_to = date('Y-m-' . '01');
@@ -137,8 +138,11 @@ class UserPlan extends Model
     } else {
       $percentPeriodo = $days * $percent;
     }
-
-    $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
+    if ($plan->amount != $balance->balance_enabled) {
+      $amount = $balance->balance_enabled;
+    } else {
+      $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
+    }
     $value = ($percentPeriodo / 100) * $amount;
 
     return $value;
