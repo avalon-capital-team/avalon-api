@@ -154,6 +154,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
   # Notifications
   Route::get('/notifications', [App\Http\Controllers\Api\Notifications\NotificationsController::class, 'list'])->name('api.notifications');
 
+  # Graphic
+  Route::get('/graphic/get-data', [App\Http\Controllers\Api\Graphic\GraphicDataController::class, 'getGraphic'])->name('api.graphic');
+
   # Admin
   Route::group(['prefix' => 'admin'], function () {
     #Dashboard
