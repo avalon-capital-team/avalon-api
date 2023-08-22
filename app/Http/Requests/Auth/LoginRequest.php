@@ -4,6 +4,8 @@ namespace App\Http\Requests\Auth;
 
 use App\Traits\FailedValidationTrait;
 use Illuminate\Foundation\Http\FormRequest;
+    use App\Rules\CheckVerificationCodeRule;
+
 
 class LoginRequest extends FormRequest
 {
@@ -28,7 +30,8 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email', 'string'],
-            'password' => ['required', 'string']
+            'password' => ['required', 'string'],
+            'code' => ['nullable', 'min:6']
         ];
     }
 
@@ -43,6 +46,7 @@ class LoginRequest extends FormRequest
             'email.required' => __('O e-mail é obrigatório'),
             'email.email' => __('O e-mail informado é inválido'),
             'password.required' => __('A senha é obrigatória'),
+            'code.required' => __('O codigo é obrigatória'),
         ];
     }
 }
