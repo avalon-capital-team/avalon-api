@@ -46,7 +46,6 @@ class LoginRequest extends FormRequest
             'email.required' => __('O e-mail é obrigatório'),
             'email.email' => __('O e-mail informado é inválido'),
             'password.required' => __('A senha é obrigatória'),
-            'code.required' => __('O codigo é obrigatória'),
         ];
     }
 }
