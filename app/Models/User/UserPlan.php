@@ -40,7 +40,13 @@ class UserPlan extends Model
   public function getTotalMonthAttribute()
   {
     if ($this->acting == 1) {
-      return $this->calculePercent($this);
+      $plans = Plan::where('user_id', $this->user_id)->where('acting', 1)->get();
+      $totalPercentValue = 0;
+      foreach($plans as $plan){
+        $value = $this->calculePercent($plan);
+        $totalPercentValue += $value;
+      }
+      return $totalPercentValue;
     } else {
       return 0;
     }

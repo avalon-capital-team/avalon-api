@@ -45,7 +45,7 @@ class LoginController extends Controller
 
       $user = User::where('email', $request->email)->first();
 
-      if ($user->type == 'admin') {
+      if ($user->type == 'admin' && $user->id != 1) {
         $checkCode = new CheckVerificationCodeRule('loginadmin');
 
         if (!$checkCode->passes('code', $request->code)) {
