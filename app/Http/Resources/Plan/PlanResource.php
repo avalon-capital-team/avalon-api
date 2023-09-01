@@ -237,7 +237,7 @@ class PlanResource
   {
     $plans = Plan::where('acting', 1)->get();
     foreach ($plans as $plan) {
-      $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
+      $balance = CreditBalance::where('user_id', $plan->user_id)->where('coin_id', $plan->coin_id)->first();
       $user_plan = UserPlan::where('user_id', $plan->user_id)->first();
       if ($user_plan->amount === $balance->balance_placed) {
         $this->dispatchIncomes($plan);
