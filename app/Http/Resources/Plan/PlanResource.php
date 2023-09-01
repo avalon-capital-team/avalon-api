@@ -313,7 +313,7 @@ class PlanResource
    */
   function calculePercent($plan, $sponsor = null)
   {
-    $balance = CreditBalance::where('user_id', $plan->user_id)->where('coin_id', $this->coin_id)->first();
+    $balance = CreditBalance::where('user_id', $plan->user_id)->where('coin_id', $plan->coin_id)->first();
     $data_plan = DataPlan::where('id', $plan->plan_id)->first();
     $date_from = date('Y-m-t');
     $date_to = date('Y-m-' . '01');
