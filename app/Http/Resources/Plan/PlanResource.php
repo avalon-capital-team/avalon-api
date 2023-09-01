@@ -312,19 +312,47 @@ class PlanResource
    */
   function calculePercent($plan, $data_plan, $sponsor = null)
   {
+    $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
+    $data_plan = DataPlan::where('id', $plan->plan_id)->first();
     $date_from = date('Y-m-t');
     $date_to = date('Y-m-' . '01');
     $days = $this->dateInterval($date_to, $date_from);
-    $percent = $sponsor ? $sponsor->porcent / $days : $data_plan->porcent / $days;
+    $percent = $data_plan->porcent / $days;
+    $percentPeriodo = $days * $percent;
 
     if (date('Y-m', strtotime($plan->activated_at)) == date('2023-08')) {
-      $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('2023-08-31'));
-      $percentPeriodo = $dateInterval * $percent;
-    } else {
-      $percentPeriodo = $days * $percent;
+      $aportes = Plan::where('user_id', $this->user_id)->where('activated_at', $plan->activated_at)->get();
+      $valueAporte = 0;
+      $valueTotal = 0;
+      $valueMonthAporte = 0;
+
+      foreach ($aportes as $aporte) {
+        $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($aporte->activated_at)), date('2023-08-31'));
+        $percentPeriodoAporte = $dateInterval * $percent;
+        $value = ($percentPeriodoAporte / 100) * $aporte->amount;
+        $total = ($percentPeriodo / 100) * $aporte->amount;
+
+        $valueTotal += $total;
+        $valueAporte += $value;
+        $valueMonthAporte += $aporte->amount;
+      }
+      if ($plan->amount === $balance->balance_placed) {
+        $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
+      } else {
+        $amount = ($plan->withdrawal_report == 0) ? $balance->balance_placed : 0;
+      }
+
+      $value = ($percentPeriodo / 100) * $amount;
+      $value = $value - $valueTotal + $valueAporte;
+      return $value;
     }
 
-    $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
+    if ($plan->amount === $balance->balance_placed) {
+      $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
+    } else {
+      $amount = ($plan->withdrawal_report == 0) ? $balance->balance_placed : $plan->amount + $plan->income;
+    }
+
     $value = ($percentPeriodo / 100) * $amount;
 
     return $value;
