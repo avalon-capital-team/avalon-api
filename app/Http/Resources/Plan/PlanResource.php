@@ -223,8 +223,10 @@ class PlanResource
   {
     $auto_report = Plan::where('user_id', $user->id)->where('acting', 1)->select('withdrawal_report')->first();
 
-    if (!$auto_report) return false;
-    if ($auto_report->withdrawal_report == 0) return false;
+    if (!$auto_report)
+      return false;
+    if ($auto_report->withdrawal_report == 0)
+      return false;
     return true;
   }
 
@@ -291,7 +293,7 @@ class PlanResource
     }
 
     $description = 'Rendimento mensal - usuário: ' . $user->name;
-    (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($base_amount),  $description);
+    (new CreditResource())->create($plan->user_id, $plan->coin_id, $plan->id, 3, $status_id, floatval($income), floatval($base_amount), $description);
 
     $balance->income += $income;
 
@@ -311,51 +313,36 @@ class PlanResource
    * @param   $data_plan
    * @return
    */
-  function calculePercent($plan, $sponsor = null)
+  function calculePercent($plan, $data_plan, $sponsor = null)
   {
     $balance = CreditBalance::where('user_id', $plan->user_id)->where('coin_id', $plan->coin_id)->first();
-    $data_plan = DataPlan::where('id', $plan->plan_id)->first();
+    $user_plan = UserPlan::where('user_id', $plan->user_id)->first();
+    $count_plan = Plan::where('user_id', $plan->user_id)->count();
     $date_from = date('Y-m-t');
     $date_to = date('Y-m-' . '01');
     $days = $this->dateInterval($date_to, $date_from);
-    $percent = $data_plan->porcent / $days;
-    $percentPeriodo = $days * $percent;
+    $percent = $sponsor ? $sponsor->porcent / $days : $data_plan->porcent / $days;
 
-    if (date('Y-m', strtotime($plan->activated_at)) == date('2023-08')) {
-      $aportes = Plan::where('user_id', $plan->user_id)->where('activated_at', $plan->activated_at)->get();
-      $valueAporte = 0;
-      $valueTotal = 0;
-      $valueMonthAporte = 0;
+    $base_division = $user_plan->amount / $count_plan;
+    $proportional_division = ($plan->amount / $user_plan->amount) * $base_division;
 
-      foreach ($aportes as $aporte) {
-        $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($aporte->activated_at)), date('2023-08-31'));
-        $percentPeriodoAporte = $dateInterval * $percent;
-        $value = ($percentPeriodoAporte / 100) * $aporte->amount;
-        $total = ($percentPeriodo / 100) * $aporte->amount;
+dd($proportional_division, $base_division);
 
-        $valueTotal += $total;
-        $valueAporte += $value;
-        $valueMonthAporte += $aporte->amount;
-      }
-      if ($plan->amount === $balance->balance_placed) {
-        $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
-      } else {
-        $amount = ($plan->withdrawal_report == 0) ? $balance->balance_placed : 0;
-      }
-
-      $value = ($percentPeriodo / 100) * $amount;
-      $value = $value - $valueTotal + $valueAporte;
-      return $value;
-    }
-
-    if ($plan->amount === $balance->balance_placed) {
-      $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
+    if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
+      $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
+      $percentPeriodo = $dateInterval * $percent;
     } else {
-      $amount = ($plan->withdrawal_report == 0) ? $balance->balance_placed : $plan->amount + $plan->income;
+      $percentPeriodo = $days * $percent;
     }
 
+    if ($user_plan->amount === $balance->balance_placed) {
+      $amountChange = ($user_plan->withdrawal_report == 0) ? $user_plan->amount : $user_plan->amount + $user_plan->income;
+
+    }
+    $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
     $value = ($percentPeriodo / 100) * $amount;
 
     return $value;
   }
+
 }
