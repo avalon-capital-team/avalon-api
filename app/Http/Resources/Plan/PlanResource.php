@@ -314,8 +314,8 @@ class PlanResource
     $days = $this->dateInterval($date_to, $date_from);
     $percent = $sponsor ? $sponsor->porcent / $days : $data_plan->porcent / $days;
 
-    if (date('Y-m', strtotime($plan->activated_at)) == date('2023-08')) {
-      $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('2023-08-31'));
+    if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
+      $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
       $percentPeriodo = $dateInterval * $percent;
     } else {
       $percentPeriodo = $days * $percent;
