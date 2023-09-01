@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Plan;
 
+use App\Models\Credit\CreditBalance;
 use App\Models\Plan\Plan;
 use App\Models\User;
 use App\Models\Data\DataPlan;
@@ -310,9 +311,9 @@ class PlanResource
    * @param   $data_plan
    * @return
    */
-  function calculePercent($plan, $data_plan, $sponsor = null)
+  function calculePercent($plan, $sponsor = null)
   {
-    $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
+    $balance = CreditBalance::where('user_id', $plan->user_id)->where('coin_id', $this->coin_id)->first();
     $data_plan = DataPlan::where('id', $plan->plan_id)->first();
     $date_from = date('Y-m-t');
     $date_to = date('Y-m-' . '01');
@@ -321,7 +322,7 @@ class PlanResource
     $percentPeriodo = $days * $percent;
 
     if (date('Y-m', strtotime($plan->activated_at)) == date('2023-08')) {
-      $aportes = Plan::where('user_id', $this->user_id)->where('activated_at', $plan->activated_at)->get();
+      $aportes = Plan::where('user_id', $plan->user_id)->where('activated_at', $plan->activated_at)->get();
       $valueAporte = 0;
       $valueTotal = 0;
       $valueMonthAporte = 0;
