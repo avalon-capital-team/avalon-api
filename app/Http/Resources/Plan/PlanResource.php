@@ -112,20 +112,6 @@ class PlanResource
   }
 
   /**
-   * Check if need pay installments
-   *
-   * @return void
-   */
-  public function checkIfNeedPayToday()
-  {
-    $plans = Plan::where('acting', 1)->get();
-    foreach ($plans as $plan) {
-      $this->dispatchIncomes($plan);
-    }
-    return $plans;
-  }
-
-  /**
    *
    * @return bool
    */
@@ -201,20 +187,6 @@ class PlanResource
 
   /**
    *
-   * @return bool
-   */
-  function dateInterval($date_from, $date_to)
-  {
-    $date_from = new DateTime($date_from);
-    $date_to = new DateTime($date_to);
-
-    // Redeem the difference between the dates
-    $dateInterval = $date_from->diff($date_to);
-    return $dateInterval->days + 1;
-  }
-
-  /**
-   *
    * User
    * @param  bool $value
    * @return string
@@ -254,6 +226,28 @@ class PlanResource
       ->update(['withdrawal_report' => $value]);
 
     return true;
+  }
+
+  /**
+   * Check if need pay installments
+   *
+   * @return void
+   */
+  public function checkIfNeedPayToday()
+  {
+    $plans = Plan::where('acting', 1)->get();
+    foreach ($plans as $plan) {
+      $balance = CreditBalance::where('user_id', $this->user_id)->where('coin_id', $this->coin_id)->first();
+      $user_plan = UserPlan::where('user_id', $plan->user_id)->first();
+      if ($user_plan->amount === $balance->balance_placed) {
+        $this->dispatchIncomes($plan);
+      } else {
+        $plan->amount += $plan->income;
+        $this->dispatchIncomes($plan);
+      }
+
+    }
+    return $plans;
   }
 
   public function dispatchIncomes(Plan $plan)
@@ -315,18 +309,10 @@ class PlanResource
    */
   function calculePercent($plan, $data_plan, $sponsor = null)
   {
-    $balance = CreditBalance::where('user_id', $plan->user_id)->where('coin_id', $plan->coin_id)->first();
-    $user_plan = UserPlan::where('user_id', $plan->user_id)->first();
-    $count_plan = Plan::where('user_id', $plan->user_id)->count();
     $date_from = date('Y-m-t');
     $date_to = date('Y-m-' . '01');
     $days = $this->dateInterval($date_to, $date_from);
     $percent = $sponsor ? $sponsor->porcent / $days : $data_plan->porcent / $days;
-
-    $base_division = $user_plan->amount / $count_plan;
-    $proportional_division = ($plan->amount / $user_plan->amount) * $base_division;
-
-dd($proportional_division, $base_division);
 
     if (date('Y-m', strtotime($plan->activated_at)) == date('Y-m')) {
       $dateInterval = $this->dateInterval(date('Y-m-d', strtotime($plan->activated_at)), date('Y-m-t'));
@@ -335,14 +321,24 @@ dd($proportional_division, $base_division);
       $percentPeriodo = $days * $percent;
     }
 
-    if ($user_plan->amount === $balance->balance_placed) {
-      $amountChange = ($user_plan->withdrawal_report == 0) ? $user_plan->amount : $user_plan->amount + $user_plan->income;
-
-    }
     $amount = ($plan->withdrawal_report == 0) ? $plan->amount : $plan->amount + $plan->income;
     $value = ($percentPeriodo / 100) * $amount;
 
     return $value;
+  }
+
+  /**
+   *
+   * @return bool
+   */
+  function dateInterval($date_from, $date_to)
+  {
+    $date_from = new DateTime($date_from);
+    $date_to = new DateTime($date_to);
+
+    // Redeem the difference between the dates
+    $dateInterval = $date_from->diff($date_to);
+    return $dateInterval->days + 1;
   }
 
 }
