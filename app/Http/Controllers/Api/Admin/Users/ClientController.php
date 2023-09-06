@@ -56,33 +56,29 @@ class ClientController extends Controller
   {
     try {
       $model = Plan::find($request->id);
-
       $model->acting = $request->type;
-      if($request->type == 1){
+
+      if ($request->type == 1) {
+        $model->activated_at = Carbon::now();
         (new CreditBalanceResource())->approveBalance($model);
         (new UserPlan())->activatedAt($model->user_plan_id);
-      }else{
+      } else {
         (new CreditBalanceResource())->inativePlan($model);
       }
 
-      $model->activated_at = Carbon::now();
       $model->save();
 
-      if($request->type == 1){
+      if ($request->type == 1) {
         return response()->json([
           'status'  => true,
           'message' => 'Aporte ativado com sucesso',
         ]);
-      }else{
+      } else {
         return response()->json([
           'status'  => true,
           'message' => 'Aporte negado com sucesso',
         ]);
       }
-      return response()->json([
-        'status'  => true,
-        'message' => 'Aporte ativado com sucesso',
-      ]);
     } catch (\Exception $e) {
       return response()->json([
         'status' => false,
@@ -104,11 +100,39 @@ class ClientController extends Controller
       $plan = $resource->createOrUpdateOrder($user, $request);
       DB::commit();
 
+      if ($request->date && $plan) {
+        $this->retroactiveDate($plan->id, $request->date);
+      }
+
       return response()->json([
         'status'  => true,
         'message' => 'A orden foi criada com sucesso',
         'plan' => $plan,
       ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message' => $e->getMessage()
+      ], $e->getCode() ?? 400);
+    }
+  }
+
+  /**
+   *
+   * @return \Illiminate\Http\Json
+   */
+  private function retroactiveDate($id, $date)
+  {
+    try {
+      $plan = Plan::find($id);
+      $plan->acting = 1;
+      $plan->activated_at = $date;
+      (new CreditBalanceResource())->approveBalance($plan);
+      (new UserPlan())->activatedAt($plan->user_plan_id);
+
+      $plan->save();
+
+      return true;
     } catch (\Exception $e) {
       return response()->json([
         'status' => false,

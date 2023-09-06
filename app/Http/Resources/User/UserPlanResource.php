@@ -58,8 +58,6 @@ class UserPlanResource
                 'coin_id' => ($validated['coin_id']),
             ]);
 
-
-
         if (!$user_plan && !$credit && !$plan) {
             throw new \Exception('Não foi possível gerar a orden. Tente novamente mais tarde!', 403);
         }

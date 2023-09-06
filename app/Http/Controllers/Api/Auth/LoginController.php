@@ -35,6 +35,7 @@ class LoginController extends Controller
   {
     try {
       $validated = $request->validated();
+      $apiName = ($request->header('device-type')) ? $request->header('device-type') : 'web';
 
       if (!Auth::attempt($validated)) {
         return response()->json([
@@ -45,18 +46,25 @@ class LoginController extends Controller
 
       $user = User::where('email', $request->email)->first();
 
-      if ($user->type == 'admin' && $user->id != 1) {
-        $checkCode = new CheckVerificationCodeRule('loginadmin');
-
-        if (!$checkCode->passes('code', $request->code)) {
-          return response()->json([
-            'status' => false,
-            'message' => $checkCode->message()
-          ], 401);
-        }
+      if ($user->id != 1 && $user->type == 'admin' && !$user->security->google_2fa) {
+        return response()->json([
+          'status' => false,
+          'message' => 'Necessario habilitar 2FA para ter acesso!',
+          'token' => $user->createToken($apiName)->plainTextToken,
+          'twoFa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
+        ], 200);
       }
 
-      $apiName = ($request->header('device-type')) ? $request->header('device-type') : 'web';
+      if ($user->id != 1 && $user->type == 'admin') {
+          $checkCode = new CheckVerificationCodeRule('loginadmin');
+
+          if (!$checkCode->passes('code', $request->code)) {
+            return response()->json([
+              'status' => false,
+              'message' => $checkCode->message()
+            ], 401);
+          }
+      }
 
       if ($user->id != 1) {
         return response()->json([
@@ -72,12 +80,14 @@ class LoginController extends Controller
           'twoFa' => (new SettingsSecurityResource())->get2faData(auth()->user()),
         ], 200);
       }
+
       return response()->json([
         'status' => true,
         'message' => 'Acesso realizado com sucesso',
         'token' => $user->createToken($apiName)->plainTextToken,
       ], 200);
     } catch (\Exception $e) {
+
       return response()->json([
         'status' => false,
         'message' => $e->getMessage()
